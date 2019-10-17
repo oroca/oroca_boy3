@@ -25,7 +25,7 @@ typedef struct
 */
 
 __attribute__((section(".version"))) flash_ver_t fw_ver =
-    {"V190926R1",
+    {"V191017R1",
      "OROCABOY3",
      "Firmware",
      0x5555AAAA,          // magic_number
@@ -66,14 +66,14 @@ void hwInit(void)
   eepromInit();
   if (eepromValid(0) == true)
   {
-    logPrintf("eeprom %dKB \t\t: OK\n", (int)eepromGetLength()/1024);
+    logPrintf("eeprom %dKB \t\t: OK\r\n", (int)eepromGetLength()/1024);
   }
   else
   {
-    logPrintf("eeprom %dKB \t\t: Fail\n", (int)eepromGetLength()/1024);
+    logPrintf("eeprom %dKB \t\t: Fail\r\n", (int)eepromGetLength()/1024);
   }
 
 
-  logPrintf("Start...\n");
+  logPrintf("Start...\r\n");
 }
 

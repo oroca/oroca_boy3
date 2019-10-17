@@ -37,11 +37,11 @@ void apInit(void)
   cmdBegin(&cmd_boot[0], _DEF_UART1, 57600);
 
 
-  if (buttonGetPressed(_DEF_BUTTON1) == true)
+  if (buttonGetPressed(_DEF_BUTTON1) == true || hwGetResetCount() == 2)
   {
     boot_mode = BOOT_MODE_CMDIF;
   }
-  else if (boot_mode != true && hwGetResetCount() >= 1)
+  else if (hwGetResetCount() == 1)
   {
     boot_mode = BOOT_MODE_LOADER;
   }
