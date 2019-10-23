@@ -39,15 +39,17 @@ bool bootInit(uint8_t channel, char *port_name, uint32_t baud)
 
   uartSetPortName(channel, port_name);
 
-  //uartOpen(channel, 1200);
-  //uartPrintf(channel, "RunBoot");
-  //uartClose(channel);
-  //delay(1000);
-
   uartOpen(channel, baud);
   uartPutch(channel, 0x55);
   uartPutch(channel, 0x55);
-  uartPutch(channel, 0x55);
+  delay(100);
+
+  uartPrintf(channel, " \r\n boot 0x5555AAAA \r\n");
+  delay(100);
+  uartClose(channel);
+  delay(2000);
+
+  uartOpen(channel, baud);
   uartPutch(channel, 0x55);
   uartPutch(channel, 0x55);
   uartClose(channel);
@@ -200,7 +202,7 @@ uint8_t bootCmdFlashErase(uint32_t addr, uint32_t length)
   data[7] = length >> 24;
 
 
-  ret = cmdSendCmdRxResp(p_cmd, BOOT_CMD_FLASH_ERASE, data, 8, 3000);
+  ret = cmdSendCmdRxResp(p_cmd, BOOT_CMD_FLASH_ERASE, data, 8, 10000);
   if (ret == false)
   {
     errcode = p_cmd->rx_packet.error;

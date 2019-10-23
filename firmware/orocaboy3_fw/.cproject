@@ -68,9 +68,11 @@
 								<option id="com.atollic.truestudio.gcc.optimization.prep_data.1373468533" name="Prepare dead data removal" superClass="com.atollic.truestudio.gcc.optimization.prep_data" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 								<option id="com.atollic.truestudio.gcc.symbols.defined.1148212288" name="Defined symbols" superClass="com.atollic.truestudio.gcc.symbols.defined" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="STM32H753xx"/>
+									<listOptionValue builtIn="false" value="LUA_32BITS"/>
 									<listOptionValue builtIn="false" value="USE_USB_FS"/>
 									<listOptionValue builtIn="false" value="USE_HAL_DRIVER"/>
 								</option>
+								<option id="com.atollic.truestudio.gcc.cstandard.521018675" name="C standard" superClass="com.atollic.truestudio.gcc.cstandard" useByScannerDiscovery="false" value="com.atollic.truestudio.gcc.cstandard.gnu1x" valueType="enumerated"/>
 								<inputType id="com.atollic.truestudio.gcc.input.1594225192" superClass="com.atollic.truestudio.gcc.input"/>
 							</tool>
 							<tool id="com.atollic.truestudio.exe.debug.toolchain.ld.864976709" name="C Linker" superClass="com.atollic.truestudio.exe.debug.toolchain.ld">
@@ -113,6 +115,7 @@
 									<listOptionValue builtIn="false" value="USE_USB_FS"/>
 									<listOptionValue builtIn="false" value="USE_HAL_DRIVER"/>
 								</option>
+								<option id="com.atollic.truestudio.gpp.cppstandard.1001934352" name="C++ standard" superClass="com.atollic.truestudio.gpp.cppstandard" useByScannerDiscovery="false" value="com.atollic.truestudio.gpp.cppstandard.gnupp0x" valueType="enumerated"/>
 								<inputType id="com.atollic.truestudio.gpp.input.1571248600" superClass="com.atollic.truestudio.gpp.input"/>
 							</tool>
 							<tool id="com.atollic.truestudio.exe.debug.toolchain.ldcc.926452705" name="C++ Linker" superClass="com.atollic.truestudio.exe.debug.toolchain.ldcc">
@@ -140,7 +143,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="src/lib/STM32_USB_Device_Library/Class|src/lib/TouchGFX/target/OSWrappers.cpp|src/bsp/FreeRTOS/Source/portable/MemMang/heap_5.c|src/bsp/FreeRTOS/Source/portable/MemMang/heap_3.c|src/bsp/FreeRTOS/Source/portable/MemMang/heap_2.c|src/bsp/FreeRTOS/Source/portable/MemMang/heap_1.c|src/bsp/FreeRTOS/Source/portable/Keil|src/bsp/FreeRTOS/Source/portable/IAR|src/ap/TouchGFX/simulator|src/lib/TouchGFX/touchgfx/framework/source/platform/driver/touch/SDL2TouchController.cpp|src/lib/TouchGFX/touchgfx/framework/source/platform/hal/simulator|src/lib/TouchGFX/touchgfx/framework/include/platform/hal/simulator|ap.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="src/ap/lua/luac.c|src/ap/lua/lua.c|src/lib/STM32_USB_Device_Library/Class|src/bsp/FreeRTOS/Source/portable/MemMang/heap_1.c|src/bsp/FreeRTOS/Source/portable/MemMang/heap_5.c|src/bsp/FreeRTOS/Source/portable/MemMang/heap_3.c|src/lib/TouchGFX/touchgfx/framework/source/platform/driver/touch/SDL2TouchController.cpp|src/lib/TouchGFX/target/OSWrappers.cpp|src/lib/TouchGFX/touchgfx/framework/include/platform/hal/simulator|src/bsp/FreeRTOS/Source/portable/Keil|src/lib/TouchGFX/touchgfx/framework/source/platform/hal/simulator|src/bsp/FreeRTOS/Source/portable/MemMang/heap_2.c|src/bsp/FreeRTOS/Source/portable/IAR|src/ap/TouchGFX/simulator|ap.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -253,7 +256,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="src/lib/STM32_USB_Device_Library/Class|src/lib/TouchGFX/target/OSWrappers.cpp|src/bsp/FreeRTOS/Source/portable/MemMang/heap_5.c|src/bsp/FreeRTOS/Source/portable/MemMang/heap_3.c|src/bsp/FreeRTOS/Source/portable/MemMang/heap_2.c|src/bsp/FreeRTOS/Source/portable/MemMang/heap_1.c|src/bsp/FreeRTOS/Source/portable/Keil|src/bsp/FreeRTOS/Source/portable/IAR|src/ap/TouchGFX/simulator|src/lib/TouchGFX/touchgfx/framework/source/platform/driver/touch/SDL2TouchController.cpp|src/lib/TouchGFX/touchgfx/framework/source/platform/hal/simulator|src/lib/TouchGFX/touchgfx/framework/include/platform/hal/simulator|ap.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="src/ap/lua/luac.c|src/ap/lua/lua.c|src/lib/STM32_USB_Device_Library/Class|src/bsp/FreeRTOS/Source/portable/MemMang/heap_1.c|src/bsp/FreeRTOS/Source/portable/MemMang/heap_5.c|src/bsp/FreeRTOS/Source/portable/MemMang/heap_3.c|src/lib/TouchGFX/touchgfx/framework/source/platform/driver/touch/SDL2TouchController.cpp|src/lib/TouchGFX/target/OSWrappers.cpp|src/lib/TouchGFX/touchgfx/framework/include/platform/hal/simulator|src/bsp/FreeRTOS/Source/portable/Keil|src/lib/TouchGFX/touchgfx/framework/source/platform/hal/simulator|src/bsp/FreeRTOS/Source/portable/MemMang/heap_2.c|src/bsp/FreeRTOS/Source/portable/IAR|src/ap/TouchGFX/simulator|ap.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

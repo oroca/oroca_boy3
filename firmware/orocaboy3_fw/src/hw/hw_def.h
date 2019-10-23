@@ -17,7 +17,7 @@
 
 #define _HW_DEF_RTC_BOOT_RESET      RTC_BKP_DR3
 #define _HW_DEF_RTC_BOOT_MODE       RTC_BKP_DR4
-
+#define _HW_DEF_RTC_RESET_SRC       RTC_BKP_DR5
 
 
 

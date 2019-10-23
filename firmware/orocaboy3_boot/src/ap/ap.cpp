@@ -30,11 +30,29 @@ static cmd_t cmd_boot[MAX_BOOT_CH];
 
 void apInit(void)
 {
+  uint8_t boot_param;
+
+
   uartOpen(_DEF_UART1, 57600);
   cmdifOpen(_DEF_UART1, 57600);
 
   cmdInit(&cmd_boot[0]);
   cmdBegin(&cmd_boot[0], _DEF_UART1, 57600);
+
+
+  boot_param = rtcReadBackupData(_HW_DEF_RTC_BOOT_MODE);
+
+
+  if (boot_param & (1<<7))
+  {
+    boot_mode = BOOT_MODE_LOADER;
+    logPrintf("boot begin...\r\n");
+
+    boot_param &= ~(1<<7);
+    rtcWriteBackupData(_HW_DEF_RTC_BOOT_MODE, boot_param);
+
+    return;
+  }
 
 
   if (buttonGetPressed(_DEF_BUTTON1) == true || hwGetResetCount() == 2)

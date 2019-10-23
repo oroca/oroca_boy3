@@ -12,20 +12,12 @@
 
 
 
+void bootCmdif(void);
 
-/*
-typedef struct
-{
-  uint8_t  version_str[32];
-  uint8_t  board_str[32];
-  uint8_t  reserved_str[32];
 
-  uint32_t magic_number;
-} flash_ver_t;
-*/
 
 __attribute__((section(".version"))) flash_ver_t fw_ver =
-    {"V191017R1",
+    {"V191023R1",
      "OROCABOY3",
      "Firmware",
      0x5555AAAA,          // magic_number
@@ -52,8 +44,12 @@ void hwInit(void)
   logPrintf("Booting..Name \t\t: %s\r\n", fw_ver.board_str);
   logPrintf("Booting..Ver  \t\t: %s\r\n", fw_ver.version_str);
 
-  resetLog();
+
+  logPrintf("ResetBits \t\t: 0x%X\n", (int)rtcReadBackupData(_HW_DEF_RTC_RESET_SRC));
+
   rtcInit();
+  resetLog();
+
   pwmInit();
   ledInit();
 
@@ -75,5 +71,36 @@ void hwInit(void)
 
 
   logPrintf("Start...\r\n");
+
+  cmdifAdd("boot", bootCmdif);
 }
 
+void hwJumpToBoot(void)
+{
+  rtcWriteBackupData(_HW_DEF_RTC_BOOT_MODE, (1<<7));
+  resetRunSoftReset();
+}
+
+
+void bootCmdif(void)
+{
+
+  if (cmdifGetParamCnt() == 1)
+  {
+    if(cmdifHasString("0x5555AAAA", 0) == true)
+    {
+      cmdifPrintf( "jump to boot\n");
+      delay(100);
+      hwJumpToBoot();
+    }
+
+    if(cmdifHasString("reset", 0) == true)
+    {
+      cmdifPrintf( "reset\n");
+      delay(100);
+      rtcWriteBackupData(_HW_DEF_RTC_BOOT_MODE, 0);
+      resetRunSoftReset();
+    }
+
+  }
+}
