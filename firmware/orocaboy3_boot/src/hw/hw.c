@@ -13,7 +13,7 @@
 
 
 __attribute__((section(".version"))) uint8_t boot_name[32] = "OROCABOY3";
-__attribute__((section(".version"))) uint8_t boot_ver[32]  = "B191023R1";
+__attribute__((section(".version"))) uint8_t boot_ver[32]  = "B191029R1";
 
 static uint8_t reset_count = 0;
 
@@ -78,6 +78,11 @@ void hwInit(void)
 
 void bootModeWait(void)
 {
+  rtcWriteBackupData(_HW_DEF_RTC_RESET_SRC, resetGetBits());
+
+  logPrintf("ResetBits \t\t: 0x%X\n", (int)rtcReadBackupData(_HW_DEF_RTC_RESET_SRC));
+
+
   if (resetGetBits() == (1<<_DEF_RESET_PIN))
   {
     reset_count = (uint8_t)rtcReadBackupData(_HW_DEF_RTC_BOOT_RESET);

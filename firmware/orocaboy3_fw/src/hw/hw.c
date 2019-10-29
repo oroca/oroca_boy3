@@ -15,12 +15,27 @@
 void bootCmdif(void);
 
 
+extern uint32_t _flash_tag_addr;
+extern uint32_t _flash_fw_addr;
 
-__attribute__((section(".version"))) flash_ver_t fw_ver =
-    {"V191023R1",
-     "OROCABOY3",
-     "Firmware",
-     0x5555AAAA,          // magic_number
+
+
+__attribute__((section(".tag"))) flash_tag_t fw_tag =
+    {
+     // fw info
+     //
+     0xAAAA5555,        // magic_number
+     "V191023R1",       // version_str
+     "OROCABOY3",       // board_str
+     "Firmware",        // name
+     __DATE__,
+     __TIME__,
+     (uint32_t)&_flash_tag_addr,
+     (uint32_t)&_flash_fw_addr,
+
+
+     // tag info
+     //
     };
 
 
@@ -41,13 +56,13 @@ void hwInit(void)
   uartOpen(_DEF_UART1, 57600);
 
   logPrintf("\n\n[ Firmware Begin... ]\r\n");
-  logPrintf("Booting..Name \t\t: %s\r\n", fw_ver.board_str);
-  logPrintf("Booting..Ver  \t\t: %s\r\n", fw_ver.version_str);
-
-
-  logPrintf("ResetBits \t\t: 0x%X\n", (int)rtcReadBackupData(_HW_DEF_RTC_RESET_SRC));
+  logPrintf("Booting..Board\t\t: %s\r\n", fw_tag.board_str);
+  logPrintf("Booting..Name \t\t: %s\r\n", fw_tag.name_str);
+  logPrintf("Booting..Ver  \t\t: %s\r\n", fw_tag.version_str);
 
   rtcInit();
+  logPrintf("ResetBits \t\t: 0x%X\n", (int)rtcReadBackupData(_HW_DEF_RTC_RESET_SRC));
+
   resetLog();
 
   pwmInit();

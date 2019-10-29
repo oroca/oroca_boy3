@@ -32,6 +32,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/lib/STM32H7xx_HAL_Driver/Inc}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/lib/STM32_USB_Device_Library/Core/Inc}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/hw/usb_cdc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/hw/driver/usb_cdc}&quot;"/>
 								</option>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.1448882478" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" useByScannerDiscovery="false" value="STM32H753II" valueType="enumerated"/>
 								<option id="com.atollic.truestudio.common_options.target.endianess.2044488831" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess" useByScannerDiscovery="false"/>
@@ -56,7 +57,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/common/hw/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/common/core}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/lib/STM32_USB_Device_Library/Core/Inc}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/hw/usb_cdc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/hw/driver/usb_cdc}&quot;"/>
 								</option>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.326765596" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" useByScannerDiscovery="false" value="STM32H753II" valueType="enumerated"/>
 								<option id="com.atollic.truestudio.common_options.target.endianess.843726206" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess" useByScannerDiscovery="false"/>
@@ -98,7 +99,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/common/hw/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/common/core}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/lib/STM32_USB_Device_Library/Core/Inc}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/hw/usb_cdc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/hw/driver/usb_cdc}&quot;"/>
 								</option>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.314413876" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" useByScannerDiscovery="false" value="STM32H753II" valueType="enumerated"/>
 								<option id="com.atollic.truestudio.common_options.target.endianess.377780753" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess" useByScannerDiscovery="false"/>
@@ -180,6 +181,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/lib/STM32H7xx_HAL_Driver/Inc}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/lib/STM32_USB_Device_Library/Core/Inc}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/hw/usb_cdc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/hw/driver/usb_cdc}&quot;"/>
 								</option>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.909447040" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" value="STM32H753II" valueType="enumerated"/>
 								<option id="com.atollic.truestudio.common_options.target.endianess.1933156421" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess"/>
@@ -201,6 +203,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/lib/STM32H7xx_HAL_Driver/Inc}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/lib/STM32_USB_Device_Library/Core/Inc}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/hw/usb_cdc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/hw/driver/usb_cdc}&quot;"/>
 								</option>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.632759079" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" value="STM32H753II" valueType="enumerated"/>
 								<option id="com.atollic.truestudio.common_options.target.endianess.1480589555" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess"/>
@@ -230,6 +233,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/lib/STM32H7xx_HAL_Driver/Inc}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/lib/STM32_USB_Device_Library/Core/Inc}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/hw/usb_cdc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/hw/driver/usb_cdc}&quot;"/>
 								</option>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.1692490305" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" value="STM32H753II" valueType="enumerated"/>
 								<option id="com.atollic.truestudio.common_options.target.endianess.1143554584" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess"/>

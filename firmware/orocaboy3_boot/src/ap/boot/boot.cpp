@@ -34,7 +34,7 @@ static void bootCmdFlashErase(cmd_t *p_cmd);
 static void bootCmdFlashWrite(cmd_t *p_cmd);
 static void bootCmdFlashRead(cmd_t *p_cmd);
 static void bootCmdJumpToFw(cmd_t *p_cmd);
-
+static bool bootIsFlashRange(uint32_t addr_begin, uint32_t length);
 
 
 bool bootCheckFw(void);
@@ -42,7 +42,6 @@ void bootJumpToFw(void);
 
 
 static flash_tag_t  *p_fw_tag = (flash_tag_t *)FLASH_ADDR_TAG;
-static flash_ver_t  *p_fw_ver = (flash_ver_t *)FLASH_ADDR_VER;
 
 
 void bootInit(void)
@@ -84,16 +83,16 @@ bool bootVerifyCrc(void)
     return false;
   }
 
-  p_data = (uint8_t *)p_fw_tag->flash_start;
+  p_data = (uint8_t *)p_fw_tag->tag_flash_start;
 
   fw_crc = 0;
 
-  for (i=0; i<p_fw_tag->flash_length; i++)
+  for (i=0; i<p_fw_tag->tag_flash_length; i++)
   {
     utilUpdateCrc(&fw_crc, p_data[i]);
   }
 
-  if (fw_crc == p_fw_tag->flash_crc)
+  if (fw_crc == p_fw_tag->tag_flash_crc)
   {
     return true;
   }
@@ -115,19 +114,18 @@ void bootCmdReadBootName(cmd_t *p_cmd)
 
 void bootCmdReadFirmVersion(cmd_t *p_cmd)
 {
-  cmdSendResp(p_cmd, OK, p_fw_ver->version_str, 32);
+  cmdSendResp(p_cmd, OK, p_fw_tag->version_str, 32);
 }
 
 void bootCmdReadFirmName(cmd_t *p_cmd)
 {
-  cmdSendResp(p_cmd, OK, p_fw_ver->board_str, 32);
+  cmdSendResp(p_cmd, OK, p_fw_tag->board_str, 32);
 }
 
 void bootCmdFlashErase(cmd_t *p_cmd)
 {
   uint8_t err_code = OK;
   uint32_t addr_begin;
-  uint32_t addr_end;
   uint32_t length;
 
 
@@ -141,11 +139,8 @@ void bootCmdFlashErase(cmd_t *p_cmd)
   length     |= p_cmd->rx_packet.data[6]<<16;
   length     |= p_cmd->rx_packet.data[7]<<24;
 
-  addr_end    = addr_begin + length - 1;
 
-
-  if ((addr_begin >= FLASH_ADDR_START) && (addr_begin < FLASH_ADDR_END) &&
-      (addr_end   >= FLASH_ADDR_START) && (addr_end   < FLASH_ADDR_END))
+  if (bootIsFlashRange(addr_begin, length) == true)
   {
     if (flashErase(addr_begin, length) == false)
     {
@@ -165,7 +160,6 @@ void bootCmdFlashWrite(cmd_t *p_cmd)
 {
   uint8_t err_code = OK;
   uint32_t addr_begin;
-  uint32_t addr_end;
   uint32_t length;
 
 
@@ -179,11 +173,8 @@ void bootCmdFlashWrite(cmd_t *p_cmd)
   length     |= p_cmd->rx_packet.data[6]<<16;
   length     |= p_cmd->rx_packet.data[7]<<24;
 
-  addr_end    = addr_begin + length - 1;
 
-
-  if ((addr_begin >= FLASH_ADDR_START) && (addr_begin < FLASH_ADDR_END) &&
-      (addr_end   >= FLASH_ADDR_START) && (addr_end   < FLASH_ADDR_END))
+  if (bootIsFlashRange(addr_begin, length) == true)
   {
     if (flashWrite(addr_begin, &p_cmd->rx_packet.data[8], length) == false)
     {
@@ -285,4 +276,34 @@ void bootProcessCmd(cmd_t *p_cmd)
       cmdSendResp(p_cmd, ERR_INVALID_CMD, NULL, 0);
       break;
   }
+}
+
+bool bootIsFlashRange(uint32_t addr_begin, uint32_t length)
+{
+  bool ret = false;
+  uint32_t addr_end;
+  uint32_t flash_start;
+  uint32_t flash_end;
+
+
+  addr_end = addr_begin + length - 1;
+
+
+  flash_start = FLASH_ADDR_START;
+  flash_end   = FLASH_ADDR_END;
+  if ((addr_begin >= flash_start) && (addr_begin < flash_end) &&
+      (addr_end   >= flash_start) && (addr_end   < flash_end))
+  {
+    ret = true;
+  }
+
+  flash_start = qspiGetAddr();
+  flash_end   = qspiGetAddr() + qspiGetLength();
+  if ((addr_begin >= flash_start) && (addr_begin < flash_end) &&
+      (addr_end   >= flash_start) && (addr_end   < flash_end))
+  {
+    ret = true;
+  }
+
+  return ret;
 }

@@ -202,7 +202,7 @@ uint8_t bootCmdFlashErase(uint32_t addr, uint32_t length)
   data[7] = length >> 24;
 
 
-  ret = cmdSendCmdRxResp(p_cmd, BOOT_CMD_FLASH_ERASE, data, 8, 10000);
+  ret = cmdSendCmdRxResp(p_cmd, BOOT_CMD_FLASH_ERASE, data, 8, 15000);
   if (ret == false)
   {
     errcode = p_cmd->rx_packet.error;

@@ -76,6 +76,8 @@ bool rtcInit(void)
     return false;
   }
 
+  resetSetBits(rtcReadBackupData(_HW_DEF_RTC_RESET_SRC));
+  resetInit();
 
   reset_time = (uint32_t)rtcGetTime();
 

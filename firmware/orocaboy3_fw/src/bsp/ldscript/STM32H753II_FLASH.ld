@@ -45,9 +45,7 @@ _Min_Stack_Size = 0x800; /* required amount of stack */
 MEMORY
 {
   TAG   (rx)      : ORIGIN = 0x08040000, LENGTH = 1K
-  BOOT  (rx)      : ORIGIN = 0x08040400, LENGTH = 1K
-  VER   (rx)      : ORIGIN = 0x08040800, LENGTH = 1K
-  FLASH (rx)      : ORIGIN = 0x08040C00, LENGTH = 765K  
+  FLASH (rx)      : ORIGIN = 0x08040400, LENGTH = 767K  
   
   DTCMRAM (xrw)   : ORIGIN = 0x20000000, LENGTH = 128K
   SRAM_D1 (xrw)   : ORIGIN = 0x24000000, LENGTH = 512K
@@ -60,20 +58,23 @@ MEMORY
 /* Define output sections */
 SECTIONS
 {
+
+  .tag :
+  {
+    . = ALIGN(4);
+    _flash_tag_addr = .;
+    KEEP(*(.tag)) 
+    . = ALIGN(4);
+  } >TAG
+  
   /* The startup code goes first into FLASH */
   .isr_vector :
   {
     . = ALIGN(4);
+    _flash_fw_addr = .;
     KEEP(*(.isr_vector)) /* Startup code */
     . = ALIGN(4);
-  } >BOOT
-
-  .version :
-  {
-    . = ALIGN(4);
-    KEEP(*(.version)) 
-    . = ALIGN(4);
-  } >VER
+  } >FLASH
   
   
   /* The program code and other data goes into FLASH */
