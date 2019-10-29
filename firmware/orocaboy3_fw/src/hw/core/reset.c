@@ -17,47 +17,15 @@ static uint8_t reset_bits   = 0x00;
 
 void resetInit(void)
 {
-  uint8_t ret = 0;
-
-  if (__HAL_RCC_GET_FLAG(RCC_FLAG_PINRST) != RESET)
-  {
-   ret |= (1<<_DEF_RESET_PIN);
-  }
-  if (__HAL_RCC_GET_FLAG(RCC_FLAG_BORRST) != RESET)
-  {
-   ret |= (1<<_DEF_RESET_POWER);
-  }
-  if (__HAL_RCC_GET_FLAG(RCC_FLAG_PORRST) != RESET)
-  {
-   ret |= (1<<_DEF_RESET_POWER);
-  }
-  if (__HAL_RCC_GET_FLAG(RCC_FLAG_IWDG1RST) != RESET)
-  {
-   ret |= (1<<_DEF_RESET_WDG);
-  }
-  if (__HAL_RCC_GET_FLAG(RCC_FLAG_WWDG1RST) != RESET)
-  {
-   ret |= (1<<_DEF_RESET_WDG);
-  }
-  if (__HAL_RCC_GET_FLAG(RCC_FLAG_SFTRST) != RESET)
-  {
-   ret |= (1<<_DEF_RESET_SOFT);
-  }
-
-  reset_bits = ret;
-
-  __HAL_RCC_CLEAR_RESET_FLAGS();
-
-
-  if (ret & (1<<_DEF_RESET_WDG))
+  if (reset_bits & (1<<_DEF_RESET_WDG))
   {
     reset_status = _DEF_RESET_WDG;
   }
-  else if (ret & (1<<_DEF_RESET_SOFT))
+  else if (reset_bits & (1<<_DEF_RESET_SOFT))
   {
     reset_status = _DEF_RESET_SOFT;
   }
-  else if (ret & (1<<_DEF_RESET_POWER))
+  else if (reset_bits & (1<<_DEF_RESET_POWER))
   {
     reset_status = _DEF_RESET_POWER;
   }
@@ -85,6 +53,11 @@ void resetLog(void)
   {
     logPrintf("ResetFrom \t\t: Soft\r\n");
   }
+}
+
+void resetSetBits(uint8_t data)
+{
+  reset_bits = data;
 }
 
 void resetRunSoftReset(void)

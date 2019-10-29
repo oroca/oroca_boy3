@@ -13,7 +13,7 @@
 
 
 __attribute__((section(".version"))) uint8_t boot_name[32] = "OROCABOY3";
-__attribute__((section(".version"))) uint8_t boot_ver[32]  = "B190925R1";
+__attribute__((section(".version"))) uint8_t boot_ver[32]  = "B191029R1";
 
 static uint8_t reset_count = 0;
 
@@ -50,11 +50,11 @@ void hwInit(void)
   {
     if (sdramTest() == true)
     {
-      logPrintf("SDRAM Test \t\t: OK\n");
+      logPrintf("SDRAM Test \t\t: OK\r\n");
     }
     else
     {
-      logPrintf("SDRAM Test \t\t: Fail\n");
+      logPrintf("SDRAM Test \t\t: Fail\r\n");
     }
   }
 
@@ -65,23 +65,28 @@ void hwInit(void)
   eepromInit();
   if (eepromValid(0) == true)
   {
-    logPrintf("eeprom %dKB \t\t: OK\n", (int)eepromGetLength()/1024);
+    logPrintf("eeprom %dKB \t\t: OK\r\n", (int)eepromGetLength()/1024);
   }
   else
   {
-    logPrintf("eeprom %dKB \t\t: Fail\n", (int)eepromGetLength()/1024);
+    logPrintf("eeprom %dKB \t\t: Fail\r\n", (int)eepromGetLength()/1024);
   }
 
 
-  logPrintf("Start...\n");
+  logPrintf("Start...\r\n");
 }
 
 void bootModeWait(void)
 {
+  rtcWriteBackupData(_HW_DEF_RTC_RESET_SRC, resetGetBits());
+
+  logPrintf("ResetBits \t\t: 0x%X\n", (int)rtcReadBackupData(_HW_DEF_RTC_RESET_SRC));
+
+
   if (resetGetBits() == (1<<_DEF_RESET_PIN))
   {
     reset_count = (uint8_t)rtcReadBackupData(_HW_DEF_RTC_BOOT_RESET);
-    logPrintf("ResetCount \t\t: %d\n", (int)reset_count);
+    logPrintf("ResetCount \t\t: %d\r\n", (int)reset_count);
 
     rtcWriteBackupData(_HW_DEF_RTC_BOOT_RESET, rtcReadBackupData(_HW_DEF_RTC_BOOT_RESET) + 1);
     ledOn(_DEF_LED1);
@@ -93,11 +98,11 @@ void bootModeWait(void)
   }
   else
   {
-    logPrintf("ResetCount \t\t: %d\n", (int)reset_count);
+    logPrintf("ResetCount \t\t: %d\r\n", (int)reset_count);
     rtcWriteBackupData(_HW_DEF_RTC_BOOT_RESET, 0);
   }
 
-  logPrintf("ResetMode \t\t: %d\n", (int)rtcReadBackupData(_HW_DEF_RTC_BOOT_MODE));
+  logPrintf("ResetMode \t\t: %d\r\n", (int)rtcReadBackupData(_HW_DEF_RTC_BOOT_MODE));
 }
 
 uint8_t hwGetResetCount(void)

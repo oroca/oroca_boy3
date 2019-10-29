@@ -20,6 +20,7 @@
 
 void resetInit(void);
 void resetLog(void);
+void resetSetBits(uint8_t data);
 void resetRunSoftReset(void);
 void resetClearFlag(void);
 uint8_t resetGetStatus(void);

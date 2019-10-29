@@ -58,11 +58,11 @@ bool sdramInit(void)
 
   if (ret == true)
   {
-    logPrintf("SDRAM %dMB \t\t: OK\n", (int)(SDRAM_DEVICE_SIZE/1024/1024));
+    logPrintf("SDRAM %dMB \t\t: OK\r\n", (int)(SDRAM_DEVICE_SIZE/1024/1024));
   }
   else
   {
-    logPrintf("SDRAM  \t\t: Fail\n");
+    logPrintf("SDRAM  \t\t: Fail\r\n");
   }
 
 #if HW_USE_CMDIF_SDRAM == 1

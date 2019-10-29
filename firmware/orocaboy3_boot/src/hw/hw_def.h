@@ -17,7 +17,7 @@
 
 #define _HW_DEF_RTC_BOOT_RESET      RTC_BKP_DR3
 #define _HW_DEF_RTC_BOOT_MODE       RTC_BKP_DR4
-
+#define _HW_DEF_RTC_RESET_SRC       RTC_BKP_DR5
 
 
 
@@ -75,7 +75,6 @@
 
 #define FLASH_ADDR_TAG      0x08040000
 #define FLASH_ADDR_FW       0x08040400
-#define FLASH_ADDR_VER      0x08040800
 
 #define FLASH_ADDR_START    0x08040000
 #define FLASH_ADDR_END     (0x08040000 + 768*1024)

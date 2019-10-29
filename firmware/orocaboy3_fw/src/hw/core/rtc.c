@@ -72,10 +72,12 @@ bool rtcInit(void)
 
   if (HAL_RTC_Init(&RtcHandle) != HAL_OK)
   {
-    logPrintf("RTC     \t\t: Fail\n");
+    logPrintf("RTC     \t\t: Fail\r\n");
     return false;
   }
 
+  resetSetBits(rtcReadBackupData(_HW_DEF_RTC_RESET_SRC));
+  resetInit();
 
   reset_time = (uint32_t)rtcGetTime();
 
@@ -98,7 +100,7 @@ bool rtcInit(void)
   }
 
 
-  logPrintf("RTC     \t\t: OK\n");
+  logPrintf("RTC     \t\t: OK\r\n");
   is_init = true;
 
 #if HW_USE_CMDIF_RTC == 1

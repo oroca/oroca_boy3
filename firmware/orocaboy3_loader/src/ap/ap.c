@@ -18,12 +18,13 @@
 
 
 
+
 flash_tag_t    fw_tag;
-flash_ver_t    fw_ver;
 
 
 
 int32_t getFileSize(char *file_name);
+bool addTagToBin(char *src_filename, char *dst_filename);
 
 
 
@@ -51,14 +52,14 @@ void apMain(int argc, char *argv[])
   size_t readbytes;
   uint32_t percent;
   uint32_t len;
-  uint16_t flash_crc;
   uint32_t pre_percent = 100;
-  uint32_t file_addr = 0;
   uint32_t start_addr = 0;
   uint32_t file_run = 0;
 
   uint32_t flash_begin;
   uint32_t flash_end;
+  char dst_filename[256];
+
 
   setbuf(stdout, NULL);
 
@@ -69,34 +70,66 @@ void apMain(int argc, char *argv[])
     return;
   }
 
+  printf("\norocaboy3_loader... V191029R1\n\n");
+
   port_name = (char *)argv[ 1 ];
   baud      = strtol( argv[ 2 ], NULL, 10 );
   file_type = (char *)argv[ 3 ];
-  start_addr= (uint32_t)strtol( argv[ 4 ], NULL, 0 );
+  start_addr= (uint32_t)strtoul( argv[ 4 ], NULL, 0 );
   file_name = (char *)argv[ 5 ];
   file_run  = (uint32_t)strtol( argv[ 6 ], NULL, 0 );
 
 
-  file_size = getFileSize(file_name);
-
-  file_addr = start_addr + FLASH_TAG_SIZE;
-
-  printf("downloader...\n\n");
-
-  printf("file open\n");
-  printf("  file name \t: %s \n", file_name);
-  printf("  file size \t: %d B\n", file_size);
-  printf("  file addr \t: 0x%X\n", file_addr);
-  printf("  file ver  \t: %s\n", (char *)fw_ver.version_str);
-  printf("  file board\t: %s\n", (char *)fw_ver.board_str);
-  printf("  file magic\t: 0x%X\n", fw_ver.magic_number);
-
-
-  if (fw_ver.magic_number != 0x5555AAAA)
+  if(strcmp(file_type, "fw") == 0)
   {
-    printf("MagicNumber Fail, Wrong Image.\n");
-    return;
+    printf("\r\n@ Make binary (Add Tag)...\r\n");
+    strcpy(dst_filename, file_name);
+    strcat(dst_filename, ".fw");
+
+    if(addTagToBin(file_name, dst_filename) != true)
+    {
+      fprintf( stderr, "  Add tag info to binary Fail! \n");
+      exit( 1 );
+    }
+
+    file_size = getFileSize(dst_filename);
+
+
+    printf("\nfirmware downloader...\n\n");
+
+    printf("file open\n");
+    printf("  file name \t: %s \n", file_name);
+    printf("  file size \t: %d B\n", file_size);
+    printf("  file addr \t: 0x%X\n", fw_tag.addr_fw);
+    printf("  file board\t: %s\n", (char *)fw_tag.board_str);
+    printf("  file name \t: %s\n", (char *)fw_tag.name_str);
+    printf("  file ver  \t: %s\n", (char *)fw_tag.version_str);
+
+    printf("  file magic\t: 0x%X\n", fw_tag.magic_number);
+
+
+    if (fw_tag.magic_number != 0x5555AAAA)
+    {
+      printf("MagicNumber Fail, Wrong Image.\n");
+      return;
+    }
   }
+  else
+  {
+    strcpy(dst_filename, file_name);
+
+    file_size = getFileSize(dst_filename);
+
+
+    printf("\nimage downloader...\n\n");
+
+    printf("file open\n");
+    printf("  file name \t: %s \n", file_name);
+    printf("  file size \t: %d B\n", file_size);
+    printf("  file addr \t: 0x%X\n", start_addr);
+  }
+
+
 
   printf("port open \t: %s\n", port_name);
 
@@ -112,15 +145,12 @@ void apMain(int argc, char *argv[])
   }
 
 
-  fw_tag.magic_number = 0x5555AAAA;
-  fw_tag.flash_start  = file_addr;
-  fw_tag.flash_length = file_size;
 
 
   flash_begin = start_addr;
-  flash_end   = start_addr + file_size + FLASH_TAG_SIZE;
-  flash_crc   = 0;
+  flash_end   = start_addr + file_size;
 
+  printf("%X\n", flash_begin);
   while(1)
   {
     //-- 보드 이름 확인
@@ -187,7 +217,7 @@ void apMain(int argc, char *argv[])
 
     //-- Flash Write
     //
-    if( ( fp = fopen( file_name, "rb" ) ) == NULL )
+    if( ( fp = fopen( dst_filename, "rb" ) ) == NULL )
     {
       fprintf( stderr, "Unable to open %s\n", file_name );
       exit(1);
@@ -195,14 +225,14 @@ void apMain(int argc, char *argv[])
 
 
     flash_write_done = false;
-    addr = file_addr;
+    addr = flash_begin;
     time_pre = millis();
     while(1)
     {
       if( !feof( fp ) )
       {
         readbytes = fread( block_buf, 1, FLASH_TX_BLOCK_LENGTH, fp );
-        percent = (addr+readbytes-file_addr)*100/file_size;
+        percent = (addr+readbytes-flash_begin)*100/file_size;
 
         if ((percent%10) == 0 && percent != pre_percent)
         {
@@ -237,10 +267,6 @@ void apMain(int argc, char *argv[])
         errcode = bootCmdFlashWrite(addr, block_buf, len);
         if( errcode == OK )
         {
-          for (int i=0; i<len; i++)
-          {
-            utilUpdateCrc(&flash_crc, block_buf[i]);
-          }
           break;
         }
         else
@@ -255,7 +281,7 @@ void apMain(int argc, char *argv[])
 
       addr += len;
 
-      if ((addr-file_addr) == file_size)
+      if ((addr-flash_begin) == file_size)
       {
         flash_write_done = true;
         break;
@@ -284,22 +310,6 @@ void apMain(int argc, char *argv[])
     else
     {
       printf("Download \t: OK\n");
-
-
-      fw_tag.flash_crc = flash_crc;
-
-      printf("Tag CRC \t: 0x%X\r\n", fw_tag.flash_crc);
-
-      errcode = bootCmdFlashWrite(flash_begin, (uint8_t *)&fw_tag, sizeof(flash_tag_t));
-      if( errcode == OK )
-      {
-        printf("Tag Write \t: OK\n");
-      }
-      else
-      {
-        printf("Tag Write Fail \t: %d \n", errcode);
-        break;
-      }
     }
 
 
@@ -324,7 +334,7 @@ int32_t getFileSize(char *file_name)
 {
   int32_t ret = -1;
   static FILE *fp;
-  uint8_t block_buf[FLASH_TAG_SIZE];
+
 
   if( ( fp = fopen( file_name, "rb" ) ) == NULL )
   {
@@ -333,8 +343,7 @@ int32_t getFileSize(char *file_name)
   }
   else
   {
-    fread( block_buf, 1, FLASH_TAG_SIZE, fp ); // boot
-    fread( (void *)&fw_ver, 1, sizeof(flash_ver_t), fp );
+    fread( (void *)&fw_tag, 1, sizeof(flash_tag_t), fp );
 
     fseek( fp, 0, SEEK_END );
     ret = ftell( fp );
@@ -343,4 +352,112 @@ int32_t getFileSize(char *file_name)
   }
 
   return ret;
+}
+
+bool addTagToBin(char *src_filename, char *dst_filename)
+{
+  FILE    *p_fd;
+  uint8_t *buf;
+  size_t   src_len;
+  uint16_t t_crc = 0;
+  flash_tag_t *p_tag;
+
+
+  if (!strcmp(src_filename, dst_filename))
+  {
+    fprintf( stderr, "  src file(%s) and dst file(%s) is same! \n", src_filename, dst_filename );
+    exit( 1 );
+  }
+
+
+  /* Open src file */
+  if ((p_fd = fopen(src_filename, "rb")) == NULL)
+  {
+    fprintf( stderr, "  unable to open src file(%s)\n", src_filename );
+    exit( 1 );
+  }
+
+  fseek( p_fd, 0, SEEK_END );
+  src_len = ftell( p_fd );
+  fseek( p_fd, 0, SEEK_SET );
+
+  if ((buf = (uint8_t *) calloc(src_len, sizeof(uint8_t))) == NULL)
+  {
+    fclose(p_fd);
+    fprintf( stderr, "  malloc Error \n");
+    exit( 1 );
+  }
+
+
+  /* Copy read fp to buf */
+  if(fread( &buf[0], 1, src_len, p_fd ) != src_len)
+  {
+    fclose(p_fd);
+    free(buf);
+    fprintf( stderr, "  length is wrong! \n" );
+    exit( 1 );
+  }
+  fclose(p_fd);
+
+
+  /* Calculate CRC16 */
+  size_t i;
+  for (i = 0; i<src_len - FLASH_TAG_SIZE; i++)
+  {
+    utilUpdateCrc(&t_crc, buf[FLASH_TAG_SIZE + i]);
+  }
+
+  p_tag = (flash_tag_t *)buf;
+
+
+  if (p_tag->magic_number == 0x5555AAAA)
+  {
+    free(buf);
+    fprintf( stderr, "  already magic number\n");
+    return true;
+  }
+  else if (p_tag->magic_number != 0xAAAA5555)
+  {
+    free(buf);
+    fprintf( stderr, "  wrong magic number 0x%X \n", p_tag->magic_number);
+    return false;
+  }
+
+  p_tag->magic_number     = 0x5555AAAA;
+  p_tag->tag_flash_start  = p_tag->addr_fw;
+  p_tag->tag_flash_end    = p_tag->addr_fw + (src_len - FLASH_TAG_SIZE);
+  p_tag->tag_flash_length = p_tag->tag_flash_end - p_tag->tag_flash_start;
+  strcpy((char *)p_tag->tag_date_str, __DATE__);
+  strcpy((char *)p_tag->tag_time_str, __TIME__);
+  p_tag->tag_flash_crc = t_crc;
+
+
+  /* Store data to dst file */
+  if ((p_fd = fopen(dst_filename, "wb")) == NULL)
+  {
+    free(buf);
+    fprintf( stderr, "  unable to open dst file(%s)\n", dst_filename );
+    exit( 1 );
+  }
+
+  if(fwrite(buf, 1, src_len, p_fd) != src_len)
+  {
+    fclose(p_fd);
+    free(buf);
+    //_unlink(dst_filename);
+    fprintf( stderr, "  total write fail! \n" );
+    exit( 1 );
+  }
+
+  printf("  created file  : %s (%d KB)\n", dst_filename, (int)((src_len)/1024) );
+  printf("  tag fw start  : 0x%08X \n", p_tag->tag_flash_start);
+  printf("  tag fw end    : 0x%08X \n", p_tag->tag_flash_end);
+  printf("  tag crc       : 0x%04X \n", p_tag->tag_flash_crc);
+  printf("  tag date      : %s \n", p_tag->tag_date_str);
+  printf("  tag time      : %s \n", p_tag->tag_time_str);
+
+  fclose(p_fd);
+  free(buf);
+
+  return true;
 }

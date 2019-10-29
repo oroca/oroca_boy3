@@ -85,10 +85,60 @@ uint8_t eepromReadByte(uint32_t addr)
 bool eepromWriteByte(uint32_t addr, uint8_t data_in)
 {
   uint8_t sub_addr;
+  uint32_t pre_time;
+  bool ret;
 
   sub_addr = (addr>>8) & 0x03;
 
-  return i2cWriteByte(i2c_ch, i2c_addr + sub_addr, addr & 0xFF, data_in, 100);
+  pre_time = millis();
+  while(millis()-pre_time < 100)
+  {
+    ret = i2cWriteByte(i2c_ch, i2c_addr + sub_addr, addr & 0xFF, data_in, 10);
+    if (ret == true)
+    {
+      break;
+    }
+  }
+
+  return ret;
+}
+
+bool eepromRead(uint32_t addr, uint8_t *p_data, uint32_t length)
+{
+  bool ret = true;
+  uint32_t i;
+
+
+  for (i=0; i<length; i++)
+  {
+    p_data[i] = eepromReadByte(addr);
+
+    if (last_error != 0)
+    {
+      ret = false;
+      break;
+    }
+  }
+
+  return ret;
+}
+
+bool eepromWrite(uint32_t addr, uint8_t *p_data, uint32_t length)
+{
+  bool ret;
+  uint32_t i;
+
+
+  for (i=0; i<length; i++)
+  {
+    ret = eepromWriteByte(addr, p_data[i]);
+    if (ret == false)
+    {
+      break;
+    }
+  }
+
+  return ret;
 }
 
 uint32_t eepromGetLength(void)
