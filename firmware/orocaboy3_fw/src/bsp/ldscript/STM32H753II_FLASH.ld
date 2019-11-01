@@ -242,23 +242,6 @@ SECTIONS
     *(.mb1rodata*)
   } >MEMORY_B1
 
-
-  .rom_1_bin :
-  {
-    . = ALIGN(8);
-    rom_1_bin = .;
-    KEEP(*(.rom_1_bin));
-    rom_1_bin_end = .;
-  } >FLASH  
-
-  .rom_2_bin :
-  {
-    . = ALIGN(8);
-    rom_2_bin = .;
-    KEEP(*(.rom_2_bin));
-    rom_2_bin_end = .;
-  } >FLASH  
-  
     
   
   /* Remove information from the standard libraries */

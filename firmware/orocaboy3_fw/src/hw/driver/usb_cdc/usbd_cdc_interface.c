@@ -51,7 +51,7 @@
 #include "wdg.h"
 #include "reset.h"
 
-const char *JUMP_BOOT_STR = "TOTE 5555AAAA";
+const char *JUMP_BOOT_STR = "BOOT 5555AAAA";
 
 
 /* Private typedef -----------------------------------------------------------*/
@@ -108,6 +108,7 @@ static uint8_t CDC_Itf_TxRead( void );
 
 void CDC_Itf_TxISR(void *arg);
 
+extern void hwJumpToBoot(void);
 
 
 
@@ -324,16 +325,16 @@ static int8_t CDC_Itf_Receive(uint8_t* Buf, uint32_t *Len)
   {
     CDC_Reset_Status = 0;
 
-    if( *Len >= 15 )
+    if( *Len >= 13 )
     {
-      for( i=0; i<15; i++ )
+      for( i=0; i<13; i++ )
       {
         if( JUMP_BOOT_STR[i] != Buf[i] ) break;
       }
 
-      if( i == 15 )
+      if( i == 13 )
       {
-        resetRunSoftReset();
+        hwJumpToBoot();
       }
     }
   }

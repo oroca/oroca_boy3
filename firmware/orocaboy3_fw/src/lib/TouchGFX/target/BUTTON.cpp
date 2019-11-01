@@ -13,11 +13,11 @@ bool ButtonSampler::sample(uint8_t& key)
 {
   uint8_t i;
 
-  for (i=1; i<BUTTON_MAX_CH; i++)
+  for (i=0; i<BUTTON_MAX_CH; i++)
   {
-    if (buttonGetReleasedEvent(i) == true && buttonGetReleasedTime(i) < 100)
+    if (buttonGetPressed(i) == true)
     {
-      key = i-1;
+      key = i;
       return true;
     }
   }

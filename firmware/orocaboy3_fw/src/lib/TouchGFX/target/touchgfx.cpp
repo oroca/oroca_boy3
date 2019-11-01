@@ -22,11 +22,6 @@ using namespace touchgfx;
 static void GUITask(void* params)
 {
   touchgfx::HAL::getInstance()->taskEntry();
-
-  while(1)
-  {
-
-  }
 }
 
 int touchgfxMain(void)
@@ -63,6 +58,8 @@ int touchgfxMain(void)
               NULL,
               configGUI_TASK_PRIORITY,
               NULL);
+
+  gpioPinWrite(_PIN_GPIO_LCD_BK_EN, _DEF_HIGH);
 
   return 0;
 }

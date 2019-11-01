@@ -94,6 +94,11 @@ void hw_init()
 {
     __HAL_RCC_CRC_CLK_ENABLE();
 
+    *((uint32_t*)0x51046108) = 1; /* DMA2D issue in cut 1.1 */
+    *((uint32_t*)0x51008108) = 1; /* AXI SRAM issue in cut 1.2 */
+
+
+
     /* Disable FMC Bank1 to avoid speculative/cache accesses */
     //FMC_Bank1_R->BTCR[0] &= ~FMC_BCRx_MBKEN;
 

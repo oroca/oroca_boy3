@@ -152,7 +152,8 @@ public:
      */
     void setSelectedPage(uint8_t pageIndex);
 
-private:
+//private:
+
     static const int16_t DRAG_CANCEL_THRESHOLD = 3; //Pixels to drag before sending cancel event.
 
     enum States

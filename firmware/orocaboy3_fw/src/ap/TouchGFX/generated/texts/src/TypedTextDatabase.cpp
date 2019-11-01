@@ -6,10 +6,12 @@
 #include <texts/TypedTextDatabase.hpp>
 
 extern touchgfx::GeneratedFont& getFont_Asap_Regular_80_4bpp();
+extern touchgfx::GeneratedFont& getFont_NanumGothicCoding_Bold_18_4bpp();
 
 const touchgfx::Font* _fonts[] =
 {
-    &(getFont_Asap_Regular_80_4bpp())
+    &(getFont_Asap_Regular_80_4bpp()),
+    &(getFont_NanumGothicCoding_Bold_18_4bpp())
 };
 
 extern const touchgfx::TypedText::TypedTextData typedText_database_DEFAULT[];
@@ -19,7 +21,9 @@ TEXT_LOCATION_FLASH_PRAGMA
 const touchgfx::TypedText::TypedTextData typedText_database_DEFAULT[] TEXT_LOCATION_FLASH_ATTRIBUTE =
 {
     { 0, touchgfx::CENTER, touchgfx::TEXT_DIRECTION_LTR },
-    { 0, touchgfx::LEFT, touchgfx::TEXT_DIRECTION_LTR }
+    { 1, touchgfx::LEFT, touchgfx::TEXT_DIRECTION_LTR },
+    { 1, touchgfx::CENTER, touchgfx::TEXT_DIRECTION_LTR },
+    { 1, touchgfx::LEFT, touchgfx::TEXT_DIRECTION_LTR }
 };
 
 TEXT_LOCATION_FLASH_PRAGMA
@@ -58,6 +62,9 @@ void resetFont(touchgfx::FontId fontId)
     {
     case 0:
         _fonts[0] = &(getFont_Asap_Regular_80_4bpp());
+        break;
+    case 1:
+        _fonts[1] = &(getFont_NanumGothicCoding_Bold_18_4bpp());
         break;
     }
 }

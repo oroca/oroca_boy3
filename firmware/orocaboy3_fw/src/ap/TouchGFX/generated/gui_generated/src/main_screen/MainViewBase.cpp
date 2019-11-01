@@ -8,35 +8,73 @@
 
 MainViewBase::MainViewBase()
 {
-    box1.setPosition(0, 0, 320, 240);
-    box1.setColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
+    box_bg.setPosition(0, 0, 320, 240);
+    box_bg.setColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
 
-    backgroundBox.setPosition(0, 0, 800, 480);
-    backgroundBox.setVisible(false);
-    backgroundBox.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
+    image_speaker.setXY(7, 2);
+    image_speaker.setBitmap(touchgfx::Bitmap(BITMAP_A4_ID));
 
-    counterBackgroundImage.setXY(160, 43);
-    counterBackgroundImage.setBitmap(touchgfx::Bitmap(BITMAP_COUNTER_BOX_ID));
+    image1.setXY(279, 2);
+    image1.setBitmap(touchgfx::Bitmap(BITMAP_A2_ID));
 
-    countTxt.setPosition(160, 76, 152, 89);
-    countTxt.setColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
-    countTxt.setLinespacing(0);
-    Unicode::snprintf(countTxtBuffer, COUNTTXT_SIZE, "%s", touchgfx::TypedText(T_SINGLEUSEID1).getText());
-    countTxt.setWildcard(countTxtBuffer);
-    countTxt.setTypedText(touchgfx::TypedText(T_TEXTID1));
+    textArea_title.setXY(124, 5);
+    textArea_title.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 8, 245));
+    textArea_title.setLinespacing(0);
+    textArea_title.setTypedText(touchgfx::TypedText(T_SINGLEUSEID1));
 
-    buttonUp.setXY(15, 43);
-    buttonUp.setBitmaps(touchgfx::Bitmap(BITMAP_UP_BTN_ID), touchgfx::Bitmap(BITMAP_UP_BTN_PRESSED_ID));
+    animatedImage_title.setXY(96, 5);
+    animatedImage_title.setBitmaps(BITMAP_OROCABOY1_ID, BITMAP_OROCABOY4_ID);
+    animatedImage_title.setUpdateTicksInterval(6);
+    animatedImage_title.startAnimation(false, true, true);
 
-    buttonDown.setXY(15, 141);
-    buttonDown.setBitmaps(touchgfx::Bitmap(BITMAP_DOWN_BTN_ID), touchgfx::Bitmap(BITMAP_DOWN_BTN_PRESSED_ID));
+    swipeContainer_emulator.setXY(0, 37);
 
-    add(box1);
-    add(backgroundBox);
-    add(counterBackgroundImage);
-    add(countTxt);
-    add(buttonUp);
-    add(buttonDown);
+    page_nes.setWidth(320);
+    page_nes.setHeight(150);
+
+    image_nes.setXY(60, 41);
+    image_nes.setBitmap(touchgfx::Bitmap(BITMAP_A1_ID));
+    page_nes.add(image_nes);
+    swipeContainer_emulator.add(page_nes);
+
+    page_msx.setWidth(320);
+    page_msx.setHeight(150);
+
+    image_msx.setXY(60, 44);
+    image_msx.setBitmap(touchgfx::Bitmap(BITMAP_FMSX_ID));
+    page_msx.add(image_msx);
+    swipeContainer_emulator.add(page_msx);
+
+    page_doom.setWidth(320);
+    page_doom.setHeight(150);
+
+    image_doom.setXY(60, 39);
+    image_doom.setBitmap(touchgfx::Bitmap(BITMAP_DOOM_ID));
+    page_doom.add(image_doom);
+    swipeContainer_emulator.add(page_doom);
+
+    page_button.setWidth(320);
+    page_button.setHeight(150);
+
+    test_menu.setXY(111, 77);
+    test_menu.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
+    test_menu.setLinespacing(0);
+    test_menu.setTypedText(touchgfx::TypedText(T_SINGLEUSEID3));
+    page_button.add(test_menu);
+    swipeContainer_emulator.add(page_button);
+
+    swipeContainer_emulator.setPageIndicatorBitmaps(touchgfx::Bitmap(BITMAP_DARK_PAGEINDICATOR_DOT_INDICATOR_SMALL_NORMAL_ID), touchgfx::Bitmap(BITMAP_DARK_PAGEINDICATOR_DOT_INDICATOR_SMALL_HIGHLIGHT_ID));
+    swipeContainer_emulator.setPageIndicatorXY(130, 0);
+    swipeContainer_emulator.setSwipeCutoff(50);
+    swipeContainer_emulator.setEndSwipeElasticWidth(50);
+    swipeContainer_emulator.setSelectedPage(0);
+
+    add(box_bg);
+    add(image_speaker);
+    add(image1);
+    add(textArea_title);
+    add(animatedImage_title);
+    add(swipeContainer_emulator);
 }
 
 void MainViewBase::setupScreen()
@@ -47,18 +85,32 @@ void MainViewBase::setupScreen()
 //Handles when a key is pressed
 void MainViewBase::handleKeyEvent(uint8_t key)
 {
-    if(2 == key)
+    if(47 == key)
     {
-        //IncreaseValue
-        //When hardware button 2 clicked call virtual function
-        //Call increaseValue
-        increaseValue();
+        //goLeft_pc
+        //When hardware button 47 clicked call virtual function
+        //Call goLeft_pc
+        goLeft_pc();
     }
-    if(3 == key)
+    if(46 == key)
     {
-        //DecreaseValue
-        //When hardware button 3 clicked call virtual function
-        //Call decreaseValue
-        decreaseValue();
+        //goRight_pc
+        //When hardware button 46 clicked call virtual function
+        //Call goRight_pc
+        goRight_pc();
+    }
+    if(51 == key)
+    {
+        //Interaction1
+        //When hardware button 51 clicked change screen to msg_box
+        //Go to msg_box with no screen transition
+        application().gotomsg_boxScreenNoTransition();
+    }
+    if(49 == key)
+    {
+        //Interaction2
+        //When hardware button 49 clicked change screen to btn_show
+        //Go to btn_show with no screen transition
+        application().gotobtn_showScreenNoTransition();
     }
 }

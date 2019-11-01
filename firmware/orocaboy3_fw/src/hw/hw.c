@@ -25,7 +25,7 @@ __attribute__((section(".tag"))) flash_tag_t fw_tag =
      // fw info
      //
      0xAAAA5555,        // magic_number
-     "V191023R1",       // version_str
+     "V191101R1",       // version_str
      "OROCABOY3",       // board_str
      "Firmware",        // name
      __DATE__,
@@ -90,6 +90,7 @@ void hwInit(void)
   usbInit();
   vcpInit();
   ltdcInit();
+
 
   if (sdInit() == true)
   {

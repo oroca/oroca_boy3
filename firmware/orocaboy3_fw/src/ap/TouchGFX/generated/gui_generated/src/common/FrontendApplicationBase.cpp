@@ -10,6 +10,10 @@
 #include <touchgfx/hal/HAL.hpp>
 #include <gui/main_screen/MainView.hpp>
 #include <gui/main_screen/MainPresenter.hpp>
+#include <gui/msg_box_screen/msg_boxView.hpp>
+#include <gui/msg_box_screen/msg_boxPresenter.hpp>
+#include <gui/btn_show_screen/btn_showView.hpp>
+#include <gui/btn_show_screen/btn_showPresenter.hpp>
 
 using namespace touchgfx;
 
@@ -38,5 +42,31 @@ void FrontendApplicationBase::gotoMainScreenNoTransition()
 void FrontendApplicationBase::gotoMainScreenNoTransitionImpl()
 {
     touchgfx::makeTransition<MainView, MainPresenter, touchgfx::NoTransition, Model >(&currentScreen, &currentPresenter, frontendHeap, &currentTransition, &model);
+}
+
+// msg_box
+
+void FrontendApplicationBase::gotomsg_boxScreenNoTransition()
+{
+    transitionCallback = touchgfx::Callback<FrontendApplicationBase>(this, &FrontendApplication::gotomsg_boxScreenNoTransitionImpl);
+    pendingScreenTransitionCallback = &transitionCallback;
+}
+
+void FrontendApplicationBase::gotomsg_boxScreenNoTransitionImpl()
+{
+    touchgfx::makeTransition<msg_boxView, msg_boxPresenter, touchgfx::NoTransition, Model >(&currentScreen, &currentPresenter, frontendHeap, &currentTransition, &model);
+}
+
+// btn_show
+
+void FrontendApplicationBase::gotobtn_showScreenNoTransition()
+{
+    transitionCallback = touchgfx::Callback<FrontendApplicationBase>(this, &FrontendApplication::gotobtn_showScreenNoTransitionImpl);
+    pendingScreenTransitionCallback = &transitionCallback;
+}
+
+void FrontendApplicationBase::gotobtn_showScreenNoTransitionImpl()
+{
+    touchgfx::makeTransition<btn_showView, btn_showPresenter, touchgfx::NoTransition, Model >(&currentScreen, &currentPresenter, frontendHeap, &currentTransition, &model);
 }
 

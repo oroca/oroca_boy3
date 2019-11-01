@@ -23,7 +23,6 @@ void apMain(void)
 {
   uint32_t pre_time;
 
-  delay(10);
 
   while(1)
   {
@@ -34,7 +33,5 @@ void apMain(void)
       pre_time = millis();
       ledToggle(_DEF_LED1);
     }
-
-    osThreadYield();
   }
 }

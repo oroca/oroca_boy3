@@ -18,6 +18,14 @@ public:
     // Main
     void gotoMainScreenNoTransition();
 
+
+    // msg_box
+    void gotomsg_boxScreenNoTransition();
+
+
+    // btn_show
+    void gotobtn_showScreenNoTransition();
+
 protected:
     touchgfx::Callback<FrontendApplicationBase> transitionCallback;
     FrontendHeap& frontendHeap;
@@ -25,6 +33,14 @@ protected:
 
     // Main
     void gotoMainScreenNoTransitionImpl();
+
+
+    // msg_box
+    void gotomsg_boxScreenNoTransitionImpl();
+
+
+    // btn_show
+    void gotobtn_showScreenNoTransitionImpl();
 };
 
 #endif // FRONTENDAPPLICATIONBASE_HPP

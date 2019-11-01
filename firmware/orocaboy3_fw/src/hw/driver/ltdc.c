@@ -14,19 +14,20 @@
 
 
 #define FRAME_BUF_ADDR        (0x24000000)
+//#define FRAME_BUF_ADDR        (0xD0000000)
 
-#define LCD_WIDTH             ((uint16_t)320)          /* LCD PIXEL WIDTH            */
-#define LCD_HEIGHT            ((uint16_t)240)          /* LCD PIXEL HEIGHT           */
-
-
-#define LCD_HSYNC             ((uint16_t)70)   /* Horizontal synchronization */
-#define LCD_HBP               ((uint16_t)0)   /* Horizontal back porch      */
-#define LCD_HFP               ((uint16_t)0)   /* Horizontal front porch     */
+#define LCD_WIDTH             ((uint16_t)320)   /* LCD PIXEL WIDTH            */
+#define LCD_HEIGHT            ((uint16_t)240)   /* LCD PIXEL HEIGHT           */
 
 
-#define LCD_VSYNC             ((uint16_t)13)   /* Vertical synchronization   */
-#define LCD_VBP               ((uint16_t)1)    /* Vertical back porch        */
-#define LCD_VFP               ((uint16_t)1)    /* Vertical front porch       */
+#define LCD_HSYNC             ((uint16_t)70)    /* Horizontal synchronization */
+#define LCD_HBP               ((uint16_t)0)     /* Horizontal back porch      */
+#define LCD_HFP               ((uint16_t)0)     /* Horizontal front porch     */
+
+
+#define LCD_VSYNC             ((uint16_t)13)    /* Vertical synchronization   */
+#define LCD_VBP               ((uint16_t)1)     /* Vertical back porch        */
+#define LCD_VFP               ((uint16_t)1)     /* Vertical front porch       */
 
 
 
@@ -53,15 +54,15 @@ bool ltdcInit(void)
   /* LCD clock configuration */
   /* PLL3_VCO Input = HSE_VALUE/PLL3M = 5 Mhz */
   /* PLL3_VCO Output = PLL3_VCO Input * PLL3N = 800 Mhz */
-  /* PLLLCDCLK = PLL3_VCO Output/PLL3R = 800/83 = 9.63 Mhz */
-  /* LTDC clock frequency = PLLLCDCLK = 9.63 Mhz */
+  /* PLLLCDCLK = PLL3_VCO Output/PLL3R = 800/125 = 6.4 Mhz */
+  /* LTDC clock frequency = PLLLCDCLK = 6.4 Mhz */
   periph_clk_init_struct.PeriphClockSelection = RCC_PERIPHCLK_LTDC;
   periph_clk_init_struct.PLL3.PLL3M = 5;
   periph_clk_init_struct.PLL3.PLL3N = 160;
   periph_clk_init_struct.PLL3.PLL3FRACN = 0;
   periph_clk_init_struct.PLL3.PLL3P = 2;
   periph_clk_init_struct.PLL3.PLL3Q = 2;
-  periph_clk_init_struct.PLL3.PLL3R = 40;
+  periph_clk_init_struct.PLL3.PLL3R = 125;
   HAL_RCCEx_PeriphCLKConfig(&periph_clk_init_struct);
 
   /* LTDC Initialization -------------------------------------------------------*/
@@ -110,7 +111,7 @@ bool ltdcInit(void)
 
   for (int i=0; i<LCD_WIDTH*LCD_HEIGHT*2; i++)
   {
-    p_data[i] = 0x10;
+    p_data[i] = 0x00;
   }
 
   ltdcLayerInit(0, FRAME_BUF_ADDR);

@@ -23,6 +23,12 @@
     <ClCompile Include="..\..\gui\src\main_screen\MainView.cpp"/>
     <ClCompile Include="..\..\generated\gui_generated\src\main_screen\MainViewBase.cpp"/>
     <ClCompile Include="..\..\gui\src\model\Model.cpp"/>
+    <ClCompile Include="..\..\gui\src\msg_box_screen\msg_boxPresenter.cpp"/>
+    <ClCompile Include="..\..\gui\src\msg_box_screen\msg_boxView.cpp"/>
+    <ClCompile Include="..\..\generated\gui_generated\src\msg_box_screen\msg_boxViewBase.cpp"/>
+    <ClCompile Include="..\..\gui\src\btn_show_screen\btn_showPresenter.cpp"/>
+    <ClCompile Include="..\..\gui\src\btn_show_screen\btn_showView.cpp"/>
+    <ClCompile Include="..\..\generated\gui_generated\src\btn_show_screen\btn_showViewBase.cpp"/>
   </ItemGroup>
   <ItemGroup>
     <None Include="$(ApplicationRoot)\assets\texts\texts.xlsx"/>
@@ -173,6 +179,12 @@
     <ClInclude Include="..\..\gui\include\gui\model\Model.hpp"/>
     <ClInclude Include="..\..\gui\include\gui\model\ModelListener.hpp"/>
     <ClInclude Include="..\..\generated\gui_generated\include\gui_generated\common\SimConstants.hpp"/>
+    <ClInclude Include="..\..\gui\include\gui\msg_box_screen\msg_boxPresenter.hpp"/>
+    <ClInclude Include="..\..\gui\include\gui\msg_box_screen\msg_boxView.hpp"/>
+    <ClInclude Include="..\..\generated\gui_generated\include\gui_generated\msg_box_screen\msg_boxViewBase.hpp"/>
+    <ClInclude Include="..\..\gui\include\gui\btn_show_screen\btn_showPresenter.hpp"/>
+    <ClInclude Include="..\..\gui\include\gui\btn_show_screen\btn_showView.hpp"/>
+    <ClInclude Include="..\..\generated\gui_generated\include\gui_generated\btn_show_screen\btn_showViewBase.hpp"/>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="$(ApplicationRoot)\generated\simulator\touchgfx.rc"/>

@@ -127,6 +127,7 @@
 #define _DEF_HW_BTN_START             10
 
 
+#define _PIN_GPIO_LCD_BK_EN           2
 #define _PIN_GPIO_SDCARD_DETECT       4
 
 

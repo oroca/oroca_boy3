@@ -9,8 +9,10 @@
 #include <gui/main_screen/MainPresenter.hpp>
 #include <touchgfx/widgets/Box.hpp>
 #include <touchgfx/widgets/Image.hpp>
-#include <touchgfx/widgets/TextAreaWithWildcard.hpp>
-#include <touchgfx/widgets/Button.hpp>
+#include <touchgfx/widgets/TextArea.hpp>
+#include <touchgfx/widgets/AnimatedImage.hpp>
+#include <touchgfx/containers/SwipeContainer.hpp>
+#include <touchgfx/containers/Container.hpp>
 
 class MainViewBase : public touchgfx::View<MainPresenter>
 {
@@ -23,12 +25,12 @@ public:
     /*
      * Virtual Action Handlers
      */
-    virtual void increaseValue()
+    virtual void goLeft_pc()
     {
         // Override and implement this function in Main
     }
 
-    virtual void decreaseValue()
+    virtual void goRight_pc()
     {
         // Override and implement this function in Main
     }
@@ -41,18 +43,24 @@ protected:
     /*
      * Member Declarations
      */
-    touchgfx::Box box1;
-    touchgfx::Box backgroundBox;
-    touchgfx::Image counterBackgroundImage;
-    touchgfx::TextAreaWithOneWildcard countTxt;
-    touchgfx::Button buttonUp;
-    touchgfx::Button buttonDown;
+    touchgfx::Box box_bg;
+    touchgfx::Image image_speaker;
+    touchgfx::Image image1;
+    touchgfx::TextArea textArea_title;
+    touchgfx::AnimatedImage animatedImage_title;
+    touchgfx::SwipeContainer swipeContainer_emulator;
+    touchgfx::Container page_nes;
+    touchgfx::Image image_nes;
 
-    /*
-     * Wildcard Buffers
-     */
-    static const uint16_t COUNTTXT_SIZE = 3;
-    touchgfx::Unicode::UnicodeChar countTxtBuffer[COUNTTXT_SIZE];
+    touchgfx::Container page_msx;
+    touchgfx::Image image_msx;
+
+    touchgfx::Container page_doom;
+    touchgfx::Image image_doom;
+
+    touchgfx::Container page_button;
+    touchgfx::TextArea test_menu;
+
 
 private:
 

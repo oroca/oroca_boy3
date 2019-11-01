@@ -6,13 +6,19 @@
 #include <touchgfx/hal/Types.hpp>
 #include <touchgfx/Bitmap.hpp>
 
-const uint16_t BITMAP_COUNTER_BOX_ID = 0;
-const uint16_t BITMAP_DOWN_BTN_ID = 1;
-const uint16_t BITMAP_DOWN_BTN_DISABLED_ID = 2;
-const uint16_t BITMAP_DOWN_BTN_PRESSED_ID = 3;
-const uint16_t BITMAP_UP_BTN_ID = 4;
-const uint16_t BITMAP_UP_BTN_DISABLED_ID = 5;
-const uint16_t BITMAP_UP_BTN_PRESSED_ID = 6;
+const uint16_t BITMAP_A1_ID = 0;
+const uint16_t BITMAP_A2_ID = 1;
+const uint16_t BITMAP_A4_ID = 2;
+const uint16_t BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_ID = 3;
+const uint16_t BITMAP_DARK_BUTTONS_ROUND_EDGE_SMALL_PRESSED_ID = 4;
+const uint16_t BITMAP_DARK_PAGEINDICATOR_DOT_INDICATOR_SMALL_HIGHLIGHT_ID = 5;
+const uint16_t BITMAP_DARK_PAGEINDICATOR_DOT_INDICATOR_SMALL_NORMAL_ID = 6;
+const uint16_t BITMAP_DOOM_ID = 7;
+const uint16_t BITMAP_FMSX_ID = 8;
+const uint16_t BITMAP_OROCABOY1_ID = 9;
+const uint16_t BITMAP_OROCABOY2_ID = 10;
+const uint16_t BITMAP_OROCABOY3_ID = 11;
+const uint16_t BITMAP_OROCABOY4_ID = 12;
 
 namespace BitmapDatabase
 {

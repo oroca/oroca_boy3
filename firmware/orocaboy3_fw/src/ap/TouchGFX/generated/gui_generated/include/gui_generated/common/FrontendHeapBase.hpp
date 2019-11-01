@@ -8,11 +8,20 @@
 #include <common/Partition.hpp>
 #include <mvp/MVPHeap.hpp>
 #include <touchgfx/transitions/NoTransition.hpp>
+
+
+
+
+
 #include <gui/common/FrontendApplication.hpp>
 #include <gui/model/Model.hpp>
 
 #include <gui/main_screen/MainView.hpp>
 #include <gui/main_screen/MainPresenter.hpp>
+#include <gui/msg_box_screen/msg_boxView.hpp>
+#include <gui/msg_box_screen/msg_boxPresenter.hpp>
+#include <gui/btn_show_screen/btn_showView.hpp>
+#include <gui/btn_show_screen/btn_showPresenter.hpp>
 
 
 /**
@@ -36,7 +45,9 @@ public:
      * @note All view types used in the application MUST be added to this list!
      */
     typedef touchgfx::meta::TypeList< MainView,
-            touchgfx::meta::Nil
+            touchgfx::meta::TypeList< msg_boxView,
+            touchgfx::meta::TypeList< btn_showView,
+            touchgfx::meta::Nil > >
             > GeneratedViewTypes;
 
     /**
@@ -49,7 +60,9 @@ public:
      * @note All presenter types used in the application MUST be added to this list!
      */
     typedef touchgfx::meta::TypeList< MainPresenter,
-            touchgfx::meta::Nil
+            touchgfx::meta::TypeList< msg_boxPresenter,
+            touchgfx::meta::TypeList< btn_showPresenter,
+            touchgfx::meta::Nil > >
             > GeneratedPresenterTypes;
 
     /**

@@ -1,5 +1,12 @@
 #include <gui/main_screen/MainView.hpp>
 #include "BitmapDatabase.hpp"
+#ifndef SIMULATOR
+#include "hw.h"
+#endif
+
+
+uint8_t current_page = 0;
+
 
 MainView::MainView()
 {
@@ -7,79 +14,71 @@ MainView::MainView()
 
 void MainView::setupScreen()
 {
-    setCount(0);
+  swipeContainer_emulator.setSelectedPage(current_page);
 }
 
 void MainView::tearDownScreen()
 {
+  current_page = swipeContainer_emulator.currentPage;
 }
 
-void MainView::increaseValue()
-{
-    if (count < 42)
-    {
-        count++;
-        setCount(count);
 
-        if (count == 42)
-        {
-            setLimitEffects(false, true);
-        }
-        else if (count == 1)
-        {
-            setLimitEffects(true, true);
-        }
-    }
+void MainView::goLeft_pc()
+{
+  touchgfx::GestureEvent evt(GestureEvent::SWIPE_HORIZONTAL, 100, 0, 0);
+  swipeContainer_emulator.handleGestureEvent(evt);
 }
 
-void MainView::decreaseValue()
+void MainView::goRight_pc()
 {
-    if (count > 0)
-    {
-        count--;
-        setCount(count);
-
-        if (0 == count)
-        {
-            setLimitEffects(true, false);
-        }
-        else if (41 == count)
-        {
-            setLimitEffects(true, true);
-        }
-    }
+  touchgfx::GestureEvent evt(GestureEvent::SWIPE_HORIZONTAL, -100, 0, 0);
+  swipeContainer_emulator.handleGestureEvent(evt);
 }
 
-void MainView::setCount(uint8_t countValue)
+void MainView::handleTickEvent(void)
 {
-    Unicode::snprintf(countTxtBuffer, 3, "%d", countValue);
-    // Invalidate text area, which will result in it being redrawn in next tick.
-    countTxt.invalidate();
+#ifndef SIMULATOR
+  //if (buttonGetPressed(_DEF_HW_BTN_UP)) circle1.setLineWidth(0);
+  //else                                  circle1.setLineWidth(1);
+  //circle1.invalidate();
+
+#endif
 }
 
-void MainView::setLimitEffects(bool belowUpper, bool aboveLower)
+void MainView::handleKeyEvent(uint8_t key)
 {
-    buttonUp.setTouchable(belowUpper);
-    buttonDown.setTouchable(aboveLower);
+  MainViewBase::handleKeyEvent(key);
 
-    if (belowUpper)
-    {
-        buttonUp.setBitmaps(Bitmap(BITMAP_UP_BTN_ID), Bitmap(BITMAP_UP_BTN_PRESSED_ID));
-    }
-    else
-    {
-        buttonUp.setBitmaps(Bitmap(BITMAP_UP_BTN_DISABLED_ID), Bitmap(BITMAP_UP_BTN_DISABLED_ID));
-    }
+#ifndef SIMULATOR
+  static uint32_t pre_time;
 
-    if (aboveLower)
-    {
-        buttonDown.setBitmaps(Bitmap(BITMAP_DOWN_BTN_ID), Bitmap(BITMAP_DOWN_BTN_PRESSED_ID));
-    }
-    else
-    {
-        buttonDown.setBitmaps(Bitmap(BITMAP_DOWN_BTN_DISABLED_ID), Bitmap(BITMAP_DOWN_BTN_DISABLED_ID));
-    }
+  if (millis()-pre_time >= 100)
+  {
+    pre_time = millis();
 
-    buttonUp.invalidate();
-    buttonDown.invalidate();
+    if(key == _DEF_HW_BTN_LEFT)
+    {
+      goLeft_pc();
+    }
+    if(key == _DEF_HW_BTN_RIGHT)
+    {
+      goRight_pc();
+    }
+    if(key == _DEF_HW_BTN_A)
+    {
+      switch(swipeContainer_emulator.currentPage)
+      {
+        case 3:
+          MainViewBase::handleKeyEvent(49);
+          break;
+
+        default:
+          MainViewBase::handleKeyEvent(51);
+          break;
+      }
+    }
+  }
+
+#endif
+
 }

@@ -172,6 +172,36 @@
     <Filter Include="Header Files\generated\gui_generated\common">
       <UniqueIdentifier>AE667286-24D4-3ECD-45A0-C00F172E2D3E</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\gui\msg_box_screen">
+      <UniqueIdentifier>A19BF25A-897B-8558-8E1B-9ADFBE41F93A</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\gui\msg_box_screen">
+      <UniqueIdentifier>78DD7375-5146-E781-85DD-587BEC8AA269</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\generated\gui_generated\msg_box_screen">
+      <UniqueIdentifier>181660BD-D7B2-AA74-3457-B431B3B991AD</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\generated\gui_generated\msg_box_screen">
+      <UniqueIdentifier>5714BC75-6DA8-06FC-261A-E15D747B1E16</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\generated\gui_generated\containers">
+      <UniqueIdentifier>060A01BA-67E2-5469-EA81-2B668572A15A</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\generated\gui_generated\containers">
+      <UniqueIdentifier>FDAA4461-CD00-9FB4-DF1E-AFF18B79FC39</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\gui\btn_show_screen">
+      <UniqueIdentifier>7FECCEDA-7023-3513-2935-2C5C018E3292</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\gui\btn_show_screen">
+      <UniqueIdentifier>2A8F3B35-C2AB-8CC3-678C-41C5564FA282</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\generated\gui_generated\btn_show_screen">
+      <UniqueIdentifier>48414B05-FAF5-59AF-81B0-A9FB60D9A9CF</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\generated\gui_generated\btn_show_screen">
+      <UniqueIdentifier>A627BA97-2670-29EF-F75A-89380F6766DB</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(TouchGFXReleasePath)\framework\source\platform\driver\touch\SDL2TouchController.cpp">
@@ -209,6 +239,24 @@
     </ClCompile>
     <ClCompile Include="..\..\gui\src\model\Model.cpp">
       <Filter>Source Files\gui\model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gui\src\msg_box_screen\msg_boxPresenter.cpp">
+      <Filter>Source Files\gui\msg_box_screen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gui\src\msg_box_screen\msg_boxView.cpp">
+      <Filter>Source Files\gui\msg_box_screen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\generated\gui_generated\src\msg_box_screen\msg_boxViewBase.cpp">
+      <Filter>Source Files\generated\gui_generated\msg_box_screen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gui\src\btn_show_screen\btn_showPresenter.cpp">
+      <Filter>Source Files\gui\btn_show_screen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gui\src\btn_show_screen\btn_showView.cpp">
+      <Filter>Source Files\gui\btn_show_screen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\generated\gui_generated\src\btn_show_screen\btn_showViewBase.cpp">
+      <Filter>Source Files\generated\gui_generated\btn_show_screen</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -651,6 +699,24 @@
     </ClInclude>
     <ClInclude Include="..\..\generated\gui_generated\include\gui_generated\common\SimConstants.hpp">
       <Filter>Header Files\generated\gui_generated\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gui\include\gui\msg_box_screen\msg_boxPresenter.hpp">
+      <Filter>Header Files\gui\msg_box_screen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gui\include\gui\msg_box_screen\msg_boxView.hpp">
+      <Filter>Header Files\gui\msg_box_screen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\generated\gui_generated\include\gui_generated\msg_box_screen\msg_boxViewBase.hpp">
+      <Filter>Header Files\generated\gui_generated\msg_box_screen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gui\include\gui\btn_show_screen\btn_showPresenter.hpp">
+      <Filter>Header Files\gui\btn_show_screen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gui\include\gui\btn_show_screen\btn_showView.hpp">
+      <Filter>Header Files\gui\btn_show_screen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\generated\gui_generated\include\gui_generated\btn_show_screen\btn_showViewBase.hpp">
+      <Filter>Header Files\generated\gui_generated\btn_show_screen</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

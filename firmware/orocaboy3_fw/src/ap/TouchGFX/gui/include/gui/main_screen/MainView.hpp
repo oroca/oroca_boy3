@@ -12,16 +12,15 @@ public:
     virtual void setupScreen();
     virtual void tearDownScreen();
 
-    virtual void increaseValue();
-    virtual void decreaseValue();
+    virtual void goLeft_pc();
+    virtual void goRight_pc();
 
-    void setCount(uint8_t countValue);
-    void setLimitEffects(bool belowUpper, bool aboveLower);
-
+    virtual void handleTickEvent(void);
+    virtual void handleKeyEvent(uint8_t key);
 protected:
 
 private:
-    uint8_t count;
+
 };
 
 #endif // MAIN_VIEW_HPP
