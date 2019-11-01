@@ -22,11 +22,10 @@ extern "C" {
 
 
 bool ledInit(void);
+bool ledIsInit(void);
 void ledOn(uint8_t ch);
 void ledOff(uint8_t ch);
 void ledToggle(uint8_t ch);
-void ledPwm(uint8_t ch, uint8_t pwm);
-void ledSetTime(uint8_t ch, uint32_t on_time, uint32_t off_time);
 
 #endif
 

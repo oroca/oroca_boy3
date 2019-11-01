@@ -12,7 +12,7 @@
 
 
 
-
+static bool is_init = false;
 USBD_HandleTypeDef USBD_Device;
 extern PCD_HandleTypeDef hpcd;
 
@@ -52,11 +52,16 @@ void usbInit(void)
   USBD_Start(&USBD_Device);
 
   HAL_PWREx_EnableUSBVoltageDetector();
+
+  is_init = true;
 }
 
-void usbDeinit(void)
+void usbDeInit(void)
 {
-  USBD_DeInit(&USBD_Device);
+  if (is_init == true)
+  {
+    USBD_DeInit(&USBD_Device);
+  }
 }
 
 #ifdef USE_USB_FS

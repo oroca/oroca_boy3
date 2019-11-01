@@ -32,8 +32,15 @@
 #include "sdram.h"
 #include "eeprom.h"
 #include "flash.h"
+#include "gpio.h"
 #include "usb.h"
 #include "vcp.h"
+#include "adc.h"
+#include "ltdc.h"
+
+
+#include "sd.h"
+#include "fatfs/fatfs.h"
 
 
 void hwInit(void);

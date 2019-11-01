@@ -14,7 +14,7 @@
 
 
 static void SystemClock_Config(void);
-
+extern void usbDeInit(void);
 
 
 void bspInit(void)
@@ -40,7 +40,7 @@ void bspInit(void)
 
 void bspDeInit(void)
 {
-  //usbDeInit();
+  usbDeInit();
   HAL_RCC_DeInit();
   //HAL_DeInit();
 }
@@ -49,7 +49,6 @@ int __io_putchar(int ch)
 {
   //ITM_SendChar(ch);
   uartWrite(_DEF_UART1, (uint8_t *)&ch, 1);
-
   return 1;
 }
 
@@ -151,6 +150,11 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+
+  /** Enable USB Voltage detector
+  */
+  HAL_PWREx_EnableUSBVoltageDetector();
+
 /*
   Note : The activation of the I/O Compensation Cell is recommended with communication  interfaces
           (GPIO, SPI, FMC, QSPI ...)  when  operating at  high frequencies(please refer to product datasheet)

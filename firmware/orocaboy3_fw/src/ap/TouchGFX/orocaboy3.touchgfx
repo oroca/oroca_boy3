@@ -1,0 +1,207 @@
+{
+  "Application": {
+    "Screens": [
+      {
+        "Components": [
+          {
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "Alpha": 255,
+            "Name": "box1",
+            "X": 0,
+            "Y": 0,
+            "Width": 320,
+            "Height": 240,
+            "Type": "Box",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "Color": {
+              "Red": 0,
+              "Green": 0,
+              "Blue": 0
+            },
+            "Alpha": 255,
+            "Name": "backgroundBox",
+            "X": 0,
+            "Y": 0,
+            "Width": 800,
+            "Height": 480,
+            "Type": "Box",
+            "Visible": false,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "RelativeFilename": "counter_box.png",
+            "Alpha": 255,
+            "Name": "counterBackgroundImage",
+            "X": 160,
+            "Y": 43,
+            "Width": 152,
+            "Height": 154,
+            "Type": "Image",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "TextId": "TextId1",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "Alpha": 255,
+            "AutoSize": false,
+            "LineSpacing": 0,
+            "Wildcard1": {
+              "TextId": "SingleUseId1",
+              "UseBuffer": true,
+              "BufferSize": 3
+            },
+            "Name": "countTxt",
+            "X": 160,
+            "Y": 76,
+            "Width": 152,
+            "Height": 89,
+            "Type": "TextArea",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "Pressed": "up_btn_pressed.png",
+            "Released": "up_btn.png",
+            "Alpha": 255,
+            "Name": "buttonUp",
+            "X": 15,
+            "Y": 43,
+            "Width": 130,
+            "Height": 56,
+            "Type": "Button",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "Pressed": "down_btn_pressed.png",
+            "Released": "down_btn.png",
+            "Alpha": 255,
+            "Name": "buttonDown",
+            "X": 15,
+            "Y": 141,
+            "Width": 130,
+            "Height": 56,
+            "Type": "Button",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          }
+        ],
+        "Interactions": [
+          {
+            "InteractionName": "IncreaseValue",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "ButtonKey": 2,
+              "Type": "TriggerPhysicalButtonClicked"
+            },
+            "Action": {
+              "FunctionName": "increaseValue",
+              "Type": "ActionCustom"
+            }
+          },
+          {
+            "InteractionName": "DecreaseValue",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "ButtonKey": 3,
+              "Type": "TriggerPhysicalButtonClicked"
+            },
+            "Action": {
+              "FunctionName": "decreaseValue",
+              "Type": "ActionCustom"
+            }
+          }
+        ],
+        "Name": "Main",
+        "OverrideDefaultBufferSize": false,
+        "CanvasBufferSize": 0
+      }
+    ],
+    "CustomContainerDefinitions": [],
+    "TextEntries": [
+      {
+        "TextEntryId": "TextId1",
+        "IsResource": true
+      },
+      {
+        "TextEntryId": "SingleUseId1",
+        "IsResource": false
+      }
+    ],
+    "Name": "orocaboy3",
+    "Resolution": {
+      "Width": 320,
+      "Height": 240
+    },
+    "SelectedColorDepth": 16,
+    "StartupScreenName": "Main",
+    "SelectedStartupLanguage": "GB",
+    "Skin": "Blue",
+    "TouchGfxPath": "../../lib/TouchGFX/touchgfx",
+    "UIPath": ".",
+    "ApplicationTemplate": {
+      "Name": "Simulator",
+      "Version": "2.0.0",
+      "Description": "Simulator Application Template",
+      "AvailableColorDepths": [
+        16,
+        24
+      ],
+      "AvailableSections": [
+        "ExtFlashSection",
+        "IntFlashSection"
+      ],
+      "AvailableResolutions": [
+        {
+          "Width": 320,
+          "Height": 240
+        }
+      ],
+      "PhysicalButtons": [],
+      "GenerateAssetsCommand": "make -f simulator/gcc/Makefile assets -j8",
+      "PostGenerateCommand": "touchgfx update_project --project-file=simulator/msvs/Application.vcxproj",
+      "CompileSimulatorCommand": "make -f simulator/gcc/Makefile -j8",
+      "RunSimulatorCommand": "build\\bin\\simulator.exe",
+      "CompileTargetCommand": "",
+      "FlashTargetCommand": ""
+    },
+    "LandscapeSkinX": 0,
+    "LandscapeSkinY": 0,
+    "PortraitSkinX": 0,
+    "PortraitSkinY": 0,
+    "DisplayOrientation": "Landscape"
+  },
+  "Version": "4.12.3",
+  "CreatedBy": "4.12.3"
+}

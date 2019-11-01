@@ -25,7 +25,19 @@ typedef struct
 
 button_tbl_t button_port_tbl[BUTTON_MAX_CH] =
 {
- {GPIOB, GPIO_PIN_7, GPIO_PIN_RESET, GPIO_PIN_SET},
+  {GPIOB, GPIO_PIN_7, GPIO_PIN_RESET, GPIO_PIN_SET}, // 0. MCU B/D
+
+  {GPIOD, GPIO_PIN_13,GPIO_PIN_RESET, GPIO_PIN_SET}, // 1. BTN_LEFT
+  {GPIOD, GPIO_PIN_12,GPIO_PIN_RESET, GPIO_PIN_SET}, // 2. BTN_RIGHT
+  {GPIOI, GPIO_PIN_3, GPIO_PIN_RESET, GPIO_PIN_SET}, // 3. BTN_UP
+  {GPIOG, GPIO_PIN_3, GPIO_PIN_RESET, GPIO_PIN_SET}, // 4. BTN_DOWN
+  {GPIOD, GPIO_PIN_11,GPIO_PIN_RESET, GPIO_PIN_SET}, // 5. BTN_A
+  {GPIOG, GPIO_PIN_11,GPIO_PIN_RESET, GPIO_PIN_SET}, // 6. BTN_B
+  {GPIOG, GPIO_PIN_10,GPIO_PIN_RESET, GPIO_PIN_SET}, // 7. BTN_X
+  {GPIOE, GPIO_PIN_3, GPIO_PIN_RESET, GPIO_PIN_SET}, // 8. BTN_Y
+  {GPIOH, GPIO_PIN_6, GPIO_PIN_RESET, GPIO_PIN_SET}, // 9. BTN_SELECT
+  {GPIOH, GPIO_PIN_7, GPIO_PIN_RESET, GPIO_PIN_SET}, // 10 BTN_START
+
 };
 
 
@@ -55,6 +67,9 @@ void buttonCmdif(void);
 #endif
 
 
+static bool buttonGetPin(uint8_t ch);
+
+
 void button_isr(void *arg)
 {
   uint8_t i;
@@ -63,7 +78,7 @@ void button_isr(void *arg)
   for (i=0; i<BUTTON_MAX_CH; i++)
   {
 
-    if (buttonGetPressed(i))
+    if (buttonGetPin(i))
     {
       if (button_tbl[i].pressed == false)
       {
@@ -141,7 +156,7 @@ void buttonResetTime(uint8_t ch)
   button_tbl[ch].released_end_time     = 0;
 }
 
-bool buttonGetPressed(uint8_t ch)
+bool buttonGetPin(uint8_t ch)
 {
   if (ch >= BUTTON_MAX_CH)
   {
@@ -156,6 +171,16 @@ bool buttonGetPressed(uint8_t ch)
   {
     return false;
   }
+}
+
+bool buttonGetPressed(uint8_t ch)
+{
+  if (ch >= BUTTON_MAX_CH)
+  {
+    return false;
+  }
+
+  return button_tbl[ch].pressed;
 }
 
 bool buttonGetPressedEvent(uint8_t ch)

@@ -12,7 +12,8 @@
 
 
 
-
+static void threadMain(void const *argument);
+extern int touchgfxMain(void);
 
 int main(void)
 {
@@ -20,8 +21,26 @@ int main(void)
   apInit();
 
 
-  apMain();
+  osThreadDef(threadMain, threadMain, _HW_DEF_RTOS_THREAD_PRI_MAIN, 0, _HW_DEF_RTOS_THREAD_MEM_MAIN);
+  if (osThreadCreate(osThread(threadMain), NULL) != NULL)
+  {
+    logPrintf("threadMain \t\t: OK\r\n");
+  }
+  else
+  {
+    logPrintf("threadMain \t\t: Fail\r\n");
+    while(1);
+  }
+  touchgfxMain();
 
+  osKernelStart();
 
   return 0;
+}
+
+static void threadMain(void const *argument)
+{
+  UNUSED(argument);
+
+  apMain();
 }

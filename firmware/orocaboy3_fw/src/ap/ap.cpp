@@ -15,12 +15,15 @@
 void apInit(void)
 {
   uartOpen(_DEF_UART1, 57600);
+  uartOpen(_DEF_UART2, 57600);
   cmdifOpen(_DEF_UART1, 57600);
 }
 
 void apMain(void)
 {
   uint32_t pre_time;
+
+  delay(10);
 
   while(1)
   {
@@ -31,5 +34,7 @@ void apMain(void)
       pre_time = millis();
       ledToggle(_DEF_LED1);
     }
+
+    osThreadYield();
   }
 }

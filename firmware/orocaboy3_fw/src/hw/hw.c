@@ -67,6 +67,8 @@ void hwInit(void)
 
   pwmInit();
   ledInit();
+  gpioInit();
+  adcInit();
 
 
   sdramInit();
@@ -84,6 +86,15 @@ void hwInit(void)
     logPrintf("eeprom %dKB \t\t: Fail\r\n", (int)eepromGetLength()/1024);
   }
 
+
+  usbInit();
+  vcpInit();
+  ltdcInit();
+
+  if (sdInit() == true)
+  {
+    fatfsInit();
+  }
 
   logPrintf("Start...\r\n");
 
