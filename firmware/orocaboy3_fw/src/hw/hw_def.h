@@ -93,6 +93,8 @@
 #define      HW_FATFS_USE_CMDIF     1
 
 
+
+
 #define _USE_HW_CMDIF
 #define      HW_CMDIF_LIST_MAX              16
 #define      HW_CMDIF_CMD_STR_MAX           16
