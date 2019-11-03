@@ -41,6 +41,8 @@
 #include "lcd.h"
 #include "dac.h"
 #include "timer.h"
+#include "speaker.h"
+
 
 #include "sd.h"
 #include "fatfs/fatfs.h"
@@ -51,6 +53,9 @@ void hwInit(void);
 
 uint8_t hwGetResetCount(void);
 void hwJumpToBoot(void);
+void hwJumpToFw(uint32_t addr);
+void hwRunFw(uint32_t fw_index);
+
 
 #ifdef __cplusplus
  }

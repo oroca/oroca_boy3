@@ -27,7 +27,7 @@ __attribute__((section(".tag"))) flash_tag_t fw_tag =
      0xAAAA5555,        // magic_number
      "V191101R1",       // version_str
      "OROCABOY3",       // board_str
-     "fMSX",            // name
+     "pNesX",           // name
      __DATE__,
      __TIME__,
      (uint32_t)&_flash_tag_addr,
@@ -60,6 +60,7 @@ void hwInit(void)
   logPrintf("Booting..Name \t\t: %s\r\n", fw_tag.name_str);
   logPrintf("Booting..Ver  \t\t: %s\r\n", fw_tag.version_str);
 
+
   rtcInit();
   logPrintf("ResetBits \t\t: 0x%X\n", (int)rtcReadBackupData(_HW_DEF_RTC_RESET_SRC));
 
@@ -70,9 +71,10 @@ void hwInit(void)
   gpioInit();
   adcInit();
 
-
   sdramInit();
-  qspiInit();
+  //qspiInit();
+  //qspiEnableMemoryMappedMode();
+
   flashInit();
   buttonInit();
   i2cInit();
@@ -93,6 +95,7 @@ void hwInit(void)
   lcdInit();
   dacInit();
   timerInit();
+  speakerInit();
 
 
   if (sdInit() == true)
@@ -112,6 +115,26 @@ void hwJumpToBoot(void)
 {
   rtcWriteBackupData(_HW_DEF_RTC_BOOT_MODE, (1<<7));
   resetRunSoftReset();
+}
+
+
+void hwJumpToFw(uint32_t addr)
+{
+  void (**jump_func)(void) = (void (**)(void))(addr + 4);
+
+  bspDeInit();
+  (*jump_func)();
+}
+
+void hwRunFw(uint32_t fw_index)
+{
+  uint32_t addr;
+
+  addr  = QSPI_FW_ADDR(fw_index);
+  addr += QSPI_FW_TAG;
+
+  logPrintf("hwRunFw : 0x%X\n", (int)addr);
+  hwJumpToFw(addr);
 }
 
 

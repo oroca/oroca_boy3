@@ -144,16 +144,29 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 
-  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_USB;
+  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_USB|RCC_PERIPHCLK_SDMMC;
+
+  PeriphClkInitStruct.PLL2.PLL2M = 5;
+  PeriphClkInitStruct.PLL2.PLL2N = 160;
+  PeriphClkInitStruct.PLL2.PLL2P = 2; // 400Mhz
+  PeriphClkInitStruct.PLL2.PLL2Q = 4; // 200Mhz
+  PeriphClkInitStruct.PLL2.PLL2R = 4; // 200Mhz
+  PeriphClkInitStruct.PLL2.PLL2RGE = RCC_PLL2VCIRANGE_2;
+  PeriphClkInitStruct.PLL2.PLL2VCOSEL = RCC_PLL2VCOWIDE;
+  PeriphClkInitStruct.PLL2.PLL2FRACN = 0;
+
   PeriphClkInitStruct.UsbClockSelection = RCC_USBCLKSOURCE_HSI48;
+  PeriphClkInitStruct.SdmmcClockSelection = RCC_SDMMCCLKSOURCE_PLL;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
   {
     Error_Handler();
   }
 
+
   /** Enable USB Voltage detector
   */
   HAL_PWREx_EnableUSBVoltageDetector();
+
 
 /*
   Note : The activation of the I/O Compensation Cell is recommended with communication  interfaces
@@ -166,11 +179,11 @@ void SystemClock_Config(void)
           To do this please uncomment the following code
 */
 
-  /*
+  //*
   __HAL_RCC_CSI_ENABLE() ;
 
   __HAL_RCC_SYSCFG_CLK_ENABLE() ;
 
   HAL_EnableCompensationCell();
-  */
+  //*/
 }

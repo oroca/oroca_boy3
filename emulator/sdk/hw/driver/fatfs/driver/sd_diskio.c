@@ -44,7 +44,7 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "lib/FatFs/src/ff_gen_drv.h"
+#include "FatFs/src/ff_gen_drv.h"
 #include "sd_diskio.h"
 #include "sd.h"
 

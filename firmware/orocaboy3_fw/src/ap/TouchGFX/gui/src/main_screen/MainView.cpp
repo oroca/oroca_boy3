@@ -74,6 +74,7 @@ void MainView::handleKeyEvent(uint8_t key)
 
         default:
           MainViewBase::handleKeyEvent(51);
+          hwRunFw(0);
           break;
       }
     }

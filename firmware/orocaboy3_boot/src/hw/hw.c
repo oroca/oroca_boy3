@@ -25,6 +25,8 @@ void hwInit(void)
 {
   bspInit();
 
+
+
   resetInit();
   microsInit();
   millisInit();
@@ -38,6 +40,7 @@ void hwInit(void)
   logPrintf("\n\n[ Bootloader Begin... ]\r\n");
   logPrintf("Booting..Name \t\t: %s\r\n", boot_name);
   logPrintf("Booting..Ver  \t\t: %s\r\n", boot_ver);
+
 
   resetLog();
   rtcInit();
@@ -108,4 +111,27 @@ void bootModeWait(void)
 uint8_t hwGetResetCount(void)
 {
   return reset_count;
+}
+
+void hwJumpToFw(uint32_t addr)
+{
+  void (**jump_func)(void) = (void (**)(void))(addr + 4);
+
+  //bspDeInit();
+  //usbDeInit();
+
+
+  qspiEnableMemoryMappedMode();
+
+
+
+  SysTick->CTRL = 0;
+  __set_MSP(*(__IO uint32_t*) addr);
+
+  //logPrintf("0x%X\n", (int)addr);
+  //logPrintf("0x%X\n", (int)(**jump_func));
+
+
+
+  (*jump_func)();
 }

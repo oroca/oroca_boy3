@@ -49,6 +49,8 @@ void hwInit(void);
 
 uint8_t hwGetResetCount(void);
 void hwJumpToBoot(void);
+void hwJumpToFw(uint32_t addr);
+void hwRunFw(uint32_t fw_index);
 
 #ifdef __cplusplus
  }

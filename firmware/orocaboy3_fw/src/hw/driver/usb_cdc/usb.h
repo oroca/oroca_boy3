@@ -24,6 +24,6 @@
 
 
 void usbInit(void);
-void usbDeinit(void);
+void usbDeInit(void);
 
 #endif /* SRC_HW_USB_CDC_USB_H_ */

@@ -24,4 +24,26 @@
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>src/bsp</name>
+			<type>2</type>
+			<locationURI>$%7BPARENT-1-PROJECT_LOC%7D/sdk/bsp</locationURI>
+		</link>
+		<link>
+			<name>src/common</name>
+			<type>2</type>
+			<locationURI>$%7BPARENT-1-PROJECT_LOC%7D/sdk/common</locationURI>
+		</link>
+		<link>
+			<name>src/hw</name>
+			<type>2</type>
+			<locationURI>$%7BPARENT-1-PROJECT_LOC%7D/sdk/hw</locationURI>
+		</link>
+		<link>
+			<name>src/lib</name>
+			<type>2</type>
+			<locationURI>$%7BPARENT-1-PROJECT_LOC%7D/sdk/lib</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>

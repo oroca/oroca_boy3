@@ -16,10 +16,13 @@
 static void SystemClock_Config(void);
 
 
+void bspTest()
+{
+  while(1);
+}
 
 void bspInit(void)
 {
-
   HAL_Init();
 
   SCB_EnableICache();

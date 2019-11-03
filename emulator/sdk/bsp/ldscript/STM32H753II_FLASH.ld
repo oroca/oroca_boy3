@@ -46,6 +46,10 @@ MEMORY
 {
   TAG   (rx)      : ORIGIN = 0x08040000, LENGTH = 1K
   FLASH (rx)      : ORIGIN = 0x08040400, LENGTH = 1280K  
+/*
+  TAG   (rx)      : ORIGIN = 0x90000000, LENGTH = 1K
+  FLASH (rx)      : ORIGIN = 0x90000400, LENGTH = 2047K  
+*/
   
   DTCMRAM (xrw)   : ORIGIN = 0x20000000, LENGTH = 128K
   SRAM_D1 (xrw)   : ORIGIN = 0x24000000, LENGTH = 512K
@@ -54,7 +58,8 @@ MEMORY
   ITCMRAM (xrw)   : ORIGIN = 0x00000000, LENGTH = 64K
   MEMORY_B1 (rx)  : ORIGIN = 0x60000000, LENGTH = 0K
   
-  QSPI (rx)       : ORIGIN = 0x90000000, LENGTH = 64M
+  QSPI_FW (rx)    : ORIGIN = 0x90000000, LENGTH = 32M
+  QSPI_DATA (rx)  : ORIGIN = 0x92000000, LENGTH = 32M
 }
 
 /* Define output sections */

@@ -186,7 +186,8 @@ void pNesX_ISR(void)
     // Mixing
     MixDac = (P1Dac + P2Dac + TrDac + NsDac) / (4);
         
-    dacPutch(map(MixDac>>8, 0, 255, 0, sound_vol));
+    //dacPutch(map(MixDac>>8, 0, 255, 0, sound_vol));
+    speakerPutch(MixDac>>8);
 }
 
 
@@ -195,7 +196,7 @@ void ApuAdjustVolume(int8_t step)
   sound_vol += step;
   sound_vol = constrain(sound_vol, 0, 100);
 
-  //audioSetVol(sound_vol);
+  speakerSetVolume(sound_vol);
 }
 /*-------------------------------------------------------------------*/
 /*  Apu Initialize Function                                          */
@@ -206,8 +207,8 @@ void ApuInit()
   timerAttachInterrupt(_DEF_TIMER1, pNesX_ISR);
   timerStart(_DEF_TIMER1);
 
-  dacSetup(DACFreq);
-  dacStart();
+  speakerSetVolume(sound_vol);
+  speakerStart(DACFreq);
 }
 
 /*-------------------------------------------------------------------*/
@@ -217,11 +218,11 @@ void ApuMute(bool mute)
 {
   if (mute)
   {
-    dacStop();
+    speakerDisable();
   }
   else
   {
-    dacStart();
+    speakerEnable();
   }
 }
       

@@ -16,8 +16,8 @@
 
 //-- Internal Variables
 //
-static uint32_t __heap_start = 0xD0000000;
-static uint32_t __heap_limit = 0xD0000000 + 16*1024*1024;
+static uint32_t __heap_start = DDR_ADDR_MEM_BUF;
+static uint32_t __heap_limit = DDR_ADDR_MEM_BUF + 16*1024*1024;
 
 
 //-- External Variables

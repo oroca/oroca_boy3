@@ -11,6 +11,9 @@
 #include "bsp.h"
 #include "uart.h"
 #include "rtos.h"
+#include "sdram.h"
+#include "qspi.h"
+#include "usb.h"
 
 
 static void SystemClock_Config(void);
@@ -37,13 +40,23 @@ void bspInit(void)
   __HAL_RCC_GPIOI_CLK_ENABLE();
   __HAL_RCC_GPIOJ_CLK_ENABLE();
   __HAL_RCC_GPIOK_CLK_ENABLE();
+
 }
 
 void bspDeInit(void)
 {
-  //usbDeInit();
+  usbDeInit();
   HAL_RCC_DeInit();
   //HAL_DeInit();
+
+
+  //HAL_Init();
+  //SystemInit();
+  //SystemClock_Config();
+
+  //sdramInit();
+  //qspiInit();
+  //qspiEnableMemoryMappedMode();
 }
 
 int __io_putchar(int ch)

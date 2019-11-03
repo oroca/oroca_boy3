@@ -117,6 +117,18 @@
 
 
 
+#define DDR_ADDR_START                0xD0000000    // 16MB
+#define DDR_ADDR_MEM_BUF              0xD1000000    // 16MB
+
+
+#define QSPI_ADDR_START               0x90000000
+#define QSPI_FW_TAG                   1024
+#define QSPI_FW_SIZE                  (2*1024*1024)
+#define QSPI_FW_ADDR(x)               ((x)*QSPI_FW_SIZE + QSPI_ADDR_START)
+
+
+
+
 #define _DEF_HW_BTN_LEFT              1
 #define _DEF_HW_BTN_RIGHT             2
 #define _DEF_HW_BTN_UP                3

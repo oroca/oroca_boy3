@@ -39,6 +39,8 @@
 #define _USE_HW_DELAY
 #define _USE_HW_RESET
 #define _USE_HW_QSPI
+#define _USE_HW_SPEAKER
+
 
 #define _USE_HW_LCD
 #define      HW_LCD_WIDTH           320
@@ -111,17 +113,24 @@
 #define      HW_CMD_MAX_DATA_LENGTH         2048
 
 
-#define FLASH_ADDR_TAG      0x08040000
-#define FLASH_ADDR_FW       0x08040400
+#define FLASH_ADDR_TAG                0x08040000
+#define FLASH_ADDR_FW                 0x08040400
+
+#define FLASH_ADDR_START              0x08040000
+#define FLASH_ADDR_END                (0x08040000 + 768*1024)
+
+#define FLASH_ADDR_BOOT_START         0x08000000
+#define FLASH_ADDR_BOOTEND            (0x08000000 + 128*1024)
 
 
-#define FLASH_ADDR_START    0x08040000
-#define FLASH_ADDR_END     (0x08040000 + 768*1024)
+#define DDR_ADDR_START                0xD0000000    // 16MB
+#define DDR_ADDR_MEM_BUF              0xD1000000    // 16MB
 
 
-#define FLASH_ADDR_BOOT_START    0x08000000
-#define FLASH_ADDR_BOOTEND      (0x08000000 + 128*1024)
-
+#define QSPI_ADDR_START               0x90000000
+#define QSPI_FW_TAG                   1024
+#define QSPI_FW_SIZE                  (2*1024*1024)
+#define QSPI_FW_ADDR(x)               ((x)*QSPI_FW_SIZE)
 
 
 #define _DEF_HW_BTN_LEFT              1
@@ -138,6 +147,8 @@
 
 #define _PIN_GPIO_LCD_BK_EN           2
 #define _PIN_GPIO_SDCARD_DETECT       4
+#define _PIN_GPIO_SPK_EN              7
+
 
 
 #endif /* SRC_HW_HW_DEF_H_ */

@@ -73,15 +73,25 @@
 #define      HW_CMD_MAX_DATA_LENGTH         2048
 
 
-#define FLASH_ADDR_TAG      0x08040000
-#define FLASH_ADDR_FW       0x08040400
+#define FLASH_ADDR_TAG                0x08040000
+#define FLASH_ADDR_FW                 0x08040400
 
-#define FLASH_ADDR_START    0x08040000
-#define FLASH_ADDR_END     (0x08040000 + (768+512)*1024)
+#define FLASH_ADDR_START              0x08040000
+#define FLASH_ADDR_END                0x08200000
 
 
-#define FLASH_ADDR_BOOT_START    0x08000000
-#define FLASH_ADDR_BOOTEND      (0x08000000 + 128*1024)
+#define FLASH_ADDR_BOOT_START         0x08000000
+#define FLASH_ADDR_BOOTEND            (0x08000000 + 128*1024)
+
+
+#define DDR_ADDR_START                0xD0000000    // 16MB
+#define DDR_ADDR_MEM_BUF              0xD1000000    // 16MB
+
+
+#define QSPI_ADDR_START               0x90000000
+#define QSPI_FW_TAG                   1024
+#define QSPI_FW_SIZE                  (2*1024*1024)
+#define QSPI_FW_ADDR(x)               ((x)*QSPI_FW_SIZE + QSPI_ADDR_START)
 
 
 
