@@ -40,15 +40,28 @@ bool slotRunFromFlash(uint8_t slot_index)
   uint32_t addr_run;
   uint32_t pre_time;
   uint32_t slot_size = 512*1024;
+  flash_tag_t  *p_fw_tag;
 
   addr_fw  = QSPI_FW_ADDR(slot_index);
-  //addr_run = SDRAM_ADDR_FW;
-  addr_run = 0x24000000;
 
-  pre_time = millis();
-  memcpy((void *)addr_run, (void *)addr_fw, slot_size);
 
-  logPrintf("copy_fw   \t\t: %dms\n", (int)(millis()-pre_time));
+  p_fw_tag = (flash_tag_t *)addr_fw;
+
+  if (p_fw_tag->addr_tag == addr_fw)
+  {
+    addr_run = addr_fw;
+    slot_size = SLOT_SIZE;
+  }
+  else
+  {
+    pre_time = millis();
+    addr_run = p_fw_tag->addr_tag;
+    memcpy((void *)addr_run, (void *)addr_fw, slot_size);
+
+    logPrintf("copy_fw   \t\t: %dms\n", (int)(millis()-pre_time));
+  }
+
+  logPrintf("%X, %X\n", p_fw_tag->addr_tag, addr_fw);
 
   if (slotVerifyFwCrc(addr_run) == true)
   {

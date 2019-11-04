@@ -10,6 +10,34 @@
 
 #include "ap.h"
 
+
+
+extern uint32_t _flash_tag_addr;
+extern uint32_t _flash_fw_addr;
+
+
+
+__attribute__((section(".tag"))) flash_tag_t fw_tag =
+    {
+     // fw info
+     //
+     0xAAAA5555,        // magic_number
+     "V191104R1",       // version_str
+     "OROCABOY3",       // board_str
+     "DOOM",           // name
+     __DATE__,
+     __TIME__,
+     (uint32_t)&_flash_tag_addr,
+     (uint32_t)&_flash_fw_addr,
+
+
+     // tag info
+     //
+    };
+
+
+
+
 extern "C"
 {
 void D_DoomMain (void);
@@ -23,6 +51,18 @@ void apInit(void)
   uartOpen(_DEF_UART1, 57600);
   uartOpen(_DEF_UART2, 57600);
   cmdifOpen(_DEF_UART1, 57600);
+
+  uint8_t *p_data[100];
+  int i;
+
+  for (i=0; i<100; i++)
+  {
+    p_data[i] = (uint8_t *)memMalloc(1);
+  }
+  for (i=0; i<100; i++)
+  {
+    memFree(p_data[i]);
+  }
 
 
   osThreadDef(threadEmul, threadEmul, _HW_DEF_RTOS_THREAD_PRI_EMUL, 0, _HW_DEF_RTOS_THREAD_MEM_EMUL);

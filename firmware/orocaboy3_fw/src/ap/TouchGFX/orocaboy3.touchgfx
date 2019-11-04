@@ -302,7 +302,7 @@
             },
             "Action": {
               "ScreenTransitionType": "ScreenTransitionNone",
-              "ActionComponent": "Main",
+              "ActionComponent": "btn_show",
               "Type": "ActionGotoScreen"
             }
           }

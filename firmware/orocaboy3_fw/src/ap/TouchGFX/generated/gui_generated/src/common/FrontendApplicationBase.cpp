@@ -57,3 +57,16 @@ void FrontendApplicationBase::gotomsg_boxScreenNoTransitionImpl()
     touchgfx::makeTransition<msg_boxView, msg_boxPresenter, touchgfx::NoTransition, Model >(&currentScreen, &currentPresenter, frontendHeap, &currentTransition, &model);
 }
 
+// btn_show
+
+void FrontendApplicationBase::gotobtn_showScreenNoTransition()
+{
+    transitionCallback = touchgfx::Callback<FrontendApplicationBase>(this, &FrontendApplication::gotobtn_showScreenNoTransitionImpl);
+    pendingScreenTransitionCallback = &transitionCallback;
+}
+
+void FrontendApplicationBase::gotobtn_showScreenNoTransitionImpl()
+{
+    touchgfx::makeTransition<btn_showView, btn_showPresenter, touchgfx::NoTransition, Model >(&currentScreen, &currentPresenter, frontendHeap, &currentTransition, &model);
+}
+

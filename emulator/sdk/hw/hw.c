@@ -12,31 +12,11 @@
 
 
 
+extern flash_tag_t fw_tag;
+
+
+
 void bootCmdif(void);
-
-
-extern uint32_t _flash_tag_addr;
-extern uint32_t _flash_fw_addr;
-
-
-
-__attribute__((section(".tag"))) flash_tag_t fw_tag =
-    {
-     // fw info
-     //
-     0xAAAA5555,        // magic_number
-     "V191104R1",       // version_str
-     "OROCABOY3",       // board_str
-     "pNesX",           // name
-     __DATE__,
-     __TIME__,
-     (uint32_t)&_flash_tag_addr,
-     (uint32_t)&_flash_fw_addr,
-
-
-     // tag info
-     //
-    };
 
 
 

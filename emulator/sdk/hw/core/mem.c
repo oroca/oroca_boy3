@@ -45,6 +45,7 @@ void memInit(uint32_t addr, uint32_t length)
 
 void *memMalloc(uint32_t size)
 {
+  printf("malloc %d\n", size);
   return malloc_(size);
 }
 
@@ -104,6 +105,9 @@ static caddr_t sbrk_(int incr)
 
   heap_end += incr;
 
+  printf("0x%X\n", (int)heap_end);
+  printf("0x%X\n", (int)prev_heap_end);
+
   return (caddr_t) prev_heap_end;
 }
 
@@ -156,20 +160,29 @@ static void *malloc_(size_t size) {
     if (!size) return NULL;
     size_t length = word_align(size + sizeof(struct chunk));
     Chunk prev = NULL;
+    printf("1\n");
     Chunk c = malloc_chunk_find(size, &prev);
+    printf("2\n");
     if (!c) {
+      printf("3\n");
         Chunk newc = (Chunk)sbrk_(length);
+        printf("4\n");
         if (newc == (void*) -1) {
+          printf("6\n");
             return NULL;
         }
+        printf("5\n");
         newc->next = NULL;
         newc->prev = prev;
         newc->size = length - sizeof(struct chunk);
         newc->data = newc + 1;
         prev->next = newc;
         c = newc;
+        printf("7\n");
     } else if (length + sizeof(size_t) < c->size) {
+      printf("5\n");
         malloc_split_next(c, length);
+        printf("6\n");
     }
     c->free = 0;
     return c->data;

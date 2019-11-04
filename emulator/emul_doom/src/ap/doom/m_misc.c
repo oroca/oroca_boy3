@@ -630,7 +630,9 @@ char *M_StringJoin(const char *s, ...)
     }
     va_end(args);
 
+    printf("1-2, %d\n", result_len);
     result = memMalloc(result_len);
+    printf("1-3\n");
 
     if (result == NULL)
     {

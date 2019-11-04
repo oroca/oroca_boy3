@@ -49,8 +49,8 @@ MEMORY
   FLASH (rx)      : ORIGIN = 0x08040400, LENGTH = 1280K  
 */
 
-  TAG   (rx)      : ORIGIN = 0x24000000, LENGTH = 1K
-  FLASH (rx)      : ORIGIN = 0x24000400, LENGTH = 511K  
+  TAG   (rx)      : ORIGIN = 0x8040000, LENGTH = 1K
+  FLASH (rx)      : ORIGIN = 0x8040400, LENGTH = 2047K  
 
   
   DTCMRAM (xrw)   : ORIGIN = 0x20000000, LENGTH = 128K

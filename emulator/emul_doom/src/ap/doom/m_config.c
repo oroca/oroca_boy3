@@ -2013,6 +2013,7 @@ void M_LoadDefaults (void)
     //
 
     i = M_CheckParmWithArgs("-extraconfig", 1);
+    printf("1-1, %d\n", i);
 
     if (i)
     {
@@ -2026,8 +2027,11 @@ void M_LoadDefaults (void)
             = M_StringJoin(configdir, default_extra_config, NULL);
     }
 
+    printf("1\n");
     LoadDefaultCollection(&doom_defaults);
+    printf("2\n");
     LoadDefaultCollection(&extra_defaults);
+    printf("3\n");
 }
 
 // Get a configuration file variable by its name

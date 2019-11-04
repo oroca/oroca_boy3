@@ -393,10 +393,6 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *UartHandle)
   {
     uartErrHandler(_DEF_UART1);
   }
-  if (UartHandle->Instance == uart_tbl[_DEF_UART3].handle->Instance)
-  {
-    uartErrHandler(_DEF_UART3);
-  }
 }
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
