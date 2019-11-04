@@ -62,6 +62,7 @@
   */
 
 #include "stm32h7xx.h"
+#include "hw_def.h"
 
 #if !defined  (HSE_VALUE)
 #define HSE_VALUE    ((uint32_t)25000000) /*!< Value of the External oscillator in Hz */
@@ -226,8 +227,7 @@ void SystemInit (void)
 #ifdef VECT_TAB_SRAM
   SCB->VTOR = D1_AXISRAM_BASE  | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal ITCMSRAM */
 #else
-  SCB->VTOR = FLASH_BANK2_BASE | VECT_TAB_OFFSET;       /* Vector Table Relocation in Internal FLASH */
-  //SCB->VTOR = 0x90000000 | VECT_TAB_OFFSET;       /* Vector Table Relocation in Internal FLASH */
+  SCB->VTOR = FLASH_ADDR_START | VECT_TAB_OFFSET;       /* Vector Table Relocation in Internal FLASH */
 #endif
 
 }

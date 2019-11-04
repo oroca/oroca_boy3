@@ -73,8 +73,10 @@ void MainView::handleKeyEvent(uint8_t key)
           break;
 
         default:
-          MainViewBase::handleKeyEvent(51);
-          hwRunFw(0);
+          if (slotRunFromFlash(swipeContainer_emulator.currentPage) == false)
+          {
+            MainViewBase::handleKeyEvent(51);
+          }
           break;
       }
     }
@@ -83,3 +85,4 @@ void MainView::handleKeyEvent(uint8_t key)
 #endif
 
 }
+

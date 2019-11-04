@@ -184,12 +184,6 @@
     <Filter Include="Header Files\generated\gui_generated\msg_box_screen">
       <UniqueIdentifier>5714BC75-6DA8-06FC-261A-E15D747B1E16</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\generated\gui_generated\containers">
-      <UniqueIdentifier>060A01BA-67E2-5469-EA81-2B668572A15A</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\generated\gui_generated\containers">
-      <UniqueIdentifier>FDAA4461-CD00-9FB4-DF1E-AFF18B79FC39</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\gui\btn_show_screen">
       <UniqueIdentifier>7FECCEDA-7023-3513-2935-2C5C018E3292</UniqueIdentifier>
     </Filter>

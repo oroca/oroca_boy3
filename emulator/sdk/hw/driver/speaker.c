@@ -19,6 +19,8 @@ static uint8_t volume = 0;
 bool speakerInit(void)
 {
   speakerDisable();
+
+  return true;
 }
 
 void speakerEnable(void)

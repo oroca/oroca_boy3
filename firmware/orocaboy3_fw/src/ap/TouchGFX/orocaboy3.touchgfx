@@ -281,7 +281,7 @@
             }
           },
           {
-            "InteractionName": "Interaction1",
+            "InteractionName": "show_empty",
             "HasCompletedTrigger": false,
             "Trigger": {
               "ButtonKey": 51,
@@ -294,7 +294,7 @@
             }
           },
           {
-            "InteractionName": "Interaction2",
+            "InteractionName": "go_home",
             "HasCompletedTrigger": false,
             "Trigger": {
               "ButtonKey": 49,
@@ -302,7 +302,7 @@
             },
             "Action": {
               "ScreenTransitionType": "ScreenTransitionNone",
-              "ActionComponent": "btn_show",
+              "ActionComponent": "Main",
               "Type": "ActionGotoScreen"
             }
           }

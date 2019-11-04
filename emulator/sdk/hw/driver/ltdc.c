@@ -13,8 +13,8 @@
 
 
 
-#define FRAME_BUF_ADDR        (0x24000000)
-//#define FRAME_BUF_ADDR        (0xD0000000)
+//#define FRAME_BUF_ADDR        (0x24000000)
+#define FRAME_BUF_ADDR        SDRAM_ADDR_IMAGE
 
 #define LCD_WIDTH             ((uint16_t)320)   /* LCD PIXEL WIDTH            */
 #define LCD_HEIGHT            ((uint16_t)240)   /* LCD PIXEL HEIGHT           */

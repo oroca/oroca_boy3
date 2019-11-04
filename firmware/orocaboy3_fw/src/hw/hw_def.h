@@ -27,8 +27,6 @@
 
 
 
-
-
 #define _HW_DEF_RTC_BOOT_RESET      RTC_BKP_DR3
 #define _HW_DEF_RTC_BOOT_MODE       RTC_BKP_DR4
 #define _HW_DEF_RTC_RESET_SRC       RTC_BKP_DR5
@@ -92,7 +90,8 @@
 #define _USE_HW_FATFS
 #define      HW_FATFS_USE_CMDIF     1
 
-
+#define _USE_HW_SLOT
+#define      HW_SLOT_MAX_CH         16
 
 
 #define _USE_HW_CMDIF
@@ -104,21 +103,25 @@
 #define      HW_CMD_MAX_DATA_LENGTH         2048
 
 
-#define FLASH_ADDR_TAG      0x08040000
-#define FLASH_ADDR_FW       0x08040400
+#define FLASH_ADDR_TAG                0x08040000
+#define FLASH_ADDR_FW                 0x08040400
 
 
-#define FLASH_ADDR_START    0x08040000
-#define FLASH_ADDR_END     (0x08040000 + 768*1024)
+#define FLASH_ADDR_START              0x08040000
+#define FLASH_ADDR_END                (0x08040000 + 768*1024)
 
 
-#define FLASH_ADDR_BOOT_START    0x08000000
-#define FLASH_ADDR_BOOTEND      (0x08000000 + 128*1024)
+#define FLASH_ADDR_BOOT_START         0x08000000
+#define FLASH_ADDR_BOOTEND            (0x08000000 + 128*1024)
 
 
 
-#define DDR_ADDR_START                0xD0000000    // 16MB
-#define DDR_ADDR_MEM_BUF              0xD1000000    // 16MB
+#define SDRAM_ADDR_START              0xD0000000    // 16MB
+#define SDRAM_ADDR_MEM_BUF            0xD1000000    // 16MB
+
+#define SDRAM_ADDR_IMAGE              0xD0000000    // 2MB
+#define SDRAM_ADDR_FW                 0xD0200000    // 2MB
+#define SDRAM_ADDR_BUF                0xD0400000    // 2MB
 
 
 #define QSPI_ADDR_START               0x90000000

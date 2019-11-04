@@ -25,7 +25,7 @@ __attribute__((section(".tag"))) flash_tag_t fw_tag =
      // fw info
      //
      0xAAAA5555,        // magic_number
-     "V191101R1",       // version_str
+     "V191104R1",       // version_str
      "OROCABOY3",       // board_str
      "pNesX",           // name
      __DATE__,
@@ -72,8 +72,8 @@ void hwInit(void)
   adcInit();
 
   sdramInit();
-  //qspiInit();
-  //qspiEnableMemoryMappedMode();
+  qspiInit();
+  qspiEnableMemoryMappedMode();
 
   flashInit();
   buttonInit();
@@ -87,7 +87,6 @@ void hwInit(void)
   {
     logPrintf("eeprom %dKB \t\t: Fail\r\n", (int)eepromGetLength()/1024);
   }
-
 
   usbInit();
   vcpInit();
@@ -118,23 +117,10 @@ void hwJumpToBoot(void)
 }
 
 
-void hwJumpToFw(uint32_t addr)
+void hwJumpToFw(void)
 {
-  void (**jump_func)(void) = (void (**)(void))(addr + 4);
-
-  bspDeInit();
-  (*jump_func)();
-}
-
-void hwRunFw(uint32_t fw_index)
-{
-  uint32_t addr;
-
-  addr  = QSPI_FW_ADDR(fw_index);
-  addr += QSPI_FW_TAG;
-
-  logPrintf("hwRunFw : 0x%X\n", (int)addr);
-  hwJumpToFw(addr);
+  rtcWriteBackupData(_HW_DEF_RTC_BOOT_MODE, (0<<7));
+  resetRunSoftReset();
 }
 
 
@@ -149,14 +135,17 @@ void bootCmdif(void)
       delay(100);
       hwJumpToBoot();
     }
-
-    if(cmdifHasString("reset", 0) == true)
+    else if(cmdifHasString("reset", 0) == true)
     {
       cmdifPrintf( "reset\n");
       delay(100);
       rtcWriteBackupData(_HW_DEF_RTC_BOOT_MODE, 0);
       resetRunSoftReset();
     }
-
+    else
+    {
+      cmdifPrintf( "boot 0x5555AAAA\n");
+      cmdifPrintf( "boot reset\n");
+    }
   }
 }

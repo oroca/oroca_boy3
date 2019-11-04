@@ -101,16 +101,16 @@ void MainViewBase::handleKeyEvent(uint8_t key)
     }
     if(51 == key)
     {
-        //Interaction1
+        //show_empty
         //When hardware button 51 clicked change screen to msg_box
         //Go to msg_box with no screen transition
         application().gotomsg_boxScreenNoTransition();
     }
     if(49 == key)
     {
-        //Interaction2
-        //When hardware button 49 clicked change screen to btn_show
-        //Go to btn_show with no screen transition
-        application().gotobtn_showScreenNoTransition();
+        //go_home
+        //When hardware button 49 clicked change screen to Main
+        //Go to Main with no screen transition
+        application().gotoMainScreenNoTransition();
     }
 }

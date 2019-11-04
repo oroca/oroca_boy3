@@ -44,12 +44,14 @@ _Min_Stack_Size = 0x800; /* required amount of stack */
 /* Specify the memory areas */
 MEMORY
 {
+/*
   TAG   (rx)      : ORIGIN = 0x08040000, LENGTH = 1K
   FLASH (rx)      : ORIGIN = 0x08040400, LENGTH = 1280K  
-/*
-  TAG   (rx)      : ORIGIN = 0x90000000, LENGTH = 1K
-  FLASH (rx)      : ORIGIN = 0x90000400, LENGTH = 2047K  
 */
+
+  TAG   (rx)      : ORIGIN = 0x24000000, LENGTH = 1K
+  FLASH (rx)      : ORIGIN = 0x24000400, LENGTH = 511K  
+
   
   DTCMRAM (xrw)   : ORIGIN = 0x20000000, LENGTH = 128K
   SRAM_D1 (xrw)   : ORIGIN = 0x24000000, LENGTH = 512K

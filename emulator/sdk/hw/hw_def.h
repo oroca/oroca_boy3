@@ -113,18 +113,26 @@
 #define      HW_CMD_MAX_DATA_LENGTH         2048
 
 
-#define FLASH_ADDR_TAG                0x08040000
-#define FLASH_ADDR_FW                 0x08040400
+//#define FLASH_ADDR_TAG                0x8040000
+#define FLASH_ADDR_TAG                0x24000000
 
-#define FLASH_ADDR_START              0x08040000
-#define FLASH_ADDR_END                (0x08040000 + 768*1024)
+
+#define FLASH_ADDR_FW                 (FLASH_ADDR_TAG + 0x400)
+
+#define FLASH_ADDR_START              FLASH_ADDR_TAG
+#define FLASH_ADDR_END                (FLASH_ADDR_START + 2048*1024)
+
 
 #define FLASH_ADDR_BOOT_START         0x08000000
 #define FLASH_ADDR_BOOTEND            (0x08000000 + 128*1024)
 
 
-#define DDR_ADDR_START                0xD0000000    // 16MB
-#define DDR_ADDR_MEM_BUF              0xD1000000    // 16MB
+#define SDRAM_ADDR_START              0xD0000000    // 16MB
+#define SDRAM_ADDR_MEM_BUF            0xD1000000    // 16MB
+
+#define SDRAM_ADDR_IMAGE              0xD0000000    // 2MB
+#define SDRAM_ADDR_FW                 0xD0200000    // 2MB
+#define SDRAM_ADDR_BUF                0xD0400000    // 2MB
 
 
 #define QSPI_ADDR_START               0x90000000
@@ -143,6 +151,9 @@
 #define _DEF_HW_BTN_Y                 8
 #define _DEF_HW_BTN_SELECT            9
 #define _DEF_HW_BTN_START             10
+
+#define _HW_DEF_ADC_X_AXIS            0
+#define _HW_DEF_ADC_Y_AXIS            1
 
 
 #define _PIN_GPIO_LCD_BK_EN           2

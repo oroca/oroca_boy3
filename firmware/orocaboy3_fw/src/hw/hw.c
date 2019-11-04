@@ -9,7 +9,7 @@
 
 
 #include "hw.h"
-
+#include "util.h"
 
 
 void bootCmdif(void);
@@ -92,6 +92,7 @@ void hwInit(void)
   usbInit();
   vcpInit();
   ltdcInit();
+  slotInit();
 
 
   if (sdInit() == true)
@@ -110,63 +111,6 @@ void hwJumpToBoot(void)
   resetRunSoftReset();
 }
 
-
-void hwJumpToFw(uint32_t addr)
-{
-  void (**jump_func)(void) = (void (**)(void))(addr + 4);
-
-  logPrintf("hwRunFw : 0x%X\n", (int)(**jump_func));
-
-#if 0
-
-  bspDeInit();
-
-  //portDISABLE_INTERRUPTS();
-
-  __set_CONTROL( 0 );
-
-  __disable_irq();
-
-
-  HAL_NVIC_DisableIRQ(I2C2_EV_IRQn);
-  HAL_NVIC_DisableIRQ(I2C2_ER_IRQn);
-  HAL_NVIC_DisableIRQ(OTG_FS_IRQn);
-  HAL_NVIC_DisableIRQ(QUADSPI_IRQn);
-  HAL_NVIC_DisableIRQ(SDMMC1_IRQn);
-
-
-  SysTick->CTRL = 0;
-  SysTick->LOAD = 0;
-  SysTick->VAL  = 0;
-
-
-  __set_MSP(*(__IO uint32_t*)addr);
-  SCB->VTOR = addr;
-  //__set_CONTROL( 0 );
-  __ISB();
-  __DSB();
-  __DMB();
-
-
-  (*jump_func)();
-#endif
-}
-
-void hwRunFw(uint32_t fw_index)
-{
-  uint32_t addr;
-
-  addr  = QSPI_FW_ADDR(fw_index);
-
-  //memcpy((void *)0xD0000000, (void *)addr, 1024*1024);
-
-  addr += QSPI_FW_TAG;
-
-  logPrintf("hwRunFw : 0x%X\n", (int)addr);
-  //hwJumpToFw(addr);
-  //hwJumpToFw(0xD0000000 + 1024);
-  hwJumpToFw(0x8100000 + 1024);
-}
 
 
 void bootCmdif(void)

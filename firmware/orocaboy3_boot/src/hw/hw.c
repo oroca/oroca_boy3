@@ -13,7 +13,7 @@
 
 
 __attribute__((section(".version"))) uint8_t boot_name[32] = "OROCABOY3";
-__attribute__((section(".version"))) uint8_t boot_ver[32]  = "B191029R1";
+__attribute__((section(".version"))) uint8_t boot_ver[32]  = "B191104R1";
 
 static uint8_t reset_count = 0;
 
@@ -113,25 +113,4 @@ uint8_t hwGetResetCount(void)
   return reset_count;
 }
 
-void hwJumpToFw(uint32_t addr)
-{
-  void (**jump_func)(void) = (void (**)(void))(addr + 4);
 
-  //bspDeInit();
-  //usbDeInit();
-
-
-  qspiEnableMemoryMappedMode();
-
-
-
-  SysTick->CTRL = 0;
-  __set_MSP(*(__IO uint32_t*) addr);
-
-  //logPrintf("0x%X\n", (int)addr);
-  //logPrintf("0x%X\n", (int)(**jump_func));
-
-
-
-  (*jump_func)();
-}

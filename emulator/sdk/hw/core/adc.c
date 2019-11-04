@@ -179,7 +179,7 @@ uint32_t adcRead10(uint8_t ch)
 
 uint32_t adcRead12(uint8_t ch)
 {
-  return 0;
+  return adcRead(ch);
 }
 
 uint32_t adcRead16(uint8_t ch)

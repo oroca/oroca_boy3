@@ -47,7 +47,7 @@ void bspInit(void)
   /* Disable the MPU */
   HAL_MPU_Disable();
 
-
+#if 0
   /* Setup D1 SRAM in Write-through */
   MPU_InitStruct.Enable           = MPU_REGION_ENABLE;
   MPU_InitStruct.BaseAddress      = D1_AXISRAM_BASE;
@@ -61,6 +61,7 @@ void bspInit(void)
   MPU_InitStruct.SubRegionDisable = 0x00;
   MPU_InitStruct.DisableExec      = MPU_INSTRUCTION_ACCESS_DISABLE;
   HAL_MPU_ConfigRegion(&MPU_InitStruct);
+#endif
 
   MPU_InitStruct.Enable           = MPU_REGION_ENABLE;
   MPU_InitStruct.BaseAddress      = D3_SRAM_BASE;
@@ -76,6 +77,7 @@ void bspInit(void)
   HAL_MPU_ConfigRegion(&MPU_InitStruct);
 
   HAL_MPU_Enable(MPU_PRIVILEGED_DEFAULT);
+
 }
 
 void bspDeInit(void)

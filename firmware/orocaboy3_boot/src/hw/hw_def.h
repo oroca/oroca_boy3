@@ -84,8 +84,10 @@
 #define FLASH_ADDR_BOOTEND            (0x08000000 + 128*1024)
 
 
-#define DDR_ADDR_START                0xD0000000    // 16MB
-#define DDR_ADDR_MEM_BUF              0xD1000000    // 16MB
+#define SDRAM_ADDR_START              0xD0000000    // 16MB
+#define SDRAM_ADDR_MEM_BUF            0xD1000000    // 16MB
+
+#define SDRAM_ADDR_FW                 0xD0000000    // 2MB
 
 
 #define QSPI_ADDR_START               0x90000000
