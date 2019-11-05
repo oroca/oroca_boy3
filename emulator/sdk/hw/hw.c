@@ -51,9 +51,9 @@ void hwInit(void)
   gpioInit();
   adcInit();
 
-  sdramInit();
-  qspiInit();
-  qspiEnableMemoryMappedMode();
+  //sdramInit();
+  //qspiInit();
+  //qspiEnableMemoryMappedMode();
 
   flashInit();
   buttonInit();

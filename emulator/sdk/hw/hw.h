@@ -42,6 +42,7 @@
 #include "dac.h"
 #include "timer.h"
 #include "speaker.h"
+#include "mpu.h"
 
 
 #include "sd.h"

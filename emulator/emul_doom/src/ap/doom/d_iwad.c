@@ -737,7 +737,6 @@ char *D_FindWADByName(const char *name)
     int i;
     
     // Absolute path?
-
     probe = M_FileCaseExists(name);
     if (probe != NULL)
     {

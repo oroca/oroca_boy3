@@ -23,6 +23,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <errno.h>
+#include <reent.h>
 
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
@@ -113,6 +114,8 @@ boolean M_FileExists(const char *filename)
     }
 #else
     FILINFO fno;
+
+    printf("%s \n", filename); // @baram
 
     if (f_stat (filename, &fno) != FR_OK)
     {
@@ -478,6 +481,7 @@ char *M_StringDuplicate(const char *orig)
 {
     char *result;
 
+    printf("test %3s \n", orig);
     result = strdup(orig);
 
     if (result == NULL)
@@ -630,9 +634,8 @@ char *M_StringJoin(const char *s, ...)
     }
     va_end(args);
 
-    printf("1-2, %d\n", result_len);
+
     result = memMalloc(result_len);
-    printf("1-3\n");
 
     if (result == NULL)
     {

@@ -253,6 +253,35 @@
             "Clickable": false,
             "Fadeable": false,
             "Moveable": false
+          },
+          {
+            "Pressed": "__designer\\Dark_Buttons_Round_Edge_small_pressed.png",
+            "Released": "__designer\\Dark_Buttons_Round_Edge_small.png",
+            "Alpha": 255,
+            "TextId": "SingleUseId4",
+            "ReleasedColor": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "PressedColor": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "TextRotation": "0",
+            "Style": "Style4",
+            "Name": "button_load",
+            "X": 75,
+            "Y": 263,
+            "Width": 170,
+            "Height": 60,
+            "Type": "ButtonWithLabel",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
           }
         ],
         "Interactions": [
@@ -260,7 +289,7 @@
             "InteractionName": "goLeft_pc",
             "HasCompletedTrigger": false,
             "Trigger": {
-              "ButtonKey": 47,
+              "ButtonKey": 0,
               "Type": "TriggerPhysicalButtonClicked"
             },
             "Action": {
@@ -272,7 +301,7 @@
             "InteractionName": "goRight_pc",
             "HasCompletedTrigger": false,
             "Trigger": {
-              "ButtonKey": 46,
+              "ButtonKey": 0,
               "Type": "TriggerPhysicalButtonClicked"
             },
             "Action": {
@@ -284,7 +313,7 @@
             "InteractionName": "show_empty",
             "HasCompletedTrigger": false,
             "Trigger": {
-              "ButtonKey": 51,
+              "ButtonKey": 0,
               "Type": "TriggerPhysicalButtonClicked"
             },
             "Action": {
@@ -297,7 +326,7 @@
             "InteractionName": "go_home",
             "HasCompletedTrigger": false,
             "Trigger": {
-              "ButtonKey": 49,
+              "ButtonKey": 0,
               "Type": "TriggerPhysicalButtonClicked"
             },
             "Action": {
@@ -705,6 +734,10 @@
       },
       {
         "TextEntryId": "SingleUseId3",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId4",
         "IsResource": false
       }
     ],

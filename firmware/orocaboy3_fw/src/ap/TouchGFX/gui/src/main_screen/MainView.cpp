@@ -6,7 +6,8 @@
 
 
 uint8_t current_page = 0;
-
+bool    slot_run = false;
+static uint32_t pre_time;
 
 MainView::MainView()
 {
@@ -38,10 +39,20 @@ void MainView::goRight_pc()
 void MainView::handleTickEvent(void)
 {
 #ifndef SIMULATOR
-  //if (buttonGetPressed(_DEF_HW_BTN_UP)) circle1.setLineWidth(0);
-  //else                                  circle1.setLineWidth(1);
-  //circle1.invalidate();
 
+
+
+  if (slot_run == true && millis()-pre_time >= 100)
+  {
+    slot_run = false;
+
+    if (slotRunFromFlash(swipeContainer_emulator.currentPage) == false)
+    {
+      //MainViewBase::handleKeyEvent(51);
+      button_load.setVisible(false);
+      button_load.invalidate();
+    }
+  }
 #endif
 }
 
@@ -73,10 +84,11 @@ void MainView::handleKeyEvent(uint8_t key)
           break;
 
         default:
-          if (slotRunFromFlash(swipeContainer_emulator.currentPage) == false)
-          {
-            MainViewBase::handleKeyEvent(51);
-          }
+          slot_run = true;
+          button_load.moveTo(75,93);
+          button_load.setVisible(true);
+          button_load.invalidate();
+          pre_time = millis();
           break;
       }
     }

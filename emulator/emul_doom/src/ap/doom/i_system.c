@@ -281,7 +281,8 @@ void I_Error (const char *error, ...)
 
     if (already_quitting)
     {
-        fprintf(stderr, "Warning: recursive call to I_Error detected.\n");
+        //fprintf(stderr, "Warning: recursive call to I_Error detected.\n");
+      return;
 #ifdef ORIGCODE
         exit(-1);
 #endif

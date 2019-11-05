@@ -11,13 +11,10 @@
 #include "slot.h"
 #include "util.h"
 #include "cmdif.h"
+#include "gpio.h"
 
 
 #ifdef _USE_HW_SLOT
-
-
-
-#define SLOT_SIZE   2048*1024
 
 
 
@@ -47,10 +44,17 @@ bool slotRunFromFlash(uint8_t slot_index)
 
   p_fw_tag = (flash_tag_t *)addr_fw;
 
+
+  if (p_fw_tag->magic_number != FLASH_MAGIC_NUMBER)
+  {
+    logPrintf("fw magic number \t: Fail\r\n");
+    return false;
+  }
+
+  slot_size = p_fw_tag->tag_flash_length + p_fw_tag->tag_length;
   if (p_fw_tag->addr_tag == addr_fw)
   {
     addr_run = addr_fw;
-    slot_size = SLOT_SIZE;
   }
   else
   {
@@ -58,10 +62,8 @@ bool slotRunFromFlash(uint8_t slot_index)
     addr_run = p_fw_tag->addr_tag;
     memcpy((void *)addr_run, (void *)addr_fw, slot_size);
 
-    logPrintf("copy_fw   \t\t: %dms\n", (int)(millis()-pre_time));
+    logPrintf("copy_fw   \t\t: %dms, %dKB\n", (int)(millis()-pre_time), (int)slot_size/1024);
   }
-
-  logPrintf("%X, %X\n", p_fw_tag->addr_tag, addr_fw);
 
   if (slotVerifyFwCrc(addr_run) == true)
   {
@@ -128,14 +130,19 @@ void slotJumpToFw(uint32_t addr)
 {
   void (**jump_func)(void) = (void (**)(void))(addr + 4);
 
+  // LCD Off;
+  //
+  gpioPinWrite(_PIN_GPIO_LCD_BK_EN, _DEF_LOW);
 
   bspDeInit();
 
-
+  //portDISABLE_INTERRUPTS();
+  SysTick->CTRL = 0;
   __set_CONTROL(0x00);
   __set_MSP(*(__IO uint32_t*)addr);
   SCB->VTOR = addr;
-  //portDISABLE_INTERRUPTS();
+
+
 
   (*jump_func)();
 }
@@ -166,11 +173,11 @@ void slotCmdif(void)
 
         if (p_fw_tag->magic_number == FLASH_MAGIC_NUMBER)
         {
-          cmdifPrintf("%d : %s \t%s %dKB\r\n", i, p_fw_tag->name_str, p_fw_tag->version_str, p_fw_tag->tag_flash_length/1024);
+          cmdifPrintf("%02d 0x%X : %s \t%s %dKB\r\n", i, 0x90000000+0x200000*i, p_fw_tag->name_str, p_fw_tag->version_str, p_fw_tag->tag_flash_length/1024);
         }
         else
         {
-          cmdifPrintf("%d : empty\r\n", i);
+          cmdifPrintf("%02d 0x%X : \r\n", i, 0x90000000+0x200000*i);
         }
       }
       cmdifPrintf("\r");

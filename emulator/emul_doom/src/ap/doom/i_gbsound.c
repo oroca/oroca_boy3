@@ -120,7 +120,7 @@ static int current_sound_lump_num = -1;
 
 static int I_SDL_StartSound(sfxinfo_t *sfxinfo, int channel, int vol, int sep, int pitch)
 {
-  printf("sound : I_SDL_StartSound %d %d %d %d\n", channel, vol, sep, pitch);
+  //printf("sound : I_SDL_StartSound %d %d %d %d\n", channel, vol, sep, pitch);
 
 
 
@@ -242,7 +242,7 @@ static void I_SDL_StopSound(int handle)
 
 static boolean I_SDL_SoundIsPlaying(int handle)
 {
-  printf("sound : I_SDL_SoundIsPlaying\n");
+  //printf("sound : I_SDL_SoundIsPlaying\n");
 
     if (!sound_initialized || handle < 0 || handle >= NUM_CHANNELS)
     {
@@ -266,7 +266,7 @@ static boolean I_SDL_SoundIsPlaying(int handle)
 
 static void I_SDL_UpdateSound(void)
 {
-  printf("sound : I_SDL_UpdateSound\n");
+  //printf("sound : I_SDL_UpdateSound\n");
 }
 
 static void I_SDL_ShutdownSound(void)

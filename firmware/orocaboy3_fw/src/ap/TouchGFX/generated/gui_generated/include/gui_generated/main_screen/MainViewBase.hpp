@@ -14,26 +14,13 @@
 #include <touchgfx/containers/SwipeContainer.hpp>
 #include <touchgfx/containers/Container.hpp>
 
+#include <touchgfx/widgets/ButtonWithLabel.hpp>
 class MainViewBase : public touchgfx::View<MainPresenter>
 {
 public:
     MainViewBase();
     virtual ~MainViewBase() {}
     virtual void setupScreen();
-    virtual void handleKeyEvent(uint8_t key);
-
-    /*
-     * Virtual Action Handlers
-     */
-    virtual void goLeft_pc()
-    {
-        // Override and implement this function in Main
-    }
-
-    virtual void goRight_pc()
-    {
-        // Override and implement this function in Main
-    }
 
 protected:
     FrontendApplication& application() {
@@ -61,6 +48,7 @@ protected:
     touchgfx::Container page_button;
     touchgfx::TextArea test_menu;
 
+    touchgfx::ButtonWithLabel button_load;
 
 private:
 

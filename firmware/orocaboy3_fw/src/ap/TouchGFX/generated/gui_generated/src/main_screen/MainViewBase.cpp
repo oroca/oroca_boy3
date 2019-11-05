@@ -69,48 +69,22 @@ MainViewBase::MainViewBase()
     swipeContainer_emulator.setEndSwipeElasticWidth(50);
     swipeContainer_emulator.setSelectedPage(0);
 
+    button_load.setXY(75, 263);
+    button_load.setBitmaps(touchgfx::Bitmap(BITMAP_DARK_BUTTONS_ROUND_EDGE_SMALL_ID), touchgfx::Bitmap(BITMAP_DARK_BUTTONS_ROUND_EDGE_SMALL_PRESSED_ID));
+    button_load.setLabelText(touchgfx::TypedText(T_SINGLEUSEID4));
+    button_load.setLabelColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
+    button_load.setLabelColorPressed(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
+
     add(box_bg);
     add(image_speaker);
     add(image1);
     add(textArea_title);
     add(animatedImage_title);
     add(swipeContainer_emulator);
+    add(button_load);
 }
 
 void MainViewBase::setupScreen()
 {
 
-}
-
-//Handles when a key is pressed
-void MainViewBase::handleKeyEvent(uint8_t key)
-{
-    if(47 == key)
-    {
-        //goLeft_pc
-        //When hardware button 47 clicked call virtual function
-        //Call goLeft_pc
-        goLeft_pc();
-    }
-    if(46 == key)
-    {
-        //goRight_pc
-        //When hardware button 46 clicked call virtual function
-        //Call goRight_pc
-        goRight_pc();
-    }
-    if(51 == key)
-    {
-        //show_empty
-        //When hardware button 51 clicked change screen to msg_box
-        //Go to msg_box with no screen transition
-        application().gotomsg_boxScreenNoTransition();
-    }
-    if(49 == key)
-    {
-        //go_home
-        //When hardware button 49 clicked change screen to btn_show
-        //Go to btn_show with no screen transition
-        application().gotobtn_showScreenNoTransition();
-    }
 }

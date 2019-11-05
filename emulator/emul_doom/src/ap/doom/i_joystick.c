@@ -474,7 +474,7 @@ static int GetAxisState(int axis, int invert)
 
     joy_x_out = map(joy_x_data, -2000, 2000, -32767, +32767);
 
-    result = -joy_x_out;
+    result = joy_x_out;
   }
 
   if (axis == 1)
@@ -487,7 +487,7 @@ static int GetAxisState(int axis, int invert)
 
     joy_y_out = map(joy_y_data, -2000, 2000, -32767, +32767);
 
-    result = joy_y_out;
+    result = -joy_y_out;
   }
 
 

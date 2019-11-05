@@ -11,7 +11,7 @@
 
 #include "def.h"
 #include "bsp.h"
-#include "config.h"
+
 
 
 
@@ -40,6 +40,7 @@
 #define _USE_HW_RESET
 #define _USE_HW_QSPI
 #define _USE_HW_SPEAKER
+#define _USE_HW_MPU
 
 
 #define _USE_HW_LCD
@@ -112,6 +113,13 @@
 #define _USE_HW_CMD
 #define      HW_CMD_MAX_DATA_LENGTH         2048
 
+
+
+#define FLASH_ADDR_TAG                0xD0200000
+#define FLASH_ADDR_FW                 (FLASH_ADDR_TAG + 0x400)
+
+#define FLASH_ADDR_START              FLASH_ADDR_TAG
+#define FLASH_ADDR_END                (FLASH_ADDR_START + 2048*1024)
 
 
 #define FLASH_ADDR_BOOT_START         0x08000000

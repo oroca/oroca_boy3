@@ -48,6 +48,10 @@ static void threadEmul(void const *argument);
 
 void apInit(void)
 {
+  //uint32_t *p_data2 = (uint32_t *)0x30000001;
+  //p_data2[0] = 1;
+
+
   uartOpen(_DEF_UART1, 57600);
   uartOpen(_DEF_UART2, 57600);
   cmdifOpen(_DEF_UART1, 57600);

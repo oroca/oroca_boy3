@@ -151,7 +151,7 @@ int window_height = SCREENHEIGHT_4_3 * 2;
 
 // Fullscreen mode, 0x0 for SDL_WINDOW_FULLSCREEN_DESKTOP.
 
-int fullscreen_width  = 384;
+int fullscreen_width  = 320;
 int fullscreen_height = 240;
 
 // Maximum number of pixels to use for intermediate scale buffer.
@@ -160,7 +160,7 @@ static int max_scaling_buffer_pixels = 16000000;
 
 // Run in full screen mode?  (int type for config code)
 
-int fullscreen = false;
+int fullscreen = true;
 
 // Aspect ratio correction mode
 
@@ -855,8 +855,8 @@ static void drawScreenNormal(void)
   int x_offset;
   int y_offset;
 
-  x_offset = 320 - (SCREENWIDTH)/2;
-  y_offset = 240 - (SCREENHEIGHT)/2;
+  x_offset = (320 - SCREENWIDTH)/2;
+  y_offset = (240 - SCREENHEIGHT)/2;
 
 
   uint16_t *p_buf = lcdGetFrameBuffer();
@@ -890,35 +890,25 @@ static void drawScreenFull(void)
   int x_offset;
   int y_offset;
 
-  x_offset = 800 - (SCREENWIDTH_4_3*2);
-  y_offset = 480 - (SCREENHEIGHT_4_3*2);
-  x_offset /= 1;
-  y_offset /= 1;
+  x_offset = 0;
+  y_offset = 0;
 
 
+  resizePixels(I_VideoBuffer, fullscreen_buffer, 320, 200, HW_LCD_WIDTH, HW_LCD_HEIGHT);
 
 
-  resizePixels(I_VideoBuffer, fullscreen_buffer, 320, 200, SCREENWIDTH_4_3, SCREENHEIGHT_4_3);
+  uint16_t *p_buf = lcdGetFrameBuffer();
 
 
-  uint16_t  line_buf[SCREENWIDTH_4_3*2];
-
-
-  uint16_t x_index;
-  for (y = 0; y < SCREENHEIGHT_4_3; y++)
+  for (y = 0; y < HW_LCD_HEIGHT; y++)
   {
-    x_index = 0;
-    for (x = 0; x < SCREENWIDTH_4_3; x++)
+    for (x = 0; x < HW_LCD_WIDTH; x++)
     {
-      index  = fullscreen_buffer[y * SCREENWIDTH_4_3 + x];
+      index  = fullscreen_buffer[y * HW_LCD_WIDTH + x];
       rgb565 = rgb565_palette[index];
 
-      line_buf[x_index++] = rgb565;
-      line_buf[x_index++] = rgb565;
+      p_buf[(y+y_offset) * HW_LCD_WIDTH + x] = rgb565;
     }
-
-    //drvLcdCopyLineBuffer((uint16_t)(x_offset), (uint16_t)(y_offset + y*2 + 0), (uint8_t *)line_buf, SCREENWIDTH_4_3*2);
-    //drvLcdCopyLineBuffer((uint16_t)(x_offset), (uint16_t)(y_offset + y*2 + 1), (uint8_t *)line_buf, SCREENWIDTH_4_3*2);
   }
   lcdRequestDraw();
 }
