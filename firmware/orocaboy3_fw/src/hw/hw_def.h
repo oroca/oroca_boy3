@@ -15,18 +15,30 @@
 
 
 
+
+#define _HW_DEF_RTOS_MEM_SIZE(x)              ((x)/4)
+
+#define _HW_DEF_RTOS_THREAD_PRI_MAIN          osPriorityNormal
+#define _HW_DEF_RTOS_THREAD_PRI_CMD           osPriorityNormal
+
+#define _HW_DEF_RTOS_THREAD_MEM_MAIN          _HW_DEF_RTOS_MEM_SIZE(6*1024)
+#define _HW_DEF_RTOS_THREAD_MEM_CMD           _HW_DEF_RTOS_MEM_SIZE(4*1024)
+
+
+
+
 #define _HW_DEF_RTC_BOOT_RESET      RTC_BKP_DR3
 #define _HW_DEF_RTC_BOOT_MODE       RTC_BKP_DR4
 #define _HW_DEF_RTC_RESET_SRC       RTC_BKP_DR5
 
 
-
+#define _USE_HW_RTOS
 #define _USE_HW_MICROS
 #define _USE_HW_MILLIS
 #define _USE_HW_DELAY
 #define _USE_HW_RESET
 #define _USE_HW_QSPI
-
+#define _USE_HW_TOUCHGFX
 
 #define _USE_HW_SDRAM
 #define      HW_USE_CMDIF_SDRAM     1
@@ -58,11 +70,29 @@
 #define      HW_USE_CMDIF_I2C       1
 
 #define _USE_HW_BUTTON
-#define      HW_BUTTON_MAX_CH       1
+#define      HW_BUTTON_MAX_CH       11
 #define      HW_USE_CMDIF_BUTTON    1
 
 #define _USE_HW_PWM
 #define      HW_PWM_MAX_CH          1
+#define      HW_USE_CMDIF_PWM       1
+
+#define _USE_HW_GPIO
+#define      HW_GPIO_MAX_CH         8
+
+#define _USE_HW_ADC
+#define      HW_ADC_MAX_CH          3
+#define      HW_USE_CMDIF_ADC       1
+
+#define _USE_HW_SD
+#define      HW_SD_USE_CMDIF        1
+
+#define _USE_HW_FATFS
+#define      HW_FATFS_USE_CMDIF     1
+
+#define _USE_HW_SLOT
+#define      HW_SLOT_MAX_CH         16
+
 
 #define _USE_HW_CMDIF
 #define      HW_CMDIF_LIST_MAX              16
@@ -73,18 +103,50 @@
 #define      HW_CMD_MAX_DATA_LENGTH         2048
 
 
-#define FLASH_ADDR_TAG      0x08040000
-#define FLASH_ADDR_FW       0x08040400
+#define FLASH_ADDR_TAG                0x08040000
+#define FLASH_ADDR_FW                 0x08040400
 
 
-#define FLASH_ADDR_START    0x08040000
-#define FLASH_ADDR_END     (0x08040000 + 768*1024)
+#define FLASH_ADDR_START              0x08040000
+#define FLASH_ADDR_END                (0x08040000 + 768*1024)
 
 
-#define FLASH_ADDR_BOOT_START    0x08000000
-#define FLASH_ADDR_BOOTEND      (0x08000000 + 128*1024)
+#define FLASH_ADDR_BOOT_START         0x08000000
+#define FLASH_ADDR_BOOTEND            (0x08000000 + 128*1024)
 
 
+
+#define SDRAM_ADDR_START              0xD0000000    // 16MB
+#define SDRAM_ADDR_MEM_BUF            0xD1000000    // 16MB
+
+#define SDRAM_ADDR_IMAGE              0xD0000000    // 2MB
+#define SDRAM_ADDR_FW                 0xD0200000    // 2MB
+#define SDRAM_ADDR_BUF                0xD0400000    // 2MB
+
+
+#define QSPI_ADDR_START               0x90000000
+#define QSPI_FW_TAG                   1024
+#define QSPI_FW_SIZE                  (2*1024*1024)
+#define QSPI_FW_ADDR(x)               ((x)*QSPI_FW_SIZE + QSPI_ADDR_START)
+
+
+
+
+#define _DEF_HW_BTN_LEFT              1
+#define _DEF_HW_BTN_RIGHT             2
+#define _DEF_HW_BTN_UP                3
+#define _DEF_HW_BTN_DOWN              4
+#define _DEF_HW_BTN_A                 5
+#define _DEF_HW_BTN_B                 6
+#define _DEF_HW_BTN_X                 7
+#define _DEF_HW_BTN_Y                 8
+#define _DEF_HW_BTN_SELECT            9
+#define _DEF_HW_BTN_START             10
+
+
+#define _PIN_GPIO_BAT_CHG             0
+#define _PIN_GPIO_LCD_BK_EN           2
+#define _PIN_GPIO_SDCARD_DETECT       4
 
 
 #endif /* SRC_HW_HW_DEF_H_ */

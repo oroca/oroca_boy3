@@ -59,6 +59,7 @@ void apMain(int argc, char *argv[])
   uint32_t flash_begin;
   uint32_t flash_end;
   char dst_filename[256];
+  int slot_number;
 
 
   setbuf(stdout, NULL);
@@ -79,6 +80,14 @@ void apMain(int argc, char *argv[])
   file_name = (char *)argv[ 5 ];
   file_run  = (uint32_t)strtol( argv[ 6 ], NULL, 0 );
 
+  if (start_addr <= 15)
+  {
+    slot_number = start_addr;
+    start_addr = 0x90000000 + 0x200000 * slot_number;
+
+    printf("slot number : %d\n", slot_number);
+    printf("     addr   : 0x%X\n", start_addr);
+  }
 
   if(strcmp(file_type, "fw") == 0)
   {
@@ -427,6 +436,7 @@ bool addTagToBin(char *src_filename, char *dst_filename)
   p_tag->tag_flash_start  = p_tag->addr_fw;
   p_tag->tag_flash_end    = p_tag->addr_fw + (src_len - FLASH_TAG_SIZE);
   p_tag->tag_flash_length = p_tag->tag_flash_end - p_tag->tag_flash_start;
+  p_tag->tag_length       = FLASH_TAG_SIZE;
   strcpy((char *)p_tag->tag_date_str, __DATE__);
   strcpy((char *)p_tag->tag_time_str, __TIME__);
   p_tag->tag_flash_crc = t_crc;

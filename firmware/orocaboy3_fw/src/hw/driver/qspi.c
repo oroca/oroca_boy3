@@ -240,7 +240,7 @@ bool qspiErase(uint32_t addr, uint32_t length)
 
   for (i=block_begin; i<=block_end; i++)
   {
-    ret = qspiEraseBlock(i);
+    ret = qspiEraseBlock(block_size*i);
     if (ret == false)
     {
       break;

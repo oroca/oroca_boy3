@@ -13,7 +13,7 @@
 
 
 __attribute__((section(".version"))) uint8_t boot_name[32] = "OROCABOY3";
-__attribute__((section(".version"))) uint8_t boot_ver[32]  = "B191029R1";
+__attribute__((section(".version"))) uint8_t boot_ver[32]  = "B191104R1";
 
 static uint8_t reset_count = 0;
 
@@ -24,6 +24,8 @@ static void bootModeWait(void);
 void hwInit(void)
 {
   bspInit();
+
+
 
   resetInit();
   microsInit();
@@ -38,6 +40,7 @@ void hwInit(void)
   logPrintf("\n\n[ Bootloader Begin... ]\r\n");
   logPrintf("Booting..Name \t\t: %s\r\n", boot_name);
   logPrintf("Booting..Ver  \t\t: %s\r\n", boot_ver);
+
 
   resetLog();
   rtcInit();
@@ -109,3 +112,5 @@ uint8_t hwGetResetCount(void)
 {
   return reset_count;
 }
+
+

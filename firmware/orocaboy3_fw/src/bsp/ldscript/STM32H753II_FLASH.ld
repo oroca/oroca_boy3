@@ -45,7 +45,7 @@ _Min_Stack_Size = 0x800; /* required amount of stack */
 MEMORY
 {
   TAG   (rx)      : ORIGIN = 0x08040000, LENGTH = 1K
-  FLASH (rx)      : ORIGIN = 0x08040400, LENGTH = 767K  
+  FLASH (rx)      : ORIGIN = 0x08040400, LENGTH = 1280K  
   
   DTCMRAM (xrw)   : ORIGIN = 0x20000000, LENGTH = 128K
   SRAM_D1 (xrw)   : ORIGIN = 0x24000000, LENGTH = 512K
@@ -53,6 +53,8 @@ MEMORY
   SRAM_D3 (xrw)   : ORIGIN = 0x38000000, LENGTH = 64K
   ITCMRAM (xrw)   : ORIGIN = 0x00000000, LENGTH = 64K
   MEMORY_B1 (rx)  : ORIGIN = 0x60000000, LENGTH = 0K
+  
+  QSPI (rx)       : ORIGIN = 0x90000000, LENGTH = 64M
 }
 
 /* Define output sections */
@@ -240,23 +242,7 @@ SECTIONS
     *(.mb1rodata*)
   } >MEMORY_B1
 
-
-  .rom_1_bin :
-  {
-    . = ALIGN(8);
-    rom_1_bin = .;
-    KEEP(*(.rom_1_bin));
-    rom_1_bin_end = .;
-  } >FLASH  
-
-  .rom_2_bin :
-  {
-    . = ALIGN(8);
-    rom_2_bin = .;
-    KEEP(*(.rom_2_bin));
-    rom_2_bin_end = .;
-  } >FLASH  
-  
+    
   
   /* Remove information from the standard libraries */
   /DISCARD/ :

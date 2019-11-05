@@ -12,7 +12,7 @@
 #include "boot/boot.h"
 
 
-#define MAX_BOOT_CH     1
+#define MAX_BOOT_CH           2
 
 
 
@@ -34,11 +34,16 @@ void apInit(void)
 
 
   uartOpen(_DEF_UART1, 57600);
-  cmdifOpen(_DEF_UART1, 57600);
+  uartOpen(_DEF_UART2, 57600);
 
   cmdInit(&cmd_boot[0]);
   cmdBegin(&cmd_boot[0], _DEF_UART1, 57600);
 
+  cmdInit(&cmd_boot[1]);
+  cmdBegin(&cmd_boot[1], _DEF_UART2, 57600);
+
+
+  cmdifOpen(_DEF_UART1, 57600);
 
   boot_param = rtcReadBackupData(_HW_DEF_RTC_BOOT_MODE);
 
@@ -51,6 +56,8 @@ void apInit(void)
     boot_param &= ~(1<<7);
     rtcWriteBackupData(_HW_DEF_RTC_BOOT_MODE, boot_param);
 
+    usbInit();
+    vcpInit();
     return;
   }
 
@@ -96,6 +103,8 @@ void apInit(void)
       break;
   }
 
+  usbInit();
+  vcpInit();
 }
 
 void apMain(void)

@@ -9,7 +9,7 @@
 
 
 #include "hw.h"
-
+#include "util.h"
 
 
 void bootCmdif(void);
@@ -25,9 +25,9 @@ __attribute__((section(".tag"))) flash_tag_t fw_tag =
      // fw info
      //
      0xAAAA5555,        // magic_number
-     "V191023R1",       // version_str
+     "V191105R1",       // version_str
      "OROCABOY3",       // board_str
-     "Firmware",        // name
+     "Launcher",        // name
      __DATE__,
      __TIME__,
      (uint32_t)&_flash_tag_addr,
@@ -67,10 +67,14 @@ void hwInit(void)
 
   pwmInit();
   ledInit();
+  gpioInit();
+  adcInit();
 
 
   sdramInit();
   qspiInit();
+  qspiEnableMemoryMappedMode();
+
   flashInit();
   buttonInit();
   i2cInit();
@@ -85,6 +89,17 @@ void hwInit(void)
   }
 
 
+  usbInit();
+  vcpInit();
+  ltdcInit();
+  slotInit();
+
+
+  if (sdInit() == true)
+  {
+    fatfsInit();
+  }
+
   logPrintf("Start...\r\n");
 
   cmdifAdd("boot", bootCmdif);
@@ -95,6 +110,7 @@ void hwJumpToBoot(void)
   rtcWriteBackupData(_HW_DEF_RTC_BOOT_MODE, (1<<7));
   resetRunSoftReset();
 }
+
 
 
 void bootCmdif(void)

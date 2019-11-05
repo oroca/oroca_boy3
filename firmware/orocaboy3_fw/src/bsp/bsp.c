@@ -10,7 +10,10 @@
 
 #include "bsp.h"
 #include "uart.h"
-
+#include "rtos.h"
+#include "sdram.h"
+#include "qspi.h"
+#include "usb.h"
 
 
 static void SystemClock_Config(void);
@@ -22,7 +25,8 @@ void bspInit(void)
 
   HAL_Init();
 
-
+  //SCB_EnableICache();
+  //SCB_EnableDCache();
 
   SystemClock_Config();
 
@@ -36,13 +40,121 @@ void bspInit(void)
   __HAL_RCC_GPIOI_CLK_ENABLE();
   __HAL_RCC_GPIOJ_CLK_ENABLE();
   __HAL_RCC_GPIOK_CLK_ENABLE();
+
+
+
+  /*  T C B
+   *  0 0 0 Strongly Ordered  , Stringly Ordered
+   *  0 0 1 Device            , Shared Device
+   *  0 1 0 Normal            , Write through, no write allocate (메모리 동기화됨)
+   *  0 1 1 Normal            , Write-back, no write allocate (실제 메모리와 다를 수 있음)
+   *  1 0 0 Normal            , Non-cacheable
+   *  1 0 1 Reserved
+   *  1 1 0 Undefined
+   *  1 1 1 Normal            , Write-back, write and read allocate
+   *  2 0 0 Device            , Non-shareable device
+   *  2 0 1 Reserved
+   */
+
+  MPU_Region_InitTypeDef MPU_InitStruct;
+
+  /* Disable the MPU */
+  HAL_MPU_Disable();
+
+#if 0
+  /* Setup D1 SRAM in Write-through */
+  MPU_InitStruct.Enable           = MPU_REGION_ENABLE;
+  MPU_InitStruct.BaseAddress      = D1_AXISRAM_BASE;
+  MPU_InitStruct.Size             = MPU_REGION_SIZE_512KB;
+  MPU_InitStruct.AccessPermission = MPU_REGION_FULL_ACCESS;
+  MPU_InitStruct.IsBufferable     = MPU_ACCESS_NOT_BUFFERABLE;
+  MPU_InitStruct.IsCacheable      = MPU_ACCESS_CACHEABLE;
+  MPU_InitStruct.IsShareable      = MPU_ACCESS_NOT_SHAREABLE;
+  MPU_InitStruct.Number           = MPU_REGION_NUMBER0;
+  MPU_InitStruct.TypeExtField     = MPU_TEX_LEVEL0;
+  MPU_InitStruct.SubRegionDisable = 0x00;
+  MPU_InitStruct.DisableExec      = MPU_INSTRUCTION_ACCESS_ENABLE;
+  HAL_MPU_ConfigRegion(&MPU_InitStruct);
+#endif
+
+  /* Non-cacheable */
+  MPU_InitStruct.Enable           = MPU_REGION_ENABLE;
+  MPU_InitStruct.BaseAddress      = D3_SRAM_BASE;
+  MPU_InitStruct.Size             = MPU_REGION_SIZE_64KB;
+  MPU_InitStruct.AccessPermission = MPU_REGION_FULL_ACCESS;
+  MPU_InitStruct.IsBufferable     = MPU_ACCESS_NOT_BUFFERABLE;
+  MPU_InitStruct.IsCacheable      = MPU_ACCESS_NOT_CACHEABLE;
+  MPU_InitStruct.IsShareable      = MPU_ACCESS_NOT_SHAREABLE;
+  MPU_InitStruct.Number           = MPU_REGION_NUMBER0;
+  MPU_InitStruct.TypeExtField     = MPU_TEX_LEVEL1;
+  MPU_InitStruct.SubRegionDisable = 0x00;
+  MPU_InitStruct.DisableExec      = MPU_INSTRUCTION_ACCESS_DISABLE;
+  HAL_MPU_ConfigRegion(&MPU_InitStruct);
+
+
+  /* Write through, no write allocate */
+  MPU_InitStruct.Enable           = MPU_REGION_ENABLE;
+  MPU_InitStruct.BaseAddress      = SDRAM_ADDR_IMAGE;
+  MPU_InitStruct.Size             = MPU_REGION_SIZE_2MB;
+  MPU_InitStruct.AccessPermission = MPU_REGION_FULL_ACCESS;
+  MPU_InitStruct.IsBufferable     = MPU_ACCESS_NOT_BUFFERABLE;
+  MPU_InitStruct.IsCacheable      = MPU_ACCESS_CACHEABLE;
+  MPU_InitStruct.IsShareable      = MPU_ACCESS_NOT_SHAREABLE;
+  MPU_InitStruct.Number           = MPU_REGION_NUMBER2;
+  MPU_InitStruct.TypeExtField     = MPU_TEX_LEVEL0;
+  MPU_InitStruct.SubRegionDisable = 0x00;
+  MPU_InitStruct.DisableExec      = MPU_INSTRUCTION_ACCESS_ENABLE;
+  HAL_MPU_ConfigRegion(&MPU_InitStruct);
+
+
+  /* Write-back, write and read allocate */
+  MPU_InitStruct.Enable           = MPU_REGION_ENABLE;
+  MPU_InitStruct.BaseAddress      = SDRAM_ADDR_MEM_BUF;
+  MPU_InitStruct.Size             = MPU_REGION_SIZE_16MB;
+  MPU_InitStruct.AccessPermission = MPU_REGION_FULL_ACCESS;
+  MPU_InitStruct.IsBufferable     = MPU_ACCESS_BUFFERABLE;
+  MPU_InitStruct.IsCacheable      = MPU_ACCESS_CACHEABLE;
+  MPU_InitStruct.IsShareable      = MPU_ACCESS_NOT_SHAREABLE;
+  MPU_InitStruct.Number           = MPU_REGION_NUMBER3;
+  MPU_InitStruct.TypeExtField     = MPU_TEX_LEVEL1;
+  MPU_InitStruct.SubRegionDisable = 0x00;
+  MPU_InitStruct.DisableExec      = MPU_INSTRUCTION_ACCESS_ENABLE;
+  HAL_MPU_ConfigRegion(&MPU_InitStruct);
+
+
+  /* Write-back, write and read allocate */
+  MPU_InitStruct.Enable           = MPU_REGION_ENABLE;
+  MPU_InitStruct.BaseAddress      = SDRAM_ADDR_FW;
+  MPU_InitStruct.Size             = MPU_REGION_SIZE_2MB;
+  MPU_InitStruct.AccessPermission = MPU_REGION_FULL_ACCESS;
+  MPU_InitStruct.IsBufferable     = MPU_ACCESS_BUFFERABLE;
+  MPU_InitStruct.IsCacheable      = MPU_ACCESS_CACHEABLE;
+  MPU_InitStruct.IsShareable      = MPU_ACCESS_NOT_SHAREABLE;
+  MPU_InitStruct.Number           = MPU_REGION_NUMBER4;
+  MPU_InitStruct.TypeExtField     = MPU_TEX_LEVEL1;
+  MPU_InitStruct.SubRegionDisable = 0x00;
+  MPU_InitStruct.DisableExec      = MPU_INSTRUCTION_ACCESS_ENABLE;
+  HAL_MPU_ConfigRegion(&MPU_InitStruct);
+
+
+  /* Enable the MPU */
+  HAL_MPU_Enable(MPU_PRIVILEGED_DEFAULT);
+
 }
 
 void bspDeInit(void)
 {
-  //usbDeInit();
+  usbDeInit();
   HAL_RCC_DeInit();
-  //HAL_DeInit();
+
+  // Disable Interrupts
+  //
+  for (int i=0; i<8; i++)
+  {
+    NVIC->ICER[i] = 0xFFFFFFFF;
+    __DSB();
+    __ISB();
+  }
 }
 
 int __io_putchar(int ch)
@@ -145,12 +257,30 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 
-  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_USB;
+  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_USB|RCC_PERIPHCLK_SDMMC;
+
+  PeriphClkInitStruct.PLL2.PLL2M = 5;
+  PeriphClkInitStruct.PLL2.PLL2N = 160;
+  PeriphClkInitStruct.PLL2.PLL2P = 2; // 400Mhz
+  PeriphClkInitStruct.PLL2.PLL2Q = 4; // 200Mhz
+  PeriphClkInitStruct.PLL2.PLL2R = 4; // 200Mhz
+  PeriphClkInitStruct.PLL2.PLL2RGE = RCC_PLL2VCIRANGE_2;
+  PeriphClkInitStruct.PLL2.PLL2VCOSEL = RCC_PLL2VCOWIDE;
+  PeriphClkInitStruct.PLL2.PLL2FRACN = 0;
+
   PeriphClkInitStruct.UsbClockSelection = RCC_USBCLKSOURCE_HSI48;
+  PeriphClkInitStruct.SdmmcClockSelection = RCC_SDMMCCLKSOURCE_PLL;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
   {
     Error_Handler();
   }
+
+
+  /** Enable USB Voltage detector
+  */
+  HAL_PWREx_EnableUSBVoltageDetector();
+
+
 /*
   Note : The activation of the I/O Compensation Cell is recommended with communication  interfaces
           (GPIO, SPI, FMC, QSPI ...)  when  operating at  high frequencies(please refer to product datasheet)
@@ -162,11 +292,11 @@ void SystemClock_Config(void)
           To do this please uncomment the following code
 */
 
-  /*
+  //*
   __HAL_RCC_CSI_ENABLE() ;
 
   __HAL_RCC_SYSCFG_CLK_ENABLE() ;
 
   HAL_EnableCompensationCell();
-  */
+  //*/
 }

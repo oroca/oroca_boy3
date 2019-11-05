@@ -15,12 +15,16 @@
 void apInit(void)
 {
   uartOpen(_DEF_UART1, 57600);
+  uartOpen(_DEF_UART2, 57600);
   cmdifOpen(_DEF_UART1, 57600);
 }
 
 void apMain(void)
 {
   uint32_t pre_time;
+
+  uint32_t *p_data2 = (uint32_t *)SDRAM_ADDR_MEM_BUF;
+  p_data2[0] = 1;
 
   while(1)
   {

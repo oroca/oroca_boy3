@@ -40,6 +40,7 @@ void hwInit(void);
 
 
 uint8_t hwGetResetCount(void);
+void hwJumpToFw(uint32_t addr);
 
 
 #ifdef __cplusplus
