@@ -16,6 +16,7 @@ MainView::MainView()
 void MainView::setupScreen()
 {
   swipeContainer_emulator.setSelectedPage(current_page);
+  image_bat.setVisible(false);
 }
 
 void MainView::tearDownScreen()
@@ -39,7 +40,7 @@ void MainView::goRight_pc()
 void MainView::handleTickEvent(void)
 {
 #ifndef SIMULATOR
-
+  static uint32_t pre_time_bat;
 
 
   if (slot_run == true && millis()-pre_time >= 100)
@@ -52,6 +53,20 @@ void MainView::handleTickEvent(void)
       button_load.setVisible(false);
       button_load.invalidate();
     }
+  }
+
+  if (millis()-pre_time_bat >= 100)
+  {
+    pre_time_bat = millis();
+    if (gpioPinRead(_PIN_GPIO_BAT_CHG) == _DEF_LOW)
+    {
+      image_bat.setVisible(true);
+    }
+    else
+    {
+      image_bat.setVisible(false);
+    }
+    image_bat.invalidate();
   }
 #endif
 }
@@ -84,11 +99,18 @@ void MainView::handleKeyEvent(uint8_t key)
           break;
 
         default:
-          slot_run = true;
-          button_load.moveTo(75,93);
-          button_load.setVisible(true);
-          button_load.invalidate();
-          pre_time = millis();
+          if (slotIsAvailable(swipeContainer_emulator.currentPage) == true)
+          {
+            slot_run = true;
+            button_load.moveTo(75,93);
+            button_load.setVisible(true);
+            button_load.invalidate();
+            pre_time = millis();
+          }
+          else
+          {
+            MainViewBase::handleKeyEvent(46);
+          }
           break;
       }
     }

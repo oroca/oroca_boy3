@@ -22,6 +22,7 @@ extern "C" {
 
 
 bool slotInit(void);
+bool slotIsAvailable(uint8_t slot_index);
 bool slotRunFromFlash(uint8_t slot_index);
 bool slotRunFromFile(const char *file_name);
 void slotJumpToFw(uint32_t addr);

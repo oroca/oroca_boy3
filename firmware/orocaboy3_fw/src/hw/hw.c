@@ -25,9 +25,9 @@ __attribute__((section(".tag"))) flash_tag_t fw_tag =
      // fw info
      //
      0xAAAA5555,        // magic_number
-     "V191101R1",       // version_str
+     "V191105R1",       // version_str
      "OROCABOY3",       // board_str
-     "Firmware",        // name
+     "Launcher",        // name
      __DATE__,
      __TIME__,
      (uint32_t)&_flash_tag_addr,

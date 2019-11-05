@@ -282,6 +282,22 @@
             "Clickable": false,
             "Fadeable": false,
             "Moveable": false
+          },
+          {
+            "Filename": "b1.png",
+            "Alpha": 255,
+            "ScalingAlgorithm": "Bilinear Interpolation",
+            "Name": "image_bat",
+            "X": 287,
+            "Y": 3,
+            "Width": 18,
+            "Height": 22,
+            "Type": "ScalableImage",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
           }
         ],
         "Interactions": [
@@ -289,7 +305,7 @@
             "InteractionName": "goLeft_pc",
             "HasCompletedTrigger": false,
             "Trigger": {
-              "ButtonKey": 0,
+              "ButtonKey": 48,
               "Type": "TriggerPhysicalButtonClicked"
             },
             "Action": {
@@ -301,7 +317,7 @@
             "InteractionName": "goRight_pc",
             "HasCompletedTrigger": false,
             "Trigger": {
-              "ButtonKey": 0,
+              "ButtonKey": 47,
               "Type": "TriggerPhysicalButtonClicked"
             },
             "Action": {
@@ -313,7 +329,7 @@
             "InteractionName": "show_empty",
             "HasCompletedTrigger": false,
             "Trigger": {
-              "ButtonKey": 0,
+              "ButtonKey": 46,
               "Type": "TriggerPhysicalButtonClicked"
             },
             "Action": {
@@ -327,6 +343,19 @@
             "HasCompletedTrigger": false,
             "Trigger": {
               "ButtonKey": 0,
+              "Type": "TriggerPhysicalButtonClicked"
+            },
+            "Action": {
+              "ScreenTransitionType": "ScreenTransitionNone",
+              "ActionComponent": "btn_show",
+              "Type": "ActionGotoScreen"
+            }
+          },
+          {
+            "InteractionName": "go_btn_test",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "ButtonKey": 49,
               "Type": "TriggerPhysicalButtonClicked"
             },
             "Action": {

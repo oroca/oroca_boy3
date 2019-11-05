@@ -86,6 +86,22 @@ bool slotRunFromFlash(uint8_t slot_index)
   return true;
 }
 
+bool slotIsAvailable(uint8_t slot_index)
+{
+  flash_tag_t  *p_fw_tag;
+
+
+  p_fw_tag = (flash_tag_t *)QSPI_FW_ADDR(slot_index);
+
+
+  if (p_fw_tag->magic_number != FLASH_MAGIC_NUMBER)
+  {
+    return false;
+  }
+
+  return true;
+}
+
 bool slotRunFromFile(const char *file_name)
 {
   return true;

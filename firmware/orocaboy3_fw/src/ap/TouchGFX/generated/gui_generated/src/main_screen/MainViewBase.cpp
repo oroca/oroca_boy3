@@ -75,6 +75,10 @@ MainViewBase::MainViewBase()
     button_load.setLabelColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
     button_load.setLabelColorPressed(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
 
+    image_bat.setBitmap(touchgfx::Bitmap(BITMAP_B1_ID));
+    image_bat.setPosition(287, 3, 18, 22);
+    image_bat.setScalingAlgorithm(touchgfx::ScalableImage::BILINEAR_INTERPOLATION);
+
     add(box_bg);
     add(image_speaker);
     add(image1);
@@ -82,9 +86,43 @@ MainViewBase::MainViewBase()
     add(animatedImage_title);
     add(swipeContainer_emulator);
     add(button_load);
+    add(image_bat);
 }
 
 void MainViewBase::setupScreen()
 {
 
+}
+
+//Handles when a key is pressed
+void MainViewBase::handleKeyEvent(uint8_t key)
+{
+    if(48 == key)
+    {
+        //goLeft_pc
+        //When hardware button 48 clicked call virtual function
+        //Call goLeft_pc
+        goLeft_pc();
+    }
+    if(47 == key)
+    {
+        //goRight_pc
+        //When hardware button 47 clicked call virtual function
+        //Call goRight_pc
+        goRight_pc();
+    }
+    if(46 == key)
+    {
+        //show_empty
+        //When hardware button 46 clicked change screen to msg_box
+        //Go to msg_box with no screen transition
+        application().gotomsg_boxScreenNoTransition();
+    }
+    if(49 == key)
+    {
+        //go_btn_test
+        //When hardware button 49 clicked change screen to btn_show
+        //Go to btn_show with no screen transition
+        application().gotobtn_showScreenNoTransition();
+    }
 }
