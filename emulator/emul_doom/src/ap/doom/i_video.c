@@ -1085,7 +1085,7 @@ void I_FinishUpdate (void)
     {
       fps = 1000 / time_process;
     }
-    printf("time : %d ms, %d fps\n", time_process, fps);
+    //printf("time : %d ms, %d fps\n", (int)time_process, (int)fps); //@baram
     pre_time = millis();
 
 #endif

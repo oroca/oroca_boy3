@@ -306,8 +306,8 @@ void HAL_DAC_MspInit(DAC_HandleTypeDef *hdac)
 
   /*##-4- Configure the NVIC for DMA #########################################*/
   /* Enable the DMA1_Channel3 IRQ Channel */
-  HAL_NVIC_SetPriority(DMA2_Stream6_IRQn, 5, 0);
-  HAL_NVIC_EnableIRQ(DMA2_Stream6_IRQn);
+  //HAL_NVIC_SetPriority(DMA2_Stream6_IRQn, 5, 0);
+  //HAL_NVIC_EnableIRQ(DMA2_Stream6_IRQn);
 }
 
 /**
@@ -324,8 +324,8 @@ void HAL_DAC_MspDeInit(DAC_HandleTypeDef *hdac)
   HAL_GPIO_DeInit(GPIOA, GPIO_PIN_4);
 
 
-  HAL_DMA_DeInit(hdac->DMA_Handle1);
-  HAL_NVIC_DisableIRQ(DMA2_Stream6_IRQn);
+  //HAL_DMA_DeInit(hdac->DMA_Handle1);
+  //HAL_NVIC_DisableIRQ(DMA2_Stream6_IRQn);
 }
 
 
