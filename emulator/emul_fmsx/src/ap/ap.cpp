@@ -39,7 +39,7 @@ __attribute__((section(".tag"))) flash_tag_t fw_tag =
 
 
 
-
+extern "C" void fmsxMain(void);
 static void threadEmul(void const *argument);
 
 
@@ -98,6 +98,7 @@ static void threadEmul(void const *argument)
 {
   UNUSED(argument);
 
+  fmsxMain();
 
   while(1)
   {
