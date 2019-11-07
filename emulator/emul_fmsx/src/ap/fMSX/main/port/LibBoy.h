@@ -23,27 +23,26 @@ extern "C" {
 /** PIXEL() **************************************************/
 /** Unix may use multiple pixel formats.                    **/
 /*************************************************************/
-#if defined(BPP32) || defined(BPP24)
-#define PIXEL(R,G,B)  (pixel)(((int)R<<16)|((int)G<<8)|B)
-#define PIXEL2MONO(P) (((P>>16)&0xFF)+((P>>8)&0xFF)+(P&0xFF))/3)
-#define RMASK 0xFF0000
-#define GMASK 0x00FF00
-#define BMASK 0x0000FF
-
-#elif defined(BPP16)
 #define PIXEL(R,G,B)  (pixel)(((31*(R)/255)<<11)|((63*(G)/255)<<5)|(31*(B)/255))
 #define PIXEL2MONO(P) (522*(((P)&31)+(((P)>>5)&63)+(((P)>>11)&31))>>8)
 #define RMASK 0xF800
 #define GMASK 0x07E0
 #define BMASK 0x001F
 
-#elif defined(BPP8)
-#define PIXEL(R,G,B)  (pixel)(((7*(R)/255)<<5)|((7*(G)/255)<<2)|(3*(B)/255))
-#define PIXEL2MONO(P) (3264*((((P)<<1)&7)+(((P)>>2)&7)+(((P)>>5)&7))>>8)
-#define RMASK 0xE0
-#define GMASK 0x1C
-#define BMASK 0x03
-#endif
+
+
+//////////////////// VIDEO /////////////////////////////
+
+#define WIDTH           256
+#define HEIGHT          216 // normally the msx has 212 lines in PAL, 4 more to send the bytes faster over SPI to the display
+
+#define WIDTH_OVERLAY   320
+#define HEIGHT_OVERLAY  240
+
+#define MSX_DISPLAY_X   ((WIDTH_OVERLAY-WIDTH)/2)
+#define MSX_DISPLAY_Y   ((HEIGHT_OVERLAY-212)/2)
+
+#define Black           0x0000
 
 
 int InitBoy(const char *Title,int Width,int Height);

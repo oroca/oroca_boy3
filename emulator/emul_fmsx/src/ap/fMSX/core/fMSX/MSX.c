@@ -44,6 +44,8 @@
 #define printf LOGI
 #endif
 
+#include "FatFs/src/ff.h"
+
 #define PRINTOK           if(Verbose) puts("OK")
 #define PRINTFAILED       if(Verbose) puts("FAILED")
 #define PRINTRESULT(R)    if(Verbose) puts((R)? "OK":"FAILED")
@@ -474,7 +476,7 @@ int StartMSX(int NewMode,int NewRAMPages,int NewVRAMPages)
         MemMap[I][J][K]=EmptyRAM;
 
   /* Save current directory */
-  if(ProgDir&&(WorkDir=getcwd(0,1024))) Chunks[NChunks++]=(void *)WorkDir;
+  if(ProgDir&&(WorkDir=getcwd(0,1024))) Chunks[NChunks++]=(void *)WorkDir; //@baram
 
   /* Set invalid modes and RAM/VRAM sizes before calling ResetMSX() */
   Mode      = ~NewMode;
@@ -486,7 +488,7 @@ int StartMSX(int NewMode,int NewRAMPages,int NewVRAMPages)
   if(!RAMPages||!VRAMPages) return(0);
 
   /* Change to the program directory */
-  if(ProgDir && chdir(ProgDir))
+  if(ProgDir && f_chdir(ProgDir) != FR_OK)
   { if(Verbose) printf("Failed changing to '%s' directory!\n",ProgDir); }
 
   /* Try loading font */
@@ -547,7 +549,7 @@ int StartMSX(int NewMode,int NewRAMPages,int NewVRAMPages)
   }
 
   /* We are now back to working directory */
-  if(WorkDir && chdir(WorkDir))
+  if(WorkDir && f_chdir(WorkDir) != FR_OK)
   { if(Verbose) printf("Failed changing to '%s' directory!\n",WorkDir); }
 
   /* For each user cartridge slot, try loading cartridge */
@@ -699,7 +701,7 @@ int ResetMSX(int NewMode,int NewRAMPages,int NewVRAMPages)
   if((Mode^NewMode)&MSX_MODEL)
   {
     /* Change to the program directory */
-    if(ProgDir && chdir(ProgDir))
+    if(ProgDir && f_chdir(ProgDir) != FR_OK)
     { if(Verbose) printf("  Failed changing to '%s' directory!\n",ProgDir); }
 
     switch(NewMode&MSX_MODEL)
@@ -782,7 +784,7 @@ int ResetMSX(int NewMode,int NewRAMPages,int NewVRAMPages)
     }
 
     /* Change to the working directory */
-    if(WorkDir && chdir(WorkDir))
+    if(WorkDir && f_chdir(WorkDir) != FR_OK)
     { if(Verbose) printf("Failed changing to '%s' directory!\n",WorkDir); }
   }
 
@@ -804,7 +806,7 @@ int ResetMSX(int NewMode,int NewRAMPages,int NewVRAMPages)
   if((Mode^NewMode)&MSX_PATCHBDOS)
   {
     /* Change to the program directory */
-    if(ProgDir && chdir(ProgDir))
+    if(ProgDir && f_chdir(ProgDir) != FR_OK)
     { if(Verbose) printf("  Failed changing to '%s' directory!\n",ProgDir); }
 
     /* Try loading DiskROM */
@@ -813,7 +815,7 @@ int ResetMSX(int NewMode,int NewRAMPages,int NewVRAMPages)
     PRINTRESULT(P1);
 
     /* Change to the working directory */
-    if(WorkDir && chdir(WorkDir))
+    if(WorkDir && f_chdir(WorkDir) != FR_OK)
     { if(Verbose) printf("  Failed changing to '%s' directory!\n",WorkDir); }
 
     /* If failed loading DiskROM, ignore the new PATCHBDOS bit */
