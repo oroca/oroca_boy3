@@ -90,7 +90,6 @@ void hwInit(void)
 
 
   usbInit();
-  vcpInit();
   ltdcInit();
   slotInit();
 
@@ -99,6 +98,19 @@ void hwInit(void)
   {
     fatfsInit();
   }
+
+  if (buttonGetPressed(_DEF_HW_BTN_SELECT) == true)
+  {
+    logPrintf("usb mode   \t\t: USB_MSC\r\n");
+    usbBegin(USB_MSC_MODE);
+  }
+  else
+  {
+    logPrintf("usb mode   \t\t: USB_CDC\r\n");
+    usbBegin(USB_CDC_MODE);
+    vcpInit();
+  }
+
 
   logPrintf("Start...\r\n");
 

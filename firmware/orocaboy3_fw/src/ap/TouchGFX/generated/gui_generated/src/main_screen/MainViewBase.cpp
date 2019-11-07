@@ -79,6 +79,14 @@ MainViewBase::MainViewBase()
     image_bat.setPosition(287, 3, 18, 22);
     image_bat.setScalingAlgorithm(touchgfx::ScalableImage::BILINEAR_INTERPOLATION);
 
+    image_sd.setBitmap(touchgfx::Bitmap(BITMAP_SD_CARD_ID));
+    image_sd.setPosition(262, 5, 18, 18);
+    image_sd.setScalingAlgorithm(touchgfx::ScalableImage::BILINEAR_INTERPOLATION);
+
+    image_drive.setBitmap(touchgfx::Bitmap(BITMAP_USB_DRIVE_ID));
+    image_drive.setPosition(242, 3, 23, 20);
+    image_drive.setScalingAlgorithm(touchgfx::ScalableImage::BILINEAR_INTERPOLATION);
+
     add(box_bg);
     add(image_speaker);
     add(image1);
@@ -87,6 +95,8 @@ MainViewBase::MainViewBase()
     add(swipeContainer_emulator);
     add(button_load);
     add(image_bat);
+    add(image_sd);
+    add(image_drive);
 }
 
 void MainViewBase::setupScreen()
@@ -97,31 +107,30 @@ void MainViewBase::setupScreen()
 //Handles when a key is pressed
 void MainViewBase::handleKeyEvent(uint8_t key)
 {
-    if(48 == key)
+    if(0 == key)
     {
         //goLeft_pc
-        //When hardware button 48 clicked call virtual function
+        //When hardware button 0 clicked call virtual function
         //Call goLeft_pc
         goLeft_pc();
-    }
-    if(47 == key)
-    {
+
         //goRight_pc
-        //When hardware button 47 clicked call virtual function
+        //When hardware button 0 clicked call virtual function
         //Call goRight_pc
         goRight_pc();
-    }
-    if(46 == key)
-    {
+
         //show_empty
-        //When hardware button 46 clicked change screen to msg_box
+        //When hardware button 0 clicked change screen to msg_box
         //Go to msg_box with no screen transition
         application().gotomsg_boxScreenNoTransition();
-    }
-    if(49 == key)
-    {
+
+        //go_home
+        //When hardware button 0 clicked change screen to btn_show
+        //Go to btn_show with no screen transition
+        application().gotobtn_showScreenNoTransition();
+
         //go_btn_test
-        //When hardware button 49 clicked change screen to btn_show
+        //When hardware button 0 clicked change screen to btn_show
         //Go to btn_show with no screen transition
         application().gotobtn_showScreenNoTransition();
     }

@@ -17,6 +17,8 @@ void MainView::setupScreen()
 {
   swipeContainer_emulator.setSelectedPage(current_page);
   image_bat.setVisible(false);
+  image_sd.setVisible(false);
+  image_drive.setVisible(false);
 }
 
 void MainView::tearDownScreen()
@@ -47,7 +49,7 @@ void MainView::handleTickEvent(void)
   {
     slot_run = false;
 
-    if (slotRunFromFlash(swipeContainer_emulator.currentPage) == false)
+    if (slotRun(swipeContainer_emulator.currentPage) == false)
     {
       //MainViewBase::handleKeyEvent(51);
       button_load.setVisible(false);
@@ -67,6 +69,27 @@ void MainView::handleTickEvent(void)
       image_bat.setVisible(false);
     }
     image_bat.invalidate();
+
+    if (sdIsDetected() == true)
+    {
+      image_sd.setVisible(true);
+    }
+    else
+    {
+      image_sd.setVisible(false);
+    }
+    image_sd.invalidate();
+
+    if (usbGetMode() == USB_MSC_MODE && sdIsDetected() == true)
+    {
+      image_drive.setVisible(true);
+    }
+    else
+    {
+      image_drive.setVisible(false);
+    }
+    image_drive.invalidate();
+
   }
 #endif
 }

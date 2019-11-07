@@ -65,6 +65,8 @@ protected:
 
     touchgfx::ButtonWithLabel button_load;
     touchgfx::ScalableImage image_bat;
+    touchgfx::ScalableImage image_sd;
+    touchgfx::ScalableImage image_drive;
 
 private:
 

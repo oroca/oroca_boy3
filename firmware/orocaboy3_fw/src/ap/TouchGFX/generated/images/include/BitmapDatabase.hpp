@@ -21,6 +21,8 @@ const uint16_t BITMAP_OROCABOY1_ID = 11;
 const uint16_t BITMAP_OROCABOY2_ID = 12;
 const uint16_t BITMAP_OROCABOY3_ID = 13;
 const uint16_t BITMAP_OROCABOY4_ID = 14;
+const uint16_t BITMAP_SD_CARD_ID = 15;
+const uint16_t BITMAP_USB_DRIVE_ID = 16;
 
 namespace BitmapDatabase
 {

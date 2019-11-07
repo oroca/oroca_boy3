@@ -298,6 +298,38 @@
             "Clickable": false,
             "Fadeable": false,
             "Moveable": false
+          },
+          {
+            "Filename": "sd_card.png",
+            "Alpha": 255,
+            "ScalingAlgorithm": "Bilinear Interpolation",
+            "Name": "image_sd",
+            "X": 262,
+            "Y": 5,
+            "Width": 18,
+            "Height": 18,
+            "Type": "ScalableImage",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "Filename": "usb_drive.png",
+            "Alpha": 255,
+            "ScalingAlgorithm": "Bilinear Interpolation",
+            "Name": "image_drive",
+            "X": 242,
+            "Y": 3,
+            "Width": 23,
+            "Height": 20,
+            "Type": "ScalableImage",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
           }
         ],
         "Interactions": [
@@ -305,7 +337,7 @@
             "InteractionName": "goLeft_pc",
             "HasCompletedTrigger": false,
             "Trigger": {
-              "ButtonKey": 48,
+              "ButtonKey": 0,
               "Type": "TriggerPhysicalButtonClicked"
             },
             "Action": {
@@ -317,7 +349,7 @@
             "InteractionName": "goRight_pc",
             "HasCompletedTrigger": false,
             "Trigger": {
-              "ButtonKey": 47,
+              "ButtonKey": 0,
               "Type": "TriggerPhysicalButtonClicked"
             },
             "Action": {
@@ -329,7 +361,7 @@
             "InteractionName": "show_empty",
             "HasCompletedTrigger": false,
             "Trigger": {
-              "ButtonKey": 46,
+              "ButtonKey": 0,
               "Type": "TriggerPhysicalButtonClicked"
             },
             "Action": {
@@ -355,7 +387,7 @@
             "InteractionName": "go_btn_test",
             "HasCompletedTrigger": false,
             "Trigger": {
-              "ButtonKey": 49,
+              "ButtonKey": 0,
               "Type": "TriggerPhysicalButtonClicked"
             },
             "Action": {

@@ -40,6 +40,11 @@
 #define _USE_HW_QSPI
 #define _USE_HW_TOUCHGFX
 
+#define _USE_HW_USB
+#define      HW_USE_CDC             1
+#define      HW_USE_MSC             1
+
+
 #define _USE_HW_SDRAM
 #define      HW_USE_CMDIF_SDRAM     1
 

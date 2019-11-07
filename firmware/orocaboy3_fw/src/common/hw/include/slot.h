@@ -23,8 +23,11 @@ extern "C" {
 
 bool slotInit(void);
 bool slotIsAvailable(uint8_t slot_index);
+bool slotRun(uint8_t slot_index);
 bool slotRunFromFlash(uint8_t slot_index);
 bool slotRunFromFile(const char *file_name);
+bool slotDelFromFlash(uint8_t slot_index);
+bool slotRunFromFolder(uint8_t slot_index);
 void slotJumpToFw(uint32_t addr);
 
 
