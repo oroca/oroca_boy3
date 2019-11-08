@@ -353,7 +353,9 @@ static byte *GetMemory(int Size)
 {
   byte *P;
 
+
   if((Size<=0)||(NChunks>=MAXCHUNKS)) return(0);
+
   P=(byte *)malloc(Size);
   if(P) Chunks[NChunks++]=P;
 
@@ -464,6 +466,7 @@ int StartMSX(int NewMode,int NewRAMPages,int NewVRAMPages)
   /* UPeriod has ot be in 1%..100% range */
   UPeriod=UPeriod<1? 1:UPeriod>100? 100:UPeriod;
 
+
   /* Allocate 16kB for the empty space (scratch RAM) */
   if(Verbose) printf("Allocating 16kB for empty space...\n");
   if(!(EmptyRAM=GetMemory(0x4000))) { PRINTFAILED;return(0); }
@@ -475,8 +478,11 @@ int StartMSX(int NewMode,int NewRAMPages,int NewVRAMPages)
       for(K=0;K<8;++K)
         MemMap[I][J][K]=EmptyRAM;
 
+
+  _printHeapInfo();
+
   /* Save current directory */
-  if(ProgDir&&(WorkDir=getcwd(0,1024))) Chunks[NChunks++]=(void *)WorkDir; //@baram
+  if(ProgDir&&(WorkDir=getcwd(NULL,1024))) Chunks[NChunks++]=(void *)WorkDir; //@baram
 
   /* Set invalid modes and RAM/VRAM sizes before calling ResetMSX() */
   Mode      = ~NewMode;
@@ -2885,51 +2891,43 @@ byte LoadFNT(const char *FileName)
 /*************************************************************/
 byte *LoadROM(const char *Name,int Size,byte *Buf)
 {
-  FILE *F;
+  FIL F;
   byte *P;
-  int J;
+  UINT len;
 
   /* Can't give address without size! */
   if(Buf&&!Size) return(0);
 
+
   /* Open file */
-  if(!(F=fopen(Name,"rb"))) return(0);
+  if(f_open(&F, Name, FA_READ) != FR_OK) return(0);
+
 
   /* Determine data size, if wasn't given */
   if(!Size)
   {
-    /* Determine size via ftell() or by reading entire [GZIPped] stream */
-    if(!fseek(F,0,SEEK_END)) Size=ftell(F);
-    else
-    {
-      /* Read file in 16kB increments */
-      while((J=fread(EmptyRAM,1,0x4000,F))==0x4000) Size+=J;
-      if(J>0) Size+=J;
-      /* Clean up the EmptyRAM! */
-      memset(EmptyRAM,NORAM,0x4000);
-    }
-    /* Rewind file to the beginning */
-    rewind(F);
+    Size = f_size(&F);
   }
 
   /* Allocate memory */
   P=Buf? Buf:GetMemory(Size);
   if(!P)
   {
-    fclose(F);
+    printf("GetMemory Fail %d\n", Size);
+    f_close(&F);
     return(0);
   }
 
   /* Read data */
-  if((J=fread(P,1,Size,F))!=Size)
+  if((f_read(&F, P, Size, &len)) != FR_OK || len != Size)
   {
     if(!Buf) FreeMemory(P);
-    fclose(F);
+    f_close(&F);
     return(0);
   }
 
   /* Done */
-  fclose(F);
+  f_close(&F);
   return(P);
 }
 

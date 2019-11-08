@@ -93,10 +93,18 @@ void apMain(void)
 }
 
 
+extern uint32_t _estack;
 
 static void threadEmul(void const *argument)
 {
   UNUSED(argument);
+
+
+  uint8_t *data;
+
+  data = (uint8_t *)malloc(512*1024);
+  _printHeapInfo();
+
 
   fmsxMain();
 

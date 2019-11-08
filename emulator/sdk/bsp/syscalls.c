@@ -29,12 +29,54 @@ extern int __io_getchar(void) __attribute__((weak));
 #endif
 
 
+static char *heap_end;
 
+
+void _printHeapInfo(void)
+{
+  extern char end asm("end");
+  char *min_stack_ptr;
+  char *heap_end_in;
+
+
+  /* Use the NVIC offset register to locate the main stack pointer. */
+  min_stack_ptr = (char*)(*(unsigned int *)*(unsigned int *)0xE000ED08);
+
+  if (heap_end == 0)
+    heap_end_in = &end;
+
+
+  printf("heap %X, %X, %dK\n",
+         (int)heap_end_in,
+         (int)min_stack_ptr,
+         ((int)min_stack_ptr - (int)heap_end_in)/1024);
+}
+
+uint32_t _getHeapFree(void)
+{
+  extern char end asm("end");
+  char *min_stack_ptr;
+  char *heap_end_in;
+
+  /* Use the NVIC offset register to locate the main stack pointer. */
+  min_stack_ptr = (char*)(*(unsigned int *)*(unsigned int *)0xE000ED08);
+
+  if (heap_end == 0)
+    heap_end_in = &end;
+
+  if (min_stack_ptr > heap_end_in)
+  {
+    return (min_stack_ptr - heap_end_in);
+  }
+  else
+  {
+    return 0;
+  }
+}
 
 caddr_t _sbrk(int incr)
 {
   extern char end asm("end");
-  static char *heap_end;
   char *prev_heap_end,*min_stack_ptr;
 
   if (heap_end == 0)
@@ -55,6 +97,7 @@ caddr_t _sbrk(int incr)
   {
 //    write(1, "Heap and stack collision\n", 25);
 //    abort();
+    printf("malloc fail %X %X %X\n", (int)heap_end, (int)incr, (int)min_stack_ptr);
     errno = ENOMEM;
     return (caddr_t) -1;
   }

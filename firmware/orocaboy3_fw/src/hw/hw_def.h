@@ -39,6 +39,8 @@
 #define _USE_HW_RESET
 #define _USE_HW_QSPI
 #define _USE_HW_TOUCHGFX
+#define _USE_HW_ESP32
+
 
 #define _USE_HW_USB
 #define      HW_USE_CDC             1
@@ -68,7 +70,7 @@
 #define      HW_LED_MAX_CH          1
 
 #define _USE_HW_UART
-#define      HW_UART_MAX_CH         2
+#define      HW_UART_MAX_CH         4
 
 #define _USE_HW_I2C
 #define      HW_I2C_MAX_CH          1
@@ -152,6 +154,7 @@
 #define _PIN_GPIO_BAT_CHG             0
 #define _PIN_GPIO_LCD_BK_EN           2
 #define _PIN_GPIO_SDCARD_DETECT       4
-
+#define _PIN_GPIO_ESP_RST             5
+#define _PIN_GPIO_ESP_BOOT            6
 
 #endif /* SRC_HW_HW_DEF_H_ */

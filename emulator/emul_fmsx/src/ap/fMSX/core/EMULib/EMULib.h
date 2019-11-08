@@ -187,7 +187,7 @@
 #include "LibSym.rh"
 #endif
 #ifdef OROCABOY
-#include "LibBoy.h"
+#include "LibBOY.h"
 #endif
 
 #ifdef __cplusplus

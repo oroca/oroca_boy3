@@ -52,6 +52,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/ap/fMSX/core/EMULib}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/ap/fMSX/core/Z80}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/ap/fMSX/core/fMSX}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/ap/fMSX/core/EMULib/OROCABOY}&quot;"/>
 								</option>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.1448882478" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" useByScannerDiscovery="false" value="STM32H753II" valueType="enumerated"/>
 								<option id="com.atollic.truestudio.common_options.target.endianess.2044488831" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess" useByScannerDiscovery="false"/>
@@ -88,6 +89,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/ap/fMSX/core/EMULib}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/ap/fMSX/core/Z80}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/ap/fMSX/core/fMSX}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/ap/fMSX/core/EMULib/OROCABOY}&quot;"/>
 								</option>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.326765596" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" useByScannerDiscovery="false" value="STM32H753II" valueType="enumerated"/>
 								<option id="com.atollic.truestudio.common_options.target.endianess.843726206" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess" useByScannerDiscovery="false"/>
@@ -146,6 +148,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/ap/fMSX/core/EMULib}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/ap/fMSX/core/Z80}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/ap/fMSX/core/fMSX}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/ap/fMSX/core/EMULib/OROCABOY}&quot;"/>
 								</option>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.314413876" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" useByScannerDiscovery="false" value="STM32H753II" valueType="enumerated"/>
 								<option id="com.atollic.truestudio.common_options.target.endianess.377780753" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess" useByScannerDiscovery="false"/>
@@ -176,7 +179,7 @@
 								<option id="com.atollic.truestudio.common_options.target.fpucore.1112039818" name="FPU" superClass="com.atollic.truestudio.common_options.target.fpucore" useByScannerDiscovery="false" value="com.atollic.truestudio.common_options.target.fpucore.fpv5-sp-d16" valueType="enumerated"/>
 								<option id="com.atollic.truestudio.common_options.target.fpu.2143243324" name="Floating point" superClass="com.atollic.truestudio.common_options.target.fpu" useByScannerDiscovery="false" value="com.atollic.truestudio.common_options.target.fpu.hard" valueType="enumerated"/>
 								<option id="com.atollic.truestudio.common_options.target.interwork.186202337" name="Mix ARM/Thumb" superClass="com.atollic.truestudio.common_options.target.interwork" useByScannerDiscovery="false"/>
-								<option id="com.atollic.truestudio.ldcc.general.scriptfile.1556484022" name="Linker script" superClass="com.atollic.truestudio.ldcc.general.scriptfile" useByScannerDiscovery="false" value="../../sdk/bsp/ldscript/STM32H753II_FLASH.ld" valueType="string"/>
+								<option id="com.atollic.truestudio.ldcc.general.scriptfile.1556484022" name="Linker script" superClass="com.atollic.truestudio.ldcc.general.scriptfile" useByScannerDiscovery="false" value="../../sdk/bsp/ldscript/STM32H753II_SDRAM.ld" valueType="string"/>
 								<option id="com.atollic.truestudio.ldcc.general.nostartfiles.186674794" name="Do not use standard start files" superClass="com.atollic.truestudio.ldcc.general.nostartfiles" useByScannerDiscovery="false" value="false" valueType="boolean"/>
 								<option id="com.atollic.truestudio.ldcc.optimization.do_garbage.704784161" name="Dead code removal" superClass="com.atollic.truestudio.ldcc.optimization.do_garbage" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 								<option id="com.atollic.truestudio.ldcc.libraries.list.1829771779" name="Libraries" superClass="com.atollic.truestudio.ldcc.libraries.list" useByScannerDiscovery="false"/>
@@ -194,7 +197,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="src/ap/fMSX/core/fMSX/fMSX.c|src/lib/STM32_USB_Device_Library/Class|src/ap/fMSX/ugui|src/bsp/FreeRTOS/Source/portable/MemMang/heap_1.c|src/bsp/FreeRTOS/Source/portable/MemMang/heap_5.c|src/lib/TouchGFX/touchgfx/framework/source/platform/driver/touch/SDL2TouchController.cpp|src/ap/fMSX/minIni/minIni.c|src/lib/TouchGFX/target/OSWrappers.cpp|src/ap/fMSX/main/menu.c|src/ap/lua/lua.c|src/lib/TouchGFX/touchgfx/framework/include/platform/hal/simulator|src/lib/FatFs/src/option/cc949.c|test|src/bsp/FreeRTOS/Source/portable/IAR|src/ap/fMSX/main/files.c|src/ap/TouchGFX/simulator|src/ap/TouchGFX/generated/simulator|src/lib/TouchGFX/touchgfx/os/OSWrappers_cmsis.cpp|src/ap/fMSX/fMSX54/fMSX/fMSX.c|src/bsp/FreeRTOS/Source/portable/MemMang/heap_3.c|src/lib/FatFs/src/option/cc932.c|src/lib/FatFs/src/option/cc936.c|src/ap/fMSX/fMSX54/EMULib/Unix|src/bsp/FreeRTOS/Source/portable/Keil|src/ap/fMSX/fMSX54/fMSX/Unix|src/ap/lua/luac.c|src/lib/TouchGFX/touchgfx/framework/source/platform/hal/simulator|src/lib/FatFs/src/option/cc950.c|src/bsp/FreeRTOS/Source/portable/MemMang/heap_2.c|ap.cpp|src/lib/FatFs/src/option/ccsbcs.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="src/bsp/FreeRTOS/Source/portable/MemMang/heap_3.c|src/ap/fMSX/core/EMULib/OROCABOY/SndUnix.c|src/ap/fMSX/core/EMULib/OROCABOY/NetUnix.c|src/ap/fMSX/core/EMULib/Unix/SndUnix.c|src/ap/fMSX/core/EMULib/Unix/NetUnix.c|src/ap/fMSX/core/fMSX/fMSX.c|src/lib/STM32_USB_Device_Library/Class|src/ap/fMSX/ugui|src/bsp/FreeRTOS/Source/portable/MemMang/heap_1.c|src/bsp/FreeRTOS/Source/portable/MemMang/heap_5.c|src/lib/TouchGFX/touchgfx/framework/source/platform/driver/touch/SDL2TouchController.cpp|src/ap/fMSX/minIni/minIni.c|src/lib/TouchGFX/target/OSWrappers.cpp|src/ap/fMSX/main/menu.c|src/ap/lua/lua.c|src/lib/TouchGFX/touchgfx/framework/include/platform/hal/simulator|src/lib/FatFs/src/option/cc949.c|test|src/bsp/FreeRTOS/Source/portable/IAR|src/ap/fMSX/main/files.c|src/ap/TouchGFX/simulator|src/ap/TouchGFX/generated/simulator|src/lib/TouchGFX/touchgfx/os/OSWrappers_cmsis.cpp|src/ap/fMSX/fMSX54/fMSX/fMSX.c|src/lib/FatFs/src/option/cc932.c|src/lib/FatFs/src/option/cc936.c|src/ap/fMSX/fMSX54/EMULib/Unix|src/bsp/FreeRTOS/Source/portable/Keil|src/ap/fMSX/fMSX54/fMSX/Unix|src/ap/lua/luac.c|src/lib/TouchGFX/touchgfx/framework/source/platform/hal/simulator|src/lib/FatFs/src/option/cc950.c|src/bsp/FreeRTOS/Source/portable/MemMang/heap_2.c|ap.cpp|src/lib/FatFs/src/option/ccsbcs.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -251,6 +254,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/ap/fMSX/core/EMULib}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/ap/fMSX/core/Z80}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/ap/fMSX/core/fMSX}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/ap/fMSX/core/EMULib/OROCABOY}&quot;"/>
 								</option>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.909447040" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" value="STM32H753II" valueType="enumerated"/>
 								<option id="com.atollic.truestudio.common_options.target.endianess.1933156421" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess"/>
@@ -292,6 +296,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/ap/fMSX/core/EMULib}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/ap/fMSX/core/Z80}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/ap/fMSX/core/fMSX}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/ap/fMSX/core/EMULib/OROCABOY}&quot;"/>
 								</option>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.632759079" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" value="STM32H753II" valueType="enumerated"/>
 								<option id="com.atollic.truestudio.common_options.target.endianess.1480589555" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess"/>
@@ -341,6 +346,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/ap/fMSX/core/EMULib}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/ap/fMSX/core/Z80}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/ap/fMSX/core/fMSX}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/ap/fMSX/core/EMULib/OROCABOY}&quot;"/>
 								</option>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.1692490305" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" value="STM32H753II" valueType="enumerated"/>
 								<option id="com.atollic.truestudio.common_options.target.endianess.1143554584" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess"/>
@@ -367,7 +373,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="src/ap/fMSX/core/fMSX/fMSX.c|src/lib/STM32_USB_Device_Library/Class|src/ap/fMSX/ugui|src/bsp/FreeRTOS/Source/portable/MemMang/heap_1.c|src/bsp/FreeRTOS/Source/portable/MemMang/heap_5.c|src/lib/TouchGFX/touchgfx/framework/source/platform/driver/touch/SDL2TouchController.cpp|src/ap/fMSX/minIni/minIni.c|src/lib/TouchGFX/target/OSWrappers.cpp|src/ap/fMSX/main/menu.c|src/ap/lua/lua.c|src/lib/TouchGFX/touchgfx/framework/include/platform/hal/simulator|src/lib/FatFs/src/option/cc949.c|test|src/bsp/FreeRTOS/Source/portable/IAR|src/ap/fMSX/main/files.c|src/ap/TouchGFX/simulator|src/ap/TouchGFX/generated/simulator|src/lib/TouchGFX/touchgfx/os/OSWrappers_cmsis.cpp|src/ap/fMSX/fMSX54/fMSX/fMSX.c|src/bsp/FreeRTOS/Source/portable/MemMang/heap_3.c|src/lib/FatFs/src/option/cc932.c|src/lib/FatFs/src/option/cc936.c|src/ap/fMSX/fMSX54/EMULib/Unix|src/bsp/FreeRTOS/Source/portable/Keil|src/ap/fMSX/fMSX54/fMSX/Unix|src/ap/lua/luac.c|src/lib/TouchGFX/touchgfx/framework/source/platform/hal/simulator|src/lib/FatFs/src/option/cc950.c|src/bsp/FreeRTOS/Source/portable/MemMang/heap_2.c|ap.cpp|src/lib/FatFs/src/option/ccsbcs.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="src/bsp/FreeRTOS/Source/portable/MemMang/heap_3.c|src/ap/fMSX/core/EMULib/OROCABOY/SndUnix.c|src/ap/fMSX/core/EMULib/OROCABOY/NetUnix.c|src/ap/fMSX/core/EMULib/Unix/SndUnix.c|src/ap/fMSX/core/EMULib/Unix/NetUnix.c|src/ap/fMSX/core/fMSX/fMSX.c|src/lib/STM32_USB_Device_Library/Class|src/ap/fMSX/ugui|src/bsp/FreeRTOS/Source/portable/MemMang/heap_1.c|src/bsp/FreeRTOS/Source/portable/MemMang/heap_5.c|src/lib/TouchGFX/touchgfx/framework/source/platform/driver/touch/SDL2TouchController.cpp|src/ap/fMSX/minIni/minIni.c|src/lib/TouchGFX/target/OSWrappers.cpp|src/ap/fMSX/main/menu.c|src/ap/lua/lua.c|src/lib/TouchGFX/touchgfx/framework/include/platform/hal/simulator|src/lib/FatFs/src/option/cc949.c|test|src/bsp/FreeRTOS/Source/portable/IAR|src/ap/fMSX/main/files.c|src/ap/TouchGFX/simulator|src/ap/TouchGFX/generated/simulator|src/lib/TouchGFX/touchgfx/os/OSWrappers_cmsis.cpp|src/ap/fMSX/fMSX54/fMSX/fMSX.c|src/lib/FatFs/src/option/cc932.c|src/lib/FatFs/src/option/cc936.c|src/ap/fMSX/fMSX54/EMULib/Unix|src/bsp/FreeRTOS/Source/portable/Keil|src/ap/fMSX/fMSX54/fMSX/Unix|src/ap/lua/luac.c|src/lib/TouchGFX/touchgfx/framework/source/platform/hal/simulator|src/lib/FatFs/src/option/cc950.c|src/bsp/FreeRTOS/Source/portable/MemMang/heap_2.c|ap.cpp|src/lib/FatFs/src/option/ccsbcs.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

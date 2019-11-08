@@ -50,6 +50,7 @@
 #include "usb.h"
 #include "wdg.h"
 #include "reset.h"
+#include "esp32.h"
 
 const char *JUMP_BOOT_STR = "BOOT 5555AAAA";
 
@@ -171,7 +172,6 @@ static int8_t CDC_Itf_Control (uint8_t cmd, uint8_t* pbuf, uint16_t length)
 { 
   USBD_SetupReqTypedef *req = (USBD_SetupReqTypedef *)pbuf;
 
-
   switch (cmd)
   {
   case CDC_SEND_ENCAPSULATED_COMMAND:
@@ -205,6 +205,8 @@ static int8_t CDC_Itf_Control (uint8_t cmd, uint8_t* pbuf, uint16_t length)
     {
       CDC_Reset_Status = 1;
     }
+    //printf("%d %d %d %d\n", LineCoding.bitrate, LineCoding.format, LineCoding.paritytype, LineCoding.datatype);
+    esp32SetBaud(LineCoding.bitrate);
     break;
 
   case CDC_GET_LINE_CODING:
@@ -219,12 +221,19 @@ static int8_t CDC_Itf_Control (uint8_t cmd, uint8_t* pbuf, uint16_t length)
 
   case CDC_SET_CONTROL_LINE_STATE:
     /* Add your code here */
-    if( req->wValue & 0x02 )
-    {
-      CDC_Reset_Status = 1;
-    }
     is_opened = true;
     is_reopen = true;
+
+    esp32RequestBoot(req->wValue);
+    /*
+    printf("cmd 0x%X %d, %X %X %X %X %X\n", cmd, length,
+           req->bmRequest,
+           req->bRequest,
+           req->wValue,
+           req->wIndex,
+           req->wLength
+           );
+    */
     break;
 
   case CDC_SEND_BREAK:

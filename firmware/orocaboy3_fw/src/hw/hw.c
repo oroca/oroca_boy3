@@ -111,6 +111,8 @@ void hwInit(void)
     vcpInit();
   }
 
+  esp32Init();
+
 
   logPrintf("Start...\r\n");
 

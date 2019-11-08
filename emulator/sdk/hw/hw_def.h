@@ -132,6 +132,7 @@
 #define SDRAM_ADDR_IMAGE              0xD0000000    // 2MB
 #define SDRAM_ADDR_FW                 0xD0200000    // 2MB
 #define SDRAM_ADDR_BUF                0xD0400000    // 2MB
+#define SDRAM_ADDR_HEAP               0xD0600000    // 2MB
 
 
 #define QSPI_ADDR_START               0x90000000

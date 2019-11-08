@@ -16,6 +16,8 @@ void apInit(void)
 {
   uartOpen(_DEF_UART1, 57600);
   uartOpen(_DEF_UART2, 57600);
+  uartOpen(_DEF_UART3, 115200);
+  uartOpen(_DEF_UART4, 115200);
   cmdifOpen(_DEF_UART1, 57600);
 }
 
@@ -37,5 +39,7 @@ void apMain(void)
       pre_time = millis();
       ledToggle(_DEF_LED1);
     }
+
+    esp32Update();
   }
 }

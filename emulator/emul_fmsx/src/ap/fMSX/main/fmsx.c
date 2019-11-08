@@ -10,9 +10,10 @@
 #include "Console.h"
 #include "EMULib.h"
 #include "MSX.h"
-#include "fmsx_main.h"
+#include "fmsx.h"
 
 
+const char *dir_program = FMSX_ROOT_GAMESDIR;
 
 
 extern int StartMSX(int NewMode,int NewRAMPages,int NewVRAMPages);
@@ -43,7 +44,14 @@ void fmsxMain(void)
 
  UPeriod = 50;
 
+ ProgDir = dir_program;
+
+ f_chdir(ProgDir);
+
+
  initOkay = InitMachine();
+
+ _printHeapInfo();
 
  /*
  if (initOkay)

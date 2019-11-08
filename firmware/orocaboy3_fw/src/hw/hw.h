@@ -38,7 +38,7 @@
 #include "adc.h"
 #include "ltdc.h"
 #include "slot.h"
-
+#include "esp32.h"
 
 #include "sd.h"
 #include "fatfs/fatfs.h"

@@ -35,7 +35,7 @@ SOFTWARE.
 ENTRY(Reset_Handler)
 
 /* Highest address of the user mode stack */
-_estack = 0x24000000+512K;    /* end of RAM */
+_estack = 0xD0600000+2048K;    /* end of RAM */
 
 
 /* Generate a link error if heap and stack don't fit into RAM */
@@ -60,6 +60,7 @@ MEMORY
   QSPI_DATA (rx)  : ORIGIN = 0x92000000, LENGTH = 32M
   
   SDRAM_BUF(xrw)  : ORIGIN = 0xD0400000, LENGTH = 2M
+  SDRAM_HEAP(xrw) : ORIGIN = 0xD0600000, LENGTH = 2M
 }
 
 /* Define output sections */
@@ -224,7 +225,7 @@ SECTIONS
     . = ALIGN(4);
     _ebss = .;         /* define a global symbol at bss end */
     __bss_end__ = _ebss;
-  } >SRAM_D1
+  } >SDRAM_HEAP
 
   /* User_heap_stack section, used to check that there is enough DTCMRAM left */
   ._user_heap_stack :
@@ -235,7 +236,7 @@ SECTIONS
     . = . + _Min_Heap_Size;
     . = . + _Min_Stack_Size;
     . = ALIGN(4);
-  } >SRAM_D1
+  } >SDRAM_HEAP
 
   /* MEMORY_bank1 section, code must be located here explicitly            */
   /* Example: extern int foo(void) __attribute__ ((section (".mb1text"))); */
