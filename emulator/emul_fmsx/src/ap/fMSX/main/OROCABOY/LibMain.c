@@ -20,6 +20,14 @@
 #include <string.h>
 #include <stdio.h>
 
+#include "hw.h"
+
+//#define WIDTH       272                   /* Buffer width    */
+//#define HEIGHT      228                   /* Buffer height   */
+
+//#define WIDTH       320                   /* Buffer width    */
+//#define HEIGHT      240                   /* Buffer height   */
+
 #define WIDTH       272                   /* Buffer width    */
 #define HEIGHT      228                   /* Buffer height   */
 
@@ -35,7 +43,11 @@
 #define XKBD_RES(K) XKeyState[Keys[K][0]]|=Keys[K][1]
 
 /* Combination of EFF_* bits */
-int UseEffects  = EFF_SCALE|EFF_SAVECPU|EFF_SYNC;
+//int UseEffects  = EFF_SCALE|EFF_SAVECPU; //|EFF_SYNC; //|EFF_SHOWFPS;
+int UseEffects  = EFF_SCALE|EFF_SYNC|EFF_SHOWFPS;
+
+
+
 
 int InMenu;                /* 1: In MenuMSX(), ignore keys   */
 int UseZoom     = 1;       /* Zoom factor (1=no zoom)        */
@@ -61,6 +73,9 @@ volatile byte XKeyState[20]; /* Temporary KeyState array     */
 
 void HandleKeys(unsigned int Key);
 void PutImage(void);
+unsigned int X11GetColor(unsigned char R,unsigned char G,unsigned char B);
+
+extern void fmsxChangeHome(void);
 
 /** CommonMux.h **********************************************/
 /** Display drivers for all possible screen depths.         **/
@@ -95,6 +110,7 @@ int InitMachine(void)
   if(!NewImage(&NormScreen,WIDTH,HEIGHT)) { TrashUnix();return(0); }
   XBuf = NormScreen.Data;
 
+
 #ifndef NARROW
   /* Create wide image buffer */
   if(!NewImage(&WideScreen,WIDTH*2,HEIGHT)) { TrashUnix();return(0); }
@@ -113,15 +129,7 @@ int InitMachine(void)
   /* Create SCREEN8 palette (GGGRRRBB) */
   for(J=0;J<256;J++)
   {
-    //BPal[J]=X11GetColor(((J>>2)&0x07)*255/7,((J>>5)&0x07)*255/7,(J&0x03)*255/3);
-    uint16_t r = (0xFF / 7) * (((J&0x1C)>> 2));
-    uint16_t g = (0xFF / 7) * (((J&0xE0)>> 5));
-    uint16_t b = J & 0x03;
-    if (b == 1) b = 73;
-    if (b == 2) b = 146;
-    if (b == 3) b = 255;
-
-    BPal[J]= BOY_COLOR(r, g, b);
+    BPal[J]=X11GetColor(((J>>2)&0x07)*255/7,((J>>5)&0x07)*255/7,(J&0x03)*255/3);
   }
 
   /* Initialize temporary keyboard array */
@@ -168,6 +176,8 @@ void TrashMachine(void)
 /*************************************************************/
 void PutImage(void)
 {
+  //printf("PutImage \n");
+
 #ifndef NARROW
   /* If screen mode changed... */
   if(ScrMode!=OldScrMode)
@@ -204,60 +214,22 @@ void PlayAllSound(int uSec)
 /*************************************************************/
 unsigned int Joystick(void)
 {
-  byte RemoteKeyState[20];
-  unsigned int J,I;
+  unsigned int J;
+
 
   /* Get joystick state */
   J = GetJoystick();
 
-  /* Make SHIFT/CONTROL act as fire buttons */
-  if(J&BTN_SHIFT)   J|=(J&BTN_ALT? (BTN_FIREB<<16):BTN_FIREB);
-  if(J&BTN_CONTROL) J|=(J&BTN_ALT? (BTN_FIREA<<16):BTN_FIREA);
 
-  /* Store joystick state for NetPlay transmission */
-  *(unsigned int *)&XKeyState[sizeof(XKeyState)-sizeof(int)]=J;
-
-  /* If failed exchanging KeyStates with remote... */
-  if(!NETExchange((void *)RemoteKeyState,(const void *)XKeyState,sizeof(XKeyState)))
-    /* Copy temporary keyboard map into permanent one */
-    memcpy((void *)KeyState,(const void *)XKeyState,sizeof(KeyState));
-  else
+  if (buttonGetPressed(_DEF_HW_BTN_SELECT))
   {
-    /* Merge local and remote KeyStates */
-    for(I=0;I<sizeof(KeyState);++I) KeyState[I]=XKeyState[I]&RemoteKeyState[I];
-    /* Merge joysticks, server is player #1, client is player #2 */
-    I = *(unsigned int *)&RemoteKeyState[sizeof(XKeyState)-sizeof(int)];
-    J = NETConnected()==NET_SERVER?
-        ((J&(BTN_ALL|BTN_MODES))|((I&BTN_ALL)<<16))
-      : ((I&(BTN_ALL|BTN_MODES))|((J&BTN_ALL)<<16));
+    speakerDisable();
+    fmsxChangeHome();
+    MenuMSX();
+    speakerEnable();
   }
 
-  /* Run replay user interface */
-  RPLControls(J);
-
-  /* Replay recorded joystick and keyboard states */
-  I = RPLPlayKeys(RPL_NEXT,(byte *)KeyState,sizeof(KeyState));
-  I = I!=RPL_ENDED? I:0;
-
-  /* Parse joystick */
-  if(J&BTN_LEFT)                    I|=JST_LEFT;
-  if(J&BTN_RIGHT)                   I|=JST_RIGHT;
-  if(J&BTN_UP)                      I|=JST_UP;
-  if(J&BTN_DOWN)                    I|=JST_DOWN;
-  if(J&(BTN_FIREA|BTN_FIRER))       I|=JST_FIREA;
-  if(J&(BTN_FIREB|BTN_FIREL))       I|=JST_FIREB;
-  if(J&(BTN_LEFT<<16))              I|=JST_LEFT<<8;
-  if(J&(BTN_RIGHT<<16))             I|=JST_RIGHT<<8;
-  if(J&(BTN_UP<<16))                I|=JST_UP<<8;
-  if(J&(BTN_DOWN<<16))              I|=JST_DOWN<<8;
-  if(J&((BTN_FIREA|BTN_FIRER)<<16)) I|=JST_FIREA<<8;
-  if(J&((BTN_FIREB|BTN_FIREL)<<16)) I|=JST_FIREB<<8;
-
-  /* Record joystick and keyboard states */
-  RPLRecordKeys(I,(byte *)KeyState,sizeof(KeyState));
-
-  /* Done */
-  return(I);
+  return J;
 }
 
 /** Keyboard() ***********************************************/
@@ -266,6 +238,7 @@ unsigned int Joystick(void)
 void Keyboard(void)
 {
   /* Everything is done in Joystick() */
+  //printf("Keyboard \n");
 }
 
 /** Mouse() **************************************************/
@@ -276,6 +249,9 @@ unsigned int Mouse(byte N)
 {
   unsigned int J;
   int X,Y;
+
+  //printf("Mouse \n");
+  return 0;
 
   J = GetMouse();
   X = ScanLines212? 212:192;
@@ -302,4 +278,5 @@ void SetColor(byte N,byte R,byte G,byte B)
 /*************************************************************/
 void HandleKeys(unsigned int Key)
 {
+  printf("HandleKeys \n");
 }

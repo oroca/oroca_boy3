@@ -13,6 +13,7 @@
 #include "EMULib.h"
 #include "Sound.h"
 #include "Console.h"
+#include "MSX.h"
 
 #include <ctype.h>
 #include <stdio.h>
@@ -22,12 +23,8 @@
 #include <signal.h>
 #include <sys/time.h>
 
-#ifdef MITSHM
-#include <sys/ipc.h>
-#include <sys/shm.h>
-#endif
+#include "hw.h"
 
-#include "FatFs/src/ff.h"
 
 
 #define FPS_COLOR PIXEL(255,0,255)
@@ -48,7 +45,8 @@ static int XSize,YSize;    /* Current window dimensions      */
 
 static int FrameCount;      /* Frame counter for EFF_SHOWFPS */
 static int FrameRate;       /* Last frame rate value         */
-static struct timeval TimeStamp; /* Last timestamp           */
+static uint32_t TimeStamp;  /* Last timestamp           */
+static uint32_t sync_time;
 
 /** TimerHandler() *******************************************/
 /** The main timer handler used by SetSyncTimer().          **/
@@ -80,7 +78,7 @@ int InitUnix(const char *Title,int Width,int Height)
   FrameRate   = 0;
 
   /* Get initial timestamp */
-  gettimeofday(&TimeStamp,0);
+  TimeStamp = millis();
 
   /* No output image yet */
 
@@ -110,9 +108,14 @@ int ShowVideo(void)
 {
   Image *Output;
   int SX,SY,SW,SH,J;
+  uint16_t *p_buf = lcdGetFrameBuffer();
+
+
+  //printf("ShowVideo \n");
 
   /* Must have active video image, X11 display */
   if(!VideoImg||!VideoImg->Data) return(0);
+
 
   /* If no window yet... */
 
@@ -126,6 +129,16 @@ int ShowVideo(void)
   if(!(Effects&(EFF_RASTER_ALL|EFF_MASK_ALL|EFF_SOFTEN_ALL|EFF_VIGNETTE|EFF_SCALE|EFF_4X3)))
   {
     //XPutImage(Dsp,Wnd,DefaultGCOfScreen(Scr),VideoImg->XImg,VideoX,VideoY,(XSize-VideoW)>>1,(YSize-VideoH)>>1,VideoW,VideoH);
+
+    //memcpy(p_buf, Output->Data, Output->W * Output->H * 2);
+    /*
+    for (int y=0; y<VideoImg->H; y++)
+    {
+      memcpy(&p_buf[y*320], &VideoImg->Data[VideoImg->W * y], VideoImg->W*2);
+    }
+    lcdRequestDraw();
+    printf("%d %d\n", VideoImg->W, VideoImg->H);
+    */
     return(1);
   }
 
@@ -135,6 +148,10 @@ int ShowVideo(void)
   SY     = 0;
   SW     = OutImg.W;
   SH     = OutImg.H;
+
+
+
+
 
   /* Interpolate image if required */
   J = Effects&EFF_SOFTEN_ALL;
@@ -212,18 +229,109 @@ int ShowVideo(void)
   {
     char S[8];
     sprintf(S,"%dfps",FrameRate);
+    /*
     PrintXY(
       &OutImg,S,
       ((OutImg.W-VideoW)>>1)+8,((OutImg.H-VideoH)>>1)+8,
       FPS_COLOR,-1
     );
+    */
+    /*
+    PrintXY(
+      Output,S,
+      ((Output->W-VideoW)>>1)+8,((Output->H-VideoH)>>1)+8,
+      FPS_COLOR,-1
+    );
+    */
+    PrintXY(
+        VideoImg,S,
+      ((VideoImg->W-VideoW)>>1)+8,((VideoImg->H-VideoH)>>1)+8,
+      FPS_COLOR,-1
+    );
+
+
   }
 
-  /* Wait for sync timer if requested */
-  if(Effects&EFF_SYNC) WaitSyncTimer();
+
 
   /* Copy image to the window, either using SHM or not */
   //XPutImage(Dsp,Wnd,DefaultGCOfScreen(Scr),Output->XImg,SX,SY,0,0,OutImg.W,OutImg.H);
+
+
+  while(lcdDrawAvailable() != true)
+  {
+    delay(1);
+  }
+
+
+#if 0
+  memcpy(p_buf, Output->Data, Output->W * Output->H * 2);
+#else
+
+  uint32_t pre_time;
+  uint32_t copy_time;
+
+  pre_time = millis();
+  if (VideoImg->W == Output->W && VideoImg->H == Output->H)
+  {
+    int x_offset;
+    int y_offset;
+
+    x_offset = (320-Output->W)/2;
+    y_offset = (240-Output->H)/2;
+
+    memset(p_buf, 0x00, 320 * 240 * 2);
+    for (int y=0; y<VideoImg->H; y++)
+    {
+      memcpy(&p_buf[(y+y_offset)*320 + x_offset], &VideoImg->Data[VideoImg->W * y], VideoImg->W*2);
+    }
+  }
+  else
+  {
+    resize_image_t src;
+    resize_image_t dest;
+
+    src.w = VideoImg->W;
+    src.h = VideoImg->H;
+    src.p_data = VideoImg->Data;
+
+    dest.w = 320;
+    dest.h = 240;
+    dest.p_data = p_buf;
+
+
+    resizeImageFast(&src, &dest);
+  }
+  copy_time = millis()-pre_time;
+#endif
+  lcdRequestDraw();
+
+
+  static uint32_t sync_pre_time;
+
+  /* Wait for sync timer if requested */
+  if(Effects&EFF_SYNC)
+  {
+
+    while((millis()-sync_pre_time < sync_time))
+    {
+      delay(1);
+    }
+
+    /*
+    if ((lcdDrawAvailable() != true) || (millis()-sync_pre_time < sync_time))
+    {
+      return 0;
+    }
+    */
+    printf("%dms, %dfps, %d %% w %d, h %d, %d\n", millis()-sync_pre_time,
+                                                  1000/(millis()-sync_pre_time),
+                                                  100*(1000/(millis()-sync_pre_time))/60,
+                                                  VideoImg->W,
+                                                  VideoImg->H,
+                                                  copy_time);
+  }
+  sync_pre_time = millis();
 
   /* Done */
   return(1);
@@ -238,14 +346,11 @@ unsigned int GetJoystick(void)
   /* Count framerate */
   if((Effects&EFF_SHOWFPS)&&(++FrameCount>=300))
   {
-    struct timeval NewTS;
     int Time;
 
-    gettimeofday(&NewTS,0);
-    Time       = (NewTS.tv_sec-TimeStamp.tv_sec)*1000
-               + (NewTS.tv_usec-TimeStamp.tv_usec)/1000;
+    Time       = millis() - TimeStamp;
     FrameRate  = 1000*FrameCount/(Time>0? Time:1); 
-    TimeStamp  = NewTS;
+    TimeStamp  = millis();
     FrameCount = 0;
     FrameRate  = FrameRate>999? 999:FrameRate;
   }
@@ -276,6 +381,9 @@ unsigned int GetKey(void)
   unsigned int J;
 
   ProcessEvents(0);
+
+
+
   J=LastKey;
   LastKey=0;
   return(J);
@@ -292,7 +400,7 @@ unsigned int WaitKey(void)
   /* Swallow current keypress */
   GetKey();
   /* Wait in 100ms increments for a new keypress */
-  while(!(J=GetKey())&&VideoImg) usleep(100000);
+  while(!(J=GetKey())&&VideoImg) delay(100);
   /* Return key code */
   return(J);
 }
@@ -304,17 +412,31 @@ unsigned int WaitKey(void)
 /*************************************************************/
 unsigned int WaitKeyOrMouse(void)
 {
-  unsigned int J;
+  unsigned int J = 0;
 
+#if 0
   /* Swallow current keypress */
   GetKey();
   /* Make sure mouse keys are not pressed */
-  while(GetMouse()&MSE_BUTTONS) usleep(100000);
+  while(GetMouse()&MSE_BUTTONS) delay(100);
   /* Wait in 100ms increments for a key or mouse click */
-  while(!(J=GetKey())&&!(GetMouse()&MSE_BUTTONS)&&VideoImg) usleep(100000);
+  while(!(J=GetKey())&&!(GetMouse()&MSE_BUTTONS)&&VideoImg) delay(100);
   /* Place key back into the buffer and return mouse state */
   LastKey=J;
   return(GetMouse());
+#endif
+
+  GetKey();
+  /* Wait in 100ms increments for a key or mouse click */
+  while(!(J=GetKey()) && VideoImg)
+  {
+    ShowVideo();
+  }
+
+  /* Place key back into the buffer and return mouse state */
+  LastKey=J;
+
+  return J;
 }
 
 /** WaitSyncTimer() ******************************************/
@@ -348,6 +470,9 @@ int SyncTimerReady(void)
 
 int SetSyncTimer(int Hz)
 {
+  sync_time = 1000 / Hz;
+  sync_time = sync_time * 100 / 100;
+  printf("sunc time %d ms\n", sync_time);
   return(1);
 }
 
@@ -378,34 +503,128 @@ unsigned int X11GetColor(unsigned char R,unsigned char G,unsigned char B)
   );
 }
 
-static char current_path[1024];
-
-
-
-char *getcwd(char *__buf, size_t __size )
-{
-
-  if (f_getcwd(current_path, __size) == FR_OK)
-  {
-    printf("getcwd %s\n", current_path);
-  }
-  else
-  {
-    printf("getcwd fail\n");
-  }
-
-  return current_path;
-}
-
 void SetEffects(unsigned int NewEffects)
 {
-  /* Set new effects */
   Effects=NewEffects;
 }
 
+
 int ProcessEvents(int Wait)
 {
-  return 0;
+  JoyState = 0;
+
+
+  {
+    for (int i=0; i<BUTTON_MAX_CH; i++)
+    {
+      if (buttonGetPressed(i) && buttonGetPressedTime(i) > 50 && buttonGetPressedEvent(i) == true)
+      {
+        switch(i)
+        {
+          case _DEF_HW_BTN_UP:
+            LastKey = CON_UP;
+            break;;
+
+          case _DEF_HW_BTN_DOWN:
+            LastKey = CON_DOWN;
+            break;;
+
+          case _DEF_HW_BTN_LEFT:
+            LastKey = CON_LEFT;
+            break;;
+
+          case _DEF_HW_BTN_RIGHT:
+            LastKey = CON_RIGHT;
+            break;;
+
+          case _DEF_HW_BTN_A:
+            LastKey = CON_OK;
+            break;;
+
+          case _DEF_HW_BTN_B:
+            LastKey = CON_EXIT;
+            break;;
+
+        }
+        break;
+      }
+
+      if (buttonGetPressed(i) == true)
+      {
+        switch(i)
+        {
+          case _DEF_HW_BTN_UP:
+            JoyState|=JST_UP;
+            break;;
+
+          case _DEF_HW_BTN_DOWN:
+            JoyState|=JST_DOWN;
+            break;;
+
+          case _DEF_HW_BTN_LEFT:
+            JoyState|=JST_LEFT;
+            break;;
+
+          case _DEF_HW_BTN_RIGHT:
+            JoyState|=JST_RIGHT;
+            break;;
+
+          case _DEF_HW_BTN_A:
+            JoyState|=JST_FIREA;
+            KBD_SET(KBD_SPACE);
+            break;;
+
+          case _DEF_HW_BTN_B:
+            JoyState|=JST_FIREB;
+            KBD_SET(KBD_ENTER);
+            break;;
+
+          case _DEF_HW_BTN_X:
+            KBD_SET('Y');
+            break;;
+          case _DEF_HW_BTN_Y:
+            KBD_SET('1');
+            break;;
+
+        }
+      }
+      else
+      {
+        switch(i)
+        {
+          case _DEF_HW_BTN_UP:
+            break;;
+
+          case _DEF_HW_BTN_DOWN:
+            break;;
+
+          case _DEF_HW_BTN_LEFT:
+            break;;
+
+          case _DEF_HW_BTN_RIGHT:
+            break;;
+
+          case _DEF_HW_BTN_A:
+            KBD_RES(KBD_SPACE);
+            break;;
+
+          case _DEF_HW_BTN_B:
+            KBD_RES(KBD_ENTER);
+            break;;
+
+          case _DEF_HW_BTN_X:
+            KBD_RES('Y');
+            break;;
+          case _DEF_HW_BTN_Y:
+            KBD_RES('1');
+            break;;
+        }
+      }
+    }
+  }
+
+
+  return(!!VideoImg);
 }
 
 

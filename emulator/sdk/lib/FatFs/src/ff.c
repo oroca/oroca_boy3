@@ -6125,5 +6125,55 @@ int f_printf (
 	return putc_flush(&pb);
 }
 
+int ff_seek(FIL *fil, long offset, int whence)
+{
+  FRESULT res;
+
+  long o;
+  switch (whence) {
+    case SEEK_SET:
+      o = offset;
+      break;
+    case SEEK_CUR:
+      o = offset + f_tell(fil);
+      break;
+    case SEEK_END:
+      o = f_size(fil) + offset;
+      if (o < 0)
+        o = 0;
+      break;
+    default:
+      return -1;
+  }
+  res = f_lseek(fil, o);
+  if (res != FR_OK)
+    return -1;
+
+  return 0;
+}
+
+size_t ff_read(void *ptr, size_t size, size_t count, FIL *fil)
+{
+  FRESULT res;
+
+  UINT bread;
+  res = f_read(fil, ptr, size * count, &bread);
+  if (res != FR_OK)
+    return 0;
+
+  return bread;
+}
+size_t ff_write(const void *ptr, size_t size, size_t count, FIL *fil)
+{
+  FRESULT res;
+
+  UINT bwrite;
+  res = f_write(fil, ptr, size * count, &bwrite);
+  if (res != FR_OK)
+    return 0;
+
+  return bwrite;
+}
+
 #endif /* !_FS_READONLY */
 #endif /* _USE_STRFUNC */

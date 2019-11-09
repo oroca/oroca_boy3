@@ -18,6 +18,9 @@
 #include <stdio.h>
 #include <unistd.h>
 
+#include "FatFs/src/ff.h"
+
+
 #ifndef DEFINE_ONCE
 #define DEFINE_ONCE
 
@@ -372,7 +375,7 @@ int SaveRPL(const char *FileName)
 {
   static unsigned char Header[16] = "RPL\032\001\0\0\0\0\0\0\0\0\0\0\0";
   unsigned char Buf[16];
-  FILE *F;
+  FIL F;
   int J,K;
 
   /* Look for the oldest valid state to replay */
@@ -383,17 +386,16 @@ int SaveRPL(const char *FileName)
   if(J==WPtr1) return(0);
 
   /* Open file */
-  F = fopen(FileName,"wb");
-  if(!F) return(0);
+  if(f_open(&F,FileName,FA_WRITE|FA_CREATE_ALWAYS) != FR_OK) return(0);
 
   /* Fill and write header */
   WRITE_INT(Header+5,RPLData[J].StateSize);
-  if(fwrite(Header,1,sizeof(Header),F)!=sizeof(Header))
-  { fclose(F);unlink(FileName);return(0); }
+  if(ff_write(Header,1,sizeof(Header),&F)!=sizeof(Header))
+  { f_close(&F);f_unlink(FileName);return(0); }
 
   /* Write initial state */
-  if(fwrite(RPLData[J].State,1,RPLData[J].StateSize,F)!=RPLData[J].StateSize)
-  { fclose(F);unlink(FileName);return(0); }
+  if(ff_write(RPLData[J].State,1,RPLData[J].StateSize,&F)!=RPLData[J].StateSize)
+  { f_close(&F);f_unlink(FileName);return(0); }
 
   /* Write input records */
   for(;J!=WPtr1;J=(J+1)&(RPL_BUFSIZE-1))
@@ -402,17 +404,17 @@ int SaveRPL(const char *FileName)
       WRITE_INT(Buf,  RPLData[J].Count[K]);
       WRITE_INT(Buf+4,RPLData[J].JoyState[K]);
 
-      if(fwrite(Buf,1,8,F)!=8)
-      { fclose(F);unlink(FileName);return(0); }
+      if(ff_write(Buf,1,8,&F)!=8)
+      { f_close(&F);f_unlink(FileName);return(0); }
     }
 
   /* Write terminating record */
   memset(Buf,0x00,8);
-  if(fwrite(Buf,1,8,F)!=8)
-  { fclose(F);unlink(FileName);return(0); }
+  if(ff_write(Buf,1,8,&F)!=8)
+  { f_close(&F);f_unlink(FileName);return(0); }
 
   /* Done */
-  fclose(F);
+  f_close(&F);
   return(1);
 }
 
@@ -424,23 +426,22 @@ int LoadRPL(const char *FileName)
   unsigned char Header[16];
   unsigned char Buf[16],*P;
   int J,K;
-  FILE *F;
+  FIL F;
 
   /* Open file */
-  F = fopen(FileName,"rb");
-  if(!F) return(0);
+  if(f_open(&F,FileName,FA_READ) != FR_OK) return(0);
 
   /* Read and verify header */
-  if(fread(Header,1,sizeof(Header),F)!=sizeof(Header)) { fclose(F);return(0); }
-  if(memcmp(Header,"RPL\032\001",5)) { fclose(F);return(0); }
+  if(ff_read(Header,1,sizeof(Header),&F)!=sizeof(Header)) { f_close(&F);return(0); }
+  if(memcmp(Header,"RPL\032\001",5)) { f_close(&F);return(0); }
 
   /* Allocate state buffer */
   J = READ_INT(Header+5);
   P = malloc(J);
-  if(!P) { fclose(F);return(0); }
+  if(!P) { f_close(&F);return(0); }
 
   /* Read state */
-  if(fread(P,1,J,F)!=J) { fclose(F);free(P);return(0); }
+  if(ff_read(P,1,J,&F)!=J) { f_close(&F);free(P);return(0); }
 
   /* State loaded, move it in */
   RPLTrash();
@@ -452,7 +453,7 @@ int LoadRPL(const char *FileName)
     for(K=0;K<RPL_RECSIZE;++K)
     {
       /* Read next input record from file */
-      if(fread(Buf,1,8,F)!=8)
+      if(ff_read(Buf,1,8,&F)!=8)
       {
         RPLData[J].Count[K]    = 0;
         RPLData[J].JoyState[K] = 0;
@@ -469,7 +470,7 @@ int LoadRPL(const char *FileName)
 
   /* Done */
   WPtr1 = J;
-  fclose(F);
+  f_close(&F);
   return(1);
 }
 

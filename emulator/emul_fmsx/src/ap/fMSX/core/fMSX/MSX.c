@@ -479,8 +479,6 @@ int StartMSX(int NewMode,int NewRAMPages,int NewVRAMPages)
         MemMap[I][J][K]=EmptyRAM;
 
 
-  _printHeapInfo();
-
   /* Save current directory */
   if(ProgDir&&(WorkDir=getcwd(NULL,1024))) Chunks[NChunks++]=(void *)WorkDir; //@baram
 
@@ -620,28 +618,28 @@ int StartMSX(int NewMode,int NewRAMPages,int NewVRAMPages)
 /*************************************************************/
 void TrashMSX(void)
 {
-  FILE *F;
+  FIL F;
   int J;
 
   /* CMOS.ROM is saved in the program directory */
-  if(ProgDir && chdir(ProgDir))
+  if(ProgDir && f_chdir(ProgDir))
   { if(Verbose) printf("Failed changing to '%s' directory!\n",ProgDir); }
 
   /* Save CMOS RAM, if present */
   if(SaveCMOS)
   {
     if(Verbose) printf("Writing CMOS.ROM...");
-    if(!(F=fopen("CMOS.ROM","wb"))) SaveCMOS=0;
+    if(f_open(&F, "CMOS.ROM", FA_WRITE|FA_CREATE_ALWAYS)) SaveCMOS=0;
     else
     {
-      if(fwrite(RTC,1,sizeof(RTC),F)!=sizeof(RTC)) SaveCMOS=0;
-      fclose(F);
+      if(ff_write(RTC,1,sizeof(RTC),&F)!=sizeof(RTC)) SaveCMOS=0;
+      f_close(&F);
     }
     PRINTRESULT(SaveCMOS);
   }
 
   /* Change back to working directory */
-  if(WorkDir && chdir(WorkDir))
+  if(WorkDir && f_chdir(WorkDir))
   { if(Verbose) printf("Failed changing to '%s' directory!\n",WorkDir); }
 
   /* Shut down sound logging */
@@ -2452,8 +2450,10 @@ byte ChangeDisk(byte N,const char *FileName)
 
   /* If FileName not empty, treat it as directory, otherwise new disk */
   if(P&&!(*FileName? DSKLoad(FileName,P,"MSX-DISK"):DSKCreate(P,"MSX-DISK")))
-  { EjectFDI(&FDD[N]);return(0); }
-
+  {
+    EjectFDI(&FDD[N]);
+    return(0);
+  }
   /* Done */
   return(!!P);
 }
@@ -2501,19 +2501,18 @@ int LoadFile(const char *FileName)
 /*************************************************************/
 int SaveCHT(const char *Name)
 {
-  FILE *F;
+  FIL F;
   int J;
 
   /* Open .CHT text file with cheats */
-  F = fopen(Name,"wb");
-  if(!F) return(0);
+  if(f_open(&F, Name,FA_WRITE|FA_CREATE_ALWAYS) != FR_OK) return(0);
 
   /* Save cheats */
   for(J=0;J<CheatCount;++J)
-    fprintf(F,"%s\n",CheatCodes[J].Text);
+    f_printf(&F,"%s\n",CheatCodes[J].Text);
 
   /* Done */
-  fclose(F);
+  f_close(&F);
   return(CheatCount);
 }
 
@@ -2780,25 +2779,28 @@ int GuessROM(const byte *Buf,int Size)
 {
   int J,I,K,ROMCount[MAXMAPPERS];
   char S[256];
-  FILE *F;
+  FIL F;
+
+  printf("GuesROM %s\n", getcwd(0, 1024));
 
   /* Try opening file with CRCs */
-  if((F=fopen("CARTS.CRC","rb")))
+  if(f_open(&F, "CARTS.CRC",FA_READ) == FR_OK)
   {
+    printf("GuesROM 1\n");
     /* Compute ROM's CRC */
     for(J=K=0;J<Size;++J) K+=Buf[J];
 
     /* Scan file comparing CRCs */
-    while(fgets(S,sizeof(S)-4,F))
+    while(f_gets(S,sizeof(S)-4,&F))
       if(sscanf(S,"%08X %d",&J,&I)==2)
-        if(K==J) { fclose(F);return(I); }
+        if(K==J) { f_close(&F);return(I); }
 
     /* Nothing found */
-    fclose(F);
+    f_close(&F);
   }
 
   /* Try opening file with SHA1 sums */
-  if((F=fopen("CARTS.SHA","rb")))
+  if(f_open(&F, "CARTS.SHA",FA_READ) == FR_OK)
   {
     char S1[41],S2[41];
     SHA1 C;
@@ -2810,14 +2812,16 @@ int GuessROM(const byte *Buf,int Size)
     {
       sprintf(S1,"%08x%08x%08x%08x%08x",C.Msg[0],C.Msg[1],C.Msg[2],C.Msg[3],C.Msg[4]);
 
+      printf("SHA1 %s\n", S1);
+
       /* Search for computed SHA1 in the file */
-      while(fgets(S,sizeof(S)-4,F))
+      while(f_gets(S,sizeof(S)-4,&F))
         if((sscanf(S,"%40s %d",S2,&J)==2) && !strcmp(S1,S2))
-        { fclose(F);return(J); }
+        { f_close(&F);return(J); }
     }
 
     /* Nothing found */
-    fclose(F);
+    f_close(&F);
   }
 
   /* Clear all counters */
@@ -2868,20 +2872,20 @@ int GuessROM(const byte *Buf,int Size)
 /*************************************************************/
 byte LoadFNT(const char *FileName)
 {
-  FILE *F;
+  FIL F;
 
   /* Drop out if no new font requested */
   if(!FileName) { FreeMemory(FontBuf);FontBuf=0;return(1); }
   /* Try opening font file */
-  if(!(F=fopen(FileName,"rb"))) return(0);
+  if(f_open(&F, FileName,FA_READ) != FR_OK) return(0);
   /* Allocate memory for 256 8x8 characters, if needed */
   if(!FontBuf) FontBuf=GetMemory(256*8);
   /* Drop out if failed memory allocation */
-  if(!FontBuf) { fclose(F);return(0); }
+  if(!FontBuf) { f_close(&F);return(0); }
   /* Read font, ignore short reads */
-  fread(FontBuf,1,256*8,F);
+  ff_read(FontBuf,1,256*8,&F);
   /* Done */
-  fclose(F);
+  f_close(&F);
   return(1);  
 }
 
@@ -2993,7 +2997,8 @@ int LoadCart(const char *FileName,int Slot,int Type)
   int C1,C2,Len,Pages,ROM64,BASIC;
   byte *P,PS,SS;
   char *T;
-  FILE *F;
+  FIL F;
+
 
   /* Slot number must be valid */
   if((Slot<0)||(Slot>=MAXSLOTS)) return(0);
@@ -3011,7 +3016,7 @@ int LoadCart(const char *FileName,int Slot,int Type)
   {
     /* Open .SAV file */
     if(Verbose) printf("Writing %s...",SRAMName[Slot]);
-    if(!(F=fopen(SRAMName[Slot],"wb"))) SaveSRAM[Slot]=0;
+    if(f_open(&F,SRAMName[Slot],FA_WRITE|FA_CREATE_ALWAYS) != FR_OK) SaveSRAM[Slot]=0;
     else
     {
       /* Write .SAV file */
@@ -3019,19 +3024,19 @@ int LoadCart(const char *FileName,int Slot,int Type)
       {
         case MAP_ASCII8:
         case MAP_FMPAC:
-          if(fwrite(SRAMData[Slot],1,0x2000,F)!=0x2000) SaveSRAM[Slot]=0;
+          if(ff_write(SRAMData[Slot],1,0x2000,&F)!=0x2000) SaveSRAM[Slot]=0;
           break;
         case MAP_ASCII16:
-          if(fwrite(SRAMData[Slot],1,0x0800,F)!=0x0800) SaveSRAM[Slot]=0;
+          if(ff_write(SRAMData[Slot],1,0x0800,&F)!=0x0800) SaveSRAM[Slot]=0;
           break;
         case MAP_GMASTER2:
-          if(fwrite(SRAMData[Slot],1,0x1000,F)!=0x1000)        SaveSRAM[Slot]=0;
-          if(fwrite(SRAMData[Slot]+0x2000,1,0x1000,F)!=0x1000) SaveSRAM[Slot]=0;
+          if(ff_write(SRAMData[Slot],1,0x1000,&F)!=0x1000)        SaveSRAM[Slot]=0;
+          if(ff_write(SRAMData[Slot]+0x2000,1,0x1000,&F)!=0x1000) SaveSRAM[Slot]=0;
           break;
       }
 
       /* Done with .SAV file */
-      fclose(F);
+      f_close(&F);
     }
 
     /* Done saving SRAM */
@@ -3060,22 +3065,22 @@ int LoadCart(const char *FileName,int Slot,int Type)
   }
 
   /* Try opening file */
-  if(!(F=fopen(FileName,"rb"))) return(0);
+  if(f_open(&F,FileName,FA_READ) != FR_OK) return(0);
   if(Verbose) printf("Found %s:\n",FileName);
 
   /* Determine size via ftell() or by reading entire [GZIPped] stream */
-  if(!fseek(F,0,SEEK_END)) Len=ftell(F);
+  if(!ff_seek(&F,0,SEEK_END)) Len=f_tell(&F);
   else
   {
     /* Read file in 16kB increments */
-    for(Len=0;(C2=fread(EmptyRAM,1,0x4000,F))==0x4000;Len+=C2);
+    for(Len=0;(C2=ff_read(EmptyRAM,1,0x4000,&F))==0x4000;Len+=C2);
     if(C2>0) Len+=C2;
     /* Clean up the EmptyRAM! */
     memset(EmptyRAM,NORAM,0x4000);
   }
 
   /* Rewind file */
-  rewind(F);
+  f_rewind(&F);
 
   /* Compute size in 8kB pages */
   Len>>=13;
@@ -3084,38 +3089,48 @@ int LoadCart(const char *FileName,int Slot,int Type)
 
   /* Check "AB" signature in a file */
   ROM64=0;
-  C1=fgetc(F);
-  C2=fgetc(F);
+  C1 = 0;
+  C2 = 0;
+  //C1=fgetc(F);
+  //C2=fgetc(F);
+
+  ff_read(&C1,1,1,&F);
+  ff_read(&C2,1,1,&F);
 
   /* Maybe this is a flat 64kB ROM? */
   if((C1!='A')||(C2!='B'))
-    if(fseek(F,0x4000,SEEK_SET)>=0)
+    if(ff_seek(&F,0x4000,SEEK_SET)>=0)
     {
-      C1=fgetc(F);
-      C2=fgetc(F);
+      //C1=fgetc(F);
+      //C2=fgetc(F);
+      ff_read(&C1,1,1,&F);
+      ff_read(&C2,1,1,&F);
+
       ROM64=(C1=='A')&&(C2=='B');
     }
 
   /* Maybe it is the last page that contains "AB" signature? */
   if((Len>=2)&&((C1!='A')||(C2!='B')))
-    if(fseek(F,0x2000*(Len-2),SEEK_SET)>=0)
+    if(ff_seek(&F,0x2000*(Len-2),SEEK_SET)>=0)
     {
-      C1=fgetc(F);
-      C2=fgetc(F);
+      //C1=fgetc(F);
+      //C2=fgetc(F);
+      ff_read(&C1,1,1,&F);
+      ff_read(&C2,1,1,&F);
     }
 
   /* If we can't find "AB" signature, drop out */     
   if((C1!='A')||(C2!='B'))
   {
     if(Verbose) puts("  Not a valid cartridge ROM");
-    fclose(F);
+    f_close(&F);
     return(0);
   }
 
   if(Verbose) printf("  Cartridge %c: ",'A'+Slot);
 
   /* Done with the file */
-  fclose(F);
+  f_close(&F);
 
   /* Show ROM type and size */
   if(Verbose)
@@ -3260,11 +3275,11 @@ int LoadCart(const char *FileName,int Slot,int Type)
       T=strrchr(SRAMName[Slot],'.');
       if(T) strcpy(T,".sav"); else strcat(SRAMName[Slot],".sav");
       /* Try opening file... */
-      if((F=fopen(SRAMName[Slot],"rb")))
+      if(f_open(&F,SRAMName[Slot],FA_READ) == FR_OK)
       {
         /* Read SRAM file */
-        Len=fread(SRAMData[Slot],1,0x4000,F);
-        fclose(F);
+        Len=ff_read(SRAMData[Slot],1,0x4000,&F);
+        f_close(&F);
         /* Print information if needed */
         if(Verbose) printf("loaded %d bytes from %s..",Len,SRAMName[Slot]);
         /* Mirror data according to the mapper type */
@@ -3317,11 +3332,11 @@ int LoadCHT(const char *Name)
 {
   char Buf[256],S[16];
   int Status;
-  FILE *F;
+  FIL F;
 
   /* Open .CHT text file with cheats */
-  F = fopen(Name,"rb");
-  if(!F) return(0);
+
+  if(f_open(&F, Name,FA_READ) != FR_OK) return(0);
 
   /* Switch cheats off for now and remove all present cheats */
   Status = Cheats(CHTS_QUERY);
@@ -3329,12 +3344,12 @@ int LoadCHT(const char *Name)
   ResetCheats();
 
   /* Try adding cheats loaded from file */
-  while(!feof(F))
-    if(fgets(Buf,sizeof(Buf),F) && (sscanf(Buf,"%13s",S)==1))
+  while(!f_eof(&F))
+    if(f_gets(Buf,sizeof(Buf),&F) && (sscanf(Buf,"%13s",S)==1))
       AddCheat(S);
 
   /* Done with the file */
-  fclose(F);
+  f_close(&F);
 
   /* Turn cheats back on, if they were on */
   Cheats(Status);
@@ -3351,12 +3366,12 @@ int LoadPAL(const char *Name)
 {
   static const char *Hex = "0123456789ABCDEF";
   char S[256],*P,*T,*H;
-  FILE *F;
+  FIL F;
   int J,I;
 
-  if(!(F=fopen(Name,"rb"))) return(0);
+  if(f_open(&F, Name,FA_READ) != FR_OK) return(0);
 
-  for(J=0;(J<16)&&fgets(S,sizeof(S),F);++J)
+  for(J=0;(J<16)&&f_gets(S,sizeof(S),&F);++J)
   {
     /* Skip white space and optional '#' character */
     for(P=S;*P&&(*P<=' ');++P);
@@ -3367,7 +3382,7 @@ int LoadPAL(const char *Name)
     if(T-P==6) SetColor(J,I>>16,(I>>8)&0xFF,I&0xFF);
   }
 
-  fclose(F);
+  f_close(&F);
   return(J);
 }
 

@@ -55,6 +55,13 @@ typedef struct
   uint32_t    released_start_time;
   uint32_t    released_end_time;
 
+
+  bool        pin_state;
+
+  uint8_t     filter_state;
+  uint8_t     filter_cnt;
+  uint8_t     filter_index;
+
 } button_t;
 
 
@@ -77,8 +84,38 @@ void button_isr(void *arg)
 
   for (i=0; i<BUTTON_MAX_CH; i++)
   {
+    switch(button_tbl[i].filter_state)
+    {
+      case 0:
+        if (button_tbl[i].pin_state != buttonGetPin(i))
+        {
+          button_tbl[i].filter_cnt = 5;
+          button_tbl[i].filter_state = 1;
+        }
+        break;
 
-    if (buttonGetPin(i))
+      case 1:
+        button_tbl[i].filter_cnt--;
+
+        if (button_tbl[i].pin_state == buttonGetPin(i))
+        {
+          button_tbl[i].filter_state = 0;
+        }
+
+        if (button_tbl[i].filter_cnt == 0)
+        {
+          if (button_tbl[i].pin_state != buttonGetPin(i))
+          {
+            button_tbl[i].pin_state = buttonGetPin(i);
+          }
+          button_tbl[i].filter_state = 0;
+        }
+
+        break;
+    }
+
+
+    if (button_tbl[i].pin_state)
     {
       if (button_tbl[i].pressed == false)
       {
@@ -134,6 +171,8 @@ bool buttonInit(void)
     button_tbl[i].pressed        = 0;
     button_tbl[i].released       = 0;
     button_tbl[i].released_event = 0;
+    button_tbl[i].pin_state      = buttonGetPin(i);
+    button_tbl[i].filter_state   = 0;
   }
 
   h_button_timer = swtimerGetHandle();

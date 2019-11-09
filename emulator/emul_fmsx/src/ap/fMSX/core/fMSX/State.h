@@ -238,7 +238,7 @@ int SaveSTA(const char *Name)
   static byte Header[16] = "STE\032\003\0\0\0\0\0\0\0\0\0\0\0";
   unsigned int J,Size;
   byte *Buf;
-  FILE *F;
+  FIL F;
 
   /* Fail if no state file */
   if(!Name) return(0);
@@ -252,8 +252,7 @@ int SaveSTA(const char *Name)
   if(!Size) { free(Buf);return(0); }
 
   /* Open new state file */
-  F = fopen(Name,"wb");
-  if(!F) { free(Buf);return(0); }
+  if(f_open(&F,Name,FA_WRITE|FA_CREATE_ALWAYS) != FR_OK) { free(Buf);return(0); }
 
   /* Prepare the header */
   J=StateID();
@@ -263,15 +262,30 @@ int SaveSTA(const char *Name)
   Header[8] = J>>8;
 
   /* Write out the header and the data */
-  if(F && (fwrite(Header,1,16,F)!=16))  { fclose(F);F=0; }
-  if(F && (fwrite(Buf,1,Size,F)!=Size)) { fclose(F);F=0; }
+  if(F.obj.fs && (ff_write(Header,1,16,&F)!=16))
+  {
+    f_close(&F);
+    F.obj.fs=0;
+  }
+  if(F.obj.fs && (ff_write(Buf,1,Size,&F)!=Size))
+  {
+    f_close(&F);
+    F.obj.fs=0;
+  }
 
   /* If failed writing state, delete open file */
-  if(F) fclose(F); else unlink(Name);
+  if(F.obj.fs)
+  {
+    f_close(&F);
+  }
+  else
+  {
+    f_unlink(Name);
+  }
 
   /* Done */
   free(Buf);
-  return(!!F);
+  return(!F.obj.fs);
 }
 
 /** LoadSTA() ************************************************/
@@ -282,24 +296,24 @@ int LoadSTA(const char *Name)
 {
   int Size,OldMode,OldRAMPages,OldVRAMPages;
   byte Header[16],*Buf;
-  FILE *F;
+  FIL F;
 
   /* Fail if no state file */
   if(!Name) return(0);
 
   /* Open saved state file */
-  if(!(F=fopen(Name,"rb"))) return(0);
+  if(f_open(&F, Name, FA_READ) != FR_OK) return(0);
 
   /* Read and check the header */
-  if(fread(Header,1,16,F)!=16)           { fclose(F);return(0); }
-  if(memcmp(Header,"STE\032\003",5))     { fclose(F);return(0); }
-  if(Header[7]+Header[8]*256!=StateID()) { fclose(F);return(0); }
+  if(ff_read(Header,1,16,&F)!=16)           { f_close(&F);return(0); }
+  if(memcmp(Header,"STE\032\003",5))     { f_close(&F);return(0); }
+  if(Header[7]+Header[8]*256!=StateID()) { f_close(&F);return(0); }
   if((Header[5]!=(RAMPages&0xFF))||(Header[6]!=(VRAMPages&0xFF)))
-  { fclose(F);return(0); }
+  { f_close(&F);return(0); }
 
   /* Allocate temporary buffer */
   Buf = malloc(MAX_STASIZE);
-  if(!Buf) { fclose(F);return(0); }
+  if(!Buf) { f_close(&F);return(0); }
 
   /* Save current configuration */
   OldMode      = Mode;
@@ -307,7 +321,7 @@ int LoadSTA(const char *Name)
   OldVRAMPages = VRAMPages;
 
   /* Read state into temporary buffer, then load it */
-  Size = fread(Buf,1,MAX_STASIZE,F);
+  Size = ff_read(Buf,1,MAX_STASIZE,&F);
   Size = Size>0? LoadState(Buf,Size):0;
 
   /* If failed loading state, reset hardware */
@@ -315,7 +329,7 @@ int LoadSTA(const char *Name)
 
   /* Done */
   free(Buf);
-  fclose(F);
+  f_close(&F);
   return(!!Size);
 }
 

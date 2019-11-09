@@ -13,79 +13,80 @@
 #include "fmsx.h"
 
 
-const char *dir_program = FMSX_ROOT_GAMESDIR;
+const char *dir_bios = "/msx/bios";
+const char *dir_roms = "/msx/roms";
+
+
+static char cur_path[1024];
+
 
 
 extern int StartMSX(int NewMode,int NewRAMPages,int NewVRAMPages);
 
 void fmsxMain(void)
 {
-  /*
-  fmsxGUI_initMenu();
+  ProgDir = dir_bios;
 
 
-  StartMSX(0, 0, 0);
-
-  fmsxGUI_showMenu();
-  */
+  f_chdir(ProgDir);
 
 
-
- uint8_t initOkay;
- uint8_t failure = 0;
+  UPeriod = 50;
 
 
-
-  // Display
-
-
- /// keyboard
-
-
- UPeriod = 50;
-
- ProgDir = dir_program;
-
- f_chdir(ProgDir);
+  if (InitMachine())
+  {
+    Mode = (Mode&~MSX_VIDEO)|MSX_PAL;
+    Mode = (Mode&~MSX_MODEL)|MSX_MSX2;
+    Mode = (Mode&~MSX_JOYSTICKS)|MSX_JOY1|MSX_JOY2;
 
 
- initOkay = InitMachine();
-
- _printHeapInfo();
-
- /*
- if (initOkay)
- {
-      if (! dirExist(FMSX_ROOT_GAMESDIR)) mkdir(FMSX_ROOT_GAMESDIR, 666);
-      if (! dirExist(FMSX_ROOT_GAMESDIR"/bios")) mkdir(FMSX_ROOT_GAMESDIR"/bios", 666);
-      if (! dirExist(FMSX_ROOT_DATADIR)) mkdir(FMSX_ROOT_DATADIR, 666);
- }
-  */
-
- if (initOkay)
- {
-    Mode=(Mode&~MSX_VIDEO)|MSX_PAL;
-    Mode=(Mode&~MSX_MODEL)|MSX_MSX2;
-    Mode=(Mode&~MSX_JOYSTICKS)|MSX_JOY1|MSX_JOY2;
-
-    RAMPages = 2;
+    RAMPages  = 2;
     VRAMPages = 2;
 
     if (!StartMSX(Mode,RAMPages,VRAMPages))
     {
-#if 0
-      switch (failure)
-      {
-         case 1:
-              //odroidFmsxGUI_msgBox("Error","Cannot mount SDCard", 1);
-              break;
-         default:
-              //odroidFmsxGUI_msgBox("Error","Start fMSX failed.\nMissing bios files?", 1);
-      }
-#endif
+      logPrintf("Start fMSX failed.\nMissing bios files?\n");
     }
 
-    //odroidFmsxGUI_msgBox("End","The emulation was shutted down\nYou can turn off your device", 1);
+    logPrintf("The emulation was shutted down\nYou can turn off your device\n");
+  }
+}
+
+
+void fmsxChangeHome(void)
+{
+  f_chdir(dir_roms);
+}
+
+
+
+
+
+char *getcwd(char *__buf, size_t __size )
+{
+  char *p_buf;
+
+  if (__buf != NULL)
+  {
+    p_buf = __buf;
+  }
+  else
+  {
+    p_buf = cur_path;
   }
 
+  if (f_getcwd(p_buf, __size) == FR_OK)
+  {
+    printf("getcwd %s\n", p_buf);
+  }
+  else
+  {
+    printf("getcwd fail\n");
+  }
+
+  return p_buf;
 }
+
+
+

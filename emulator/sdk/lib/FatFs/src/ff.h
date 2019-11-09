@@ -27,6 +27,7 @@ extern "C" {
 
 #include "integer.h"	/* Basic integer types */
 #include "fatfs/driver/ffconf.h"		/* FatFs configuration options */
+#include <unistd.h>
 
 #if _FATFS != _FFCONF
 #error Wrong configuration file (ffconf.h).
@@ -272,6 +273,10 @@ int f_putc (TCHAR c, FIL* fp);										/* Put a character to the file */
 int f_puts (const TCHAR* str, FIL* cp);								/* Put a string to the file */
 int f_printf (FIL* fp, const TCHAR* str, ...);						/* Put a formatted string to the file */
 TCHAR* f_gets (TCHAR* buff, int len, FIL* fp);						/* Get a string from the file */
+
+int ff_seek(FIL *fil, long offset, int whence);
+size_t ff_read(void *ptr, size_t size, size_t count, FIL *fil);
+size_t ff_write(const void *ptr, size_t size, size_t count, FIL *fil);
 
 #define f_eof(fp) ((int)((fp)->fptr == (fp)->obj.objsize))
 #define f_error(fp) ((fp)->err)

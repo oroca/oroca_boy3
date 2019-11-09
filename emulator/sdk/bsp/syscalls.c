@@ -15,7 +15,7 @@
 #include <reent.h>
 #include <unistd.h>
 #include <sys/wait.h>
-
+#include "uart.h"
 
 
 #define FreeRTOS
@@ -29,7 +29,7 @@ extern int __io_getchar(void) __attribute__((weak));
 #endif
 
 
-static char *heap_end;
+static char *heap_end = 0;
 
 
 void _printHeapInfo(void)
@@ -90,6 +90,7 @@ caddr_t _sbrk(int incr)
   /* Locate the STACK bottom address */
   min_stack_ptr -= MAX_STACK_SIZE;
 
+  //uartPrintf(_DEF_UART1, "heap free %X %X %X, %dK, %dK\n", heap_end, incr, min_stack_ptr, incr/1024,(int)(min_stack_ptr - heap_end)/1024);
   if (heap_end + incr > min_stack_ptr)
 #else
   if (heap_end + incr > stack_ptr)

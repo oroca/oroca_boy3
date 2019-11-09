@@ -22,7 +22,7 @@ __attribute__((section(".tag"))) flash_tag_t fw_tag =
      // fw info
      //
      0xAAAA5555,        // magic_number
-     "V191104R1",       // version_str
+     "V191109R1",       // version_str
      "OROCABOY3",       // board_str
      "fMSX",            // name
      __DATE__,
@@ -98,13 +98,6 @@ extern uint32_t _estack;
 static void threadEmul(void const *argument)
 {
   UNUSED(argument);
-
-
-  uint8_t *data;
-
-  data = (uint8_t *)malloc(512*1024);
-  _printHeapInfo();
-
 
   fmsxMain();
 

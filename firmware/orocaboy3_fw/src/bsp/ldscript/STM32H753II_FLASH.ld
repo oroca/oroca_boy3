@@ -35,7 +35,7 @@ SOFTWARE.
 ENTRY(Reset_Handler)
 
 /* Highest address of the user mode stack */
-_estack = 0x20000000+128K;    /* end of RAM */
+_estack = 0x24000000+512K;    /* end of RAM */
 
 /* Generate a link error if heap and stack don't fit into RAM */
 _Min_Heap_Size = 0;      /* required amount of heap  */
@@ -146,7 +146,7 @@ SECTIONS
 
     . = ALIGN(4);
     _edata = .;        /* define a global symbol at data end */
-  } >DTCMRAM AT> FLASH
+  } >SRAM_D1 AT> FLASH
   
  _sisram_d1 = LOADADDR(.sram_d1);
 
@@ -219,7 +219,7 @@ SECTIONS
     . = ALIGN(4);
     _ebss = .;         /* define a global symbol at bss end */
     __bss_end__ = _ebss;
-  } >DTCMRAM
+  } >SRAM_D1
 
   /* User_heap_stack section, used to check that there is enough DTCMRAM left */
   ._user_heap_stack :
@@ -230,7 +230,7 @@ SECTIONS
     . = . + _Min_Heap_Size;
     . = . + _Min_Stack_Size;
     . = ALIGN(4);
-  } >DTCMRAM
+  } >SRAM_D1
 
   /* MEMORY_bank1 section, code must be located here explicitly            */
   /* Example: extern int foo(void) __attribute__ ((section (".mb1text"))); */

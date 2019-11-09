@@ -14,6 +14,8 @@
 
 #include <stdio.h>
 #include <string.h>
+#include "Fatfs/src/ff.h"
+
 
 #if defined(ANDROID)
 #include "MemFS.h"
@@ -45,16 +47,16 @@ unsigned int ApplyIPS(const char *FileName,unsigned char *Data,unsigned int Size
 {
   unsigned char Buf[16];
   unsigned int Result,Count,J,N;
-  FILE *F;
+  FIL F;
 
-  F = fopen(FileName,"rb");
-  if(!F) return(0);
+
+  if(f_open(&F, FileName, FA_READ) != FR_OK) return(0);
 
   /* Verify file header */
-  if(fread(Buf,1,5,F)!=5)   { fclose(F);return(0); }
-  if(memcmp(Buf,"PATCH",5)) { fclose(F);return(0); }
+  if(ff_read(Buf,1,5,&F)!=5)   { f_close(&F);return(0); }
+  if(memcmp(Buf,"PATCH",5)) { f_close(&F);return(0); }
 
-  for(Result=0,Count=1;fread(Buf,1,5,F)==5;++Count)
+  for(Result=0,Count=1;ff_read(Buf,1,5,&F)==5;++Count)
   {
     J = Buf[2]+((unsigned int)Buf[1]<<8)+((unsigned int)Buf[0]<<16);
     N = Buf[4]+((unsigned int)Buf[3]<<8);
@@ -71,14 +73,14 @@ unsigned int ApplyIPS(const char *FileName,unsigned char *Data,unsigned int Size
       {
         /* Just measuring patch size */
         if(Result<J+N) Result=J+N;
-        if(fseek(F,N,SEEK_CUR)<0) break;
+        if(ff_seek(&F,N,SEEK_CUR)<0) break;
       }
       else if(J+N>Size)
       {
         printf("IPS: Failed applying COPY patch #%d to 0x%X..0x%X of 0x%X bytes.\n",Count,J,J+N-1,Size);
-        if(fseek(F,N,SEEK_CUR)<0) break;
+        if(ff_seek(&F,N,SEEK_CUR)<0) break;
       }
-      else if(fread(Data+J,1,N,F)==N)
+      else if(ff_read(Data+J,1,N,&F)==N)
       {
 //        printf("IPS: Applied COPY patch #%d to 0x%X..0x%X.\n",Count,J,J+N-1);
         ++Result;
@@ -93,7 +95,7 @@ unsigned int ApplyIPS(const char *FileName,unsigned char *Data,unsigned int Size
     {
       /* Filling with a value */
 
-      if(fread(Buf,1,3,F)!=3)
+      if(ff_read(Buf,1,3,&F)!=3)
       {
         if(Data) printf("IPS: Failed reading FILL patch #%d from the file.\n",Count);
         break;
@@ -119,7 +121,7 @@ unsigned int ApplyIPS(const char *FileName,unsigned char *Data,unsigned int Size
     }
   }
 
-  fclose(F);
+  f_close(&F);
   return(Result);
 }
 

@@ -15,6 +15,9 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "FatFs/src/ff.h"
+
+
 /** LoadFileMCF() ********************************************/
 /** Load cheats from .MCF file. Returns number of loaded    **/
 /** cheat entries or 0 on failure.                          **/
@@ -24,15 +27,14 @@ int LoadFileMCF(const char *Name,MCFEntry *Cheats,int MaxCheats)
   char Buf[256],Note[256];
   unsigned int Arg0,Addr,Data,Arg3;
   int J;
-  FILE *F;
+  FIL F;
 
   /* Open .MCF text file with cheats */
-  F = fopen(Name,"rb");
-  if(!F) return(0);
+  if(f_open(&F, Name, FA_READ) != FR_OK) return(0);
 
   /* Load cheats from file */
-  for(J=0;!feof(F)&&(J<MaxCheats);)
-    if(fgets(Buf,sizeof(Buf),F) && (sscanf(Buf,"%u,%u,%u,%u,%255s",&Arg0,&Addr,&Data,&Arg3,Note)==5))
+  for(J=0;!f_eof(&F)&&(J<MaxCheats);)
+    if(f_gets(Buf,sizeof(Buf),&F) && (sscanf(Buf,"%u,%u,%u,%u,%255s",&Arg0,&Addr,&Data,&Arg3,Note)==5))
     {
       Cheats[J].Addr = Addr;
       Cheats[J].Data = Data;
@@ -43,7 +45,7 @@ int LoadFileMCF(const char *Name,MCFEntry *Cheats,int MaxCheats)
     }
 
   /* Done with the file */
-  fclose(F);
+  f_close(&F);
 
   /* Done */
   return(J);
@@ -55,18 +57,17 @@ int LoadFileMCF(const char *Name,MCFEntry *Cheats,int MaxCheats)
 /*************************************************************/
 int SaveFileMCF(const char *Name,const MCFEntry *Cheats,int CheatCount)
 {
-  FILE *F;
+  FIL F;
   int J;
 
   /* Open .MCF text file with cheats */
-  F = fopen(Name,"wb");
-  if(!F) return(0);
+  if(f_open(&F,Name,FA_WRITE | FA_CREATE_ALWAYS) != FR_OK) return(0);
 
   /* Save cheats */
   for(J=0;J<CheatCount;++J)
-    fprintf(F,"%d,%d,%d,%d,%s\n",0,Cheats[J].Addr,Cheats[J].Data,0,Cheats[J].Note);
+    f_printf(&F,"%d,%d,%d,%d,%s\n",0,Cheats[J].Addr,Cheats[J].Data,0,Cheats[J].Note);
 
   /* Done */
-  fclose(F);
+  f_close(&F);
   return(CheatCount);
 }

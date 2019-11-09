@@ -18,13 +18,6 @@
 
 
 
-#define FMSX_ROOT_GAMESDIR  "/msx/roms"
-
-
-
-
-
-
 
 
 void fmsxMain(void);

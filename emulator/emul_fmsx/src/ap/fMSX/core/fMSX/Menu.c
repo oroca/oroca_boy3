@@ -78,7 +78,7 @@ void MenuMSX(void)
       "Rewind tape\n"
       "Reset emulator\n"
       "Quit emulator\n"
-      "  \n"
+      "About\n"
       "Done\n",
       MIDILogging(MIDI_QUERY)? CON_CHECK:' ',
       OPTION(MSX_DRUMS)?       CON_CHECK:' ',
@@ -657,6 +657,24 @@ void MenuMSX(void)
         break;
       case 21: /* Quit */
         ExitNow=1;
+        J=0;
+        break;
+      case 22:
+        //CONMsg(-1,-1,-1,-1,CLR_WHITE,CLR_INFO,"About","fMSX by Marat Fayzullin, ported by Baram \0\0");
+        /* Compose menu */
+        sprintf(S,
+          "About - fMSX\n"
+          "https://fms.komkon.org/fMSX/\n"
+          "Made by Marat Fayzullin\n"
+          " \n"
+          "Ported by Baram for OROCABOY\n"
+        );
+
+        /* Replace all EOLNs with zeroes */
+        for(J=0;S[J];J++) if(S[J]=='\n') S[J]='\0';
+
+        /* Run menu */
+        I=CONMenu(-1,-1,-1,-1,CLR_TEXT,CLR_BACK5,S,I);
         J=0;
         break;
       case 23: /* Done */

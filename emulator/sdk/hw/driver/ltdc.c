@@ -40,13 +40,13 @@ void ltdcSetFrameBuffer(uint16_t* addr);
 
 
 static LTDC_HandleTypeDef hltdc;
-static bool ltdc_request_draw = false;
+static volatile bool ltdc_request_draw = false;
 
-static uint16_t lcd_int_active_line;
-static uint16_t lcd_int_porch_line;
+static volatile uint16_t lcd_int_active_line;
+static volatile uint16_t lcd_int_porch_line;
 
 
-static uint32_t  frame_index = 0;
+static volatile uint32_t  frame_index = 0;
 static uint16_t *frame_buffer[2] =
     {
       (uint16_t *)(FRAME_BUF_ADDR + LCD_WIDTH*LCD_HEIGHT*2*0),
@@ -54,7 +54,7 @@ static uint16_t *frame_buffer[2] =
     };
 
 uint16_t *ltdc_draw_buffer;
-static bool is_double_buffer = true;
+static volatile bool is_double_buffer = true;
 
 
 
@@ -304,6 +304,7 @@ void ltdcSwapFrameBuffer(void)
     {
       ltdc_draw_buffer = frame_buffer[frame_index];
     }
+    //SCB_InvalidateDCache_by_Addr((uint32_t *)frame_buffer[frame_index], 320*240*2);
   }
 }
 

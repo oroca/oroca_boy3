@@ -964,7 +964,7 @@ const char *CONFile(pixel FGColor,pixel BGColor,const char *Ext)
     if(f_opendir(&D, ".") != FR_OK) break;
 
     /* Compute required buffer size size */
-    for(f_rewinddir(&D),I=256; (f_readdir(&D, &DP)); I+=strlen(DP.fname)+2);
+    for(f_rewinddir(&D),I=256*64; (f_readdir(&D, &DP)); I+=strlen(DP.fname)+2);
 
     /* Reallocate buffer if needed */
     if((I>BufSize)&&(T=malloc(I)))
@@ -977,12 +977,33 @@ const char *CONFile(pixel FGColor,pixel BGColor,const char *Ext)
     /* If failed to allocate buffer, drop out */
     if(!Buf) { f_closedir(&D);return(0); }
 
+
     /* Create title from the current pathname */
     if(!getcwd(Buf,BufSize-2)) strcpy(Buf,"Choose File");
     J=strlen(Buf)+1;
 
+    printf("path %s\n", Buf);
+
     /* Scan subdirectories */
-    for(f_rewinddir(&D); (f_readdir(&D, &DP));)
+    //for(f_rewinddir(&D); (f_readdir(&D, &DP) != FR_NO_FILE);)
+    f_rewinddir(&D);
+    while(1)
+    {
+      FRESULT res = f_readdir(&D, &DP);
+
+      if (res != FR_OK || DP.fname[0] == 0) break;  /* Break on error or end of dir */
+      if (DP.fattrib & AM_DIR)
+      {
+        I=strlen(DP.fname)+1;
+        if(J+I+1<BufSize)
+        {
+          Buf[J++]=CON_FOLDER;
+          strcpy(Buf+J,DP.fname);
+          J+=I;
+        }
+      }
+
+#if 0
       //if(!stat(DP->d_name,&ST)&&S_ISDIR(ST.st_mode))
       if(f_stat(DP.fname, &ST) == FR_OK && ST.fattrib & AM_DIR)
       {
@@ -994,7 +1015,34 @@ const char *CONFile(pixel FGColor,pixel BGColor,const char *Ext)
           J+=I;
         }
       }
+#endif
+    }
 
+
+    f_rewinddir(&D);
+    while(1)
+    {
+      FRESULT res = f_readdir(&D, &DP);
+
+      if (res != FR_OK || DP.fname[0] == 0) break;  /* Break on error or end of dir */
+      if (!(DP.fattrib & AM_DIR))
+      {
+        I=strlen(DP.fname)+1;
+        if(J+I+1<BufSize)
+        {
+          for(P=Ext;*P;P+=strlen(P)+1)
+            if((I>strlen(P))&&!stricmp(DP.fname+I-1-strlen(P),P))
+            {
+              Buf[J++]=CON_FILE;
+              strcpy(Buf+J,DP.fname);
+              J+=I;
+              break;
+            }
+        }
+      }
+    }
+
+#if 0
     /* Scan files */
     //for(rewinddir(D);(DP=readdir(D));)
     for(f_rewinddir(&D); (f_readdir(&D, &DP));)
@@ -1012,6 +1060,7 @@ const char *CONFile(pixel FGColor,pixel BGColor,const char *Ext)
               break;
             }
       }
+#endif
 
     /* Terminate directory listing */
     Buf[J]='\0';
@@ -1028,7 +1077,7 @@ const char *CONFile(pixel FGColor,pixel BGColor,const char *Ext)
       {
         case CON_FOLDER:
           /* Folder selected, enter it */
-          if(chdir(P+1)) { /* Something went wrong */ }
+          if(f_chdir(P+1) != FR_OK) { /* Something went wrong */ }
           break;
         case CON_FILE:
           /* File selected, return it */

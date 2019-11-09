@@ -43,7 +43,7 @@
 #include "timer.h"
 #include "speaker.h"
 #include "mpu.h"
-
+#include "resize.h"
 
 #include "sd.h"
 #include "fatfs/fatfs.h"
