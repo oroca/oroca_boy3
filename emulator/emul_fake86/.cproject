@@ -105,7 +105,7 @@
 									<listOptionValue builtIn="false" value="USE_HAL_DRIVER"/>
 								</option>
 								<option id="com.atollic.truestudio.gcc.cstandard.521018675" name="C standard" superClass="com.atollic.truestudio.gcc.cstandard" useByScannerDiscovery="false" value="com.atollic.truestudio.gcc.cstandard.gnu1x" valueType="enumerated"/>
-								<option id="com.atollic.truestudio.exe.debug.toolchain.gcc.optimization.level.1910561125" name="Optimization Level" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc.optimization.level" useByScannerDiscovery="false" value="com.atollic.truestudio.gcc.optimization.level.02" valueType="enumerated"/>
+								<option id="com.atollic.truestudio.exe.debug.toolchain.gcc.optimization.level.1910561125" name="Optimization Level" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc.optimization.level" useByScannerDiscovery="false" value="com.atollic.truestudio.gcc.optimization.level.00" valueType="enumerated"/>
 								<option id="com.atollic.truestudio.exe.debug.toolchain.gcc.debug.info.787520930" name="Debug Level" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc.debug.info" useByScannerDiscovery="false" value="com.atollic.truestudio.gcc.debug.info.3" valueType="enumerated"/>
 								<option id="com.atollic.truestudio.gcc.optimization.no_strict_aliasing.1175528047" name="No strict aliasing" superClass="com.atollic.truestudio.gcc.optimization.no_strict_aliasing" useByScannerDiscovery="false" value="false" valueType="boolean"/>
 								<option id="com.atollic.truestudio.gcc.optimization.slow_flash_data.594048151" name="Assume loading data from flash is slower than fetching instruction (-mslow-flash-data)" superClass="com.atollic.truestudio.gcc.optimization.slow_flash_data" useByScannerDiscovery="false" value="false" valueType="boolean"/>
@@ -191,7 +191,7 @@
 					</folderInfo>
 					<fileInfo id="com.atollic.truestudio.exe.debug.2133610638.1598012064" name="resize.c" rcbsApplicability="disable" resourcePath="src/hw/core/resize.c" toolsToInvoke="com.atollic.truestudio.exe.debug.toolchain.gcc.2005540331.735391038">
 						<tool id="com.atollic.truestudio.exe.debug.toolchain.gcc.2005540331.735391038" name="C Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc.2005540331">
-							<option id="com.atollic.truestudio.exe.debug.toolchain.gcc.optimization.level.1362951509" name="Optimization Level" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc.optimization.level" useByScannerDiscovery="false" value="com.atollic.truestudio.gcc.optimization.level.02" valueType="enumerated"/>
+							<option id="com.atollic.truestudio.exe.debug.toolchain.gcc.optimization.level.1362951509" name="Optimization Level" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc.optimization.level" useByScannerDiscovery="false" value="com.atollic.truestudio.gcc.optimization.level.00" valueType="enumerated"/>
 							<inputType id="com.atollic.truestudio.gcc.input.1191894167" superClass="com.atollic.truestudio.gcc.input"/>
 						</tool>
 					</fileInfo>
@@ -205,7 +205,7 @@
 								<inputType id="com.atollic.truestudio.as.input.1526845796" name="Input" superClass="com.atollic.truestudio.as.input"/>
 							</tool>
 							<tool id="com.atollic.truestudio.exe.debug.toolchain.gcc.1904882595" name="C Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc.2005540331">
-								<option id="com.atollic.truestudio.exe.debug.toolchain.gcc.optimization.level.244550430" name="Optimization Level" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc.optimization.level" useByScannerDiscovery="false" value="com.atollic.truestudio.gcc.optimization.level.02" valueType="enumerated"/>
+								<option id="com.atollic.truestudio.exe.debug.toolchain.gcc.optimization.level.244550430" name="Optimization Level" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc.optimization.level" useByScannerDiscovery="false" value="com.atollic.truestudio.gcc.optimization.level.00" valueType="enumerated"/>
 								<inputType id="com.atollic.truestudio.gcc.input.1294379489" superClass="com.atollic.truestudio.gcc.input"/>
 							</tool>
 							<tool id="com.atollic.truestudio.exe.debug.toolchain.ld.589781217" name="C Linker" superClass="com.atollic.truestudio.exe.debug.toolchain.ld.864976709"/>
@@ -227,7 +227,7 @@
 								<inputType id="com.atollic.truestudio.as.input.222119704" name="Input" superClass="com.atollic.truestudio.as.input"/>
 							</tool>
 							<tool id="com.atollic.truestudio.exe.debug.toolchain.gcc.867875261" name="C Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc.2005540331">
-								<option id="com.atollic.truestudio.exe.debug.toolchain.gcc.optimization.level.1588952500" name="Optimization Level" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc.optimization.level" useByScannerDiscovery="false" value="com.atollic.truestudio.gcc.optimization.level.02" valueType="enumerated"/>
+								<option id="com.atollic.truestudio.exe.debug.toolchain.gcc.optimization.level.1588952500" name="Optimization Level" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc.optimization.level" useByScannerDiscovery="false" value="com.atollic.truestudio.gcc.optimization.level.00" valueType="enumerated"/>
 								<inputType id="com.atollic.truestudio.gcc.input.909257745" superClass="com.atollic.truestudio.gcc.input"/>
 							</tool>
 							<tool id="com.atollic.truestudio.exe.debug.toolchain.ld.748415803" name="C Linker" superClass="com.atollic.truestudio.exe.debug.toolchain.ld.864976709"/>
