@@ -248,17 +248,7 @@ SECTIONS
     *(.mb1rodata*)
   } >MEMORY_B1
 
-  .sdram :
-  {
-    . = ALIGN(4);
-    _ssram_d1 = .;       /* create a global symbol at sram_d1 start */
-    *(.sram_d1)
-    *(.sram_d1*)
-    
-    . = ALIGN(4);
-    _esram_d1 = .;       /* create a global symbol at sram_d1 end */
-  } >SDRAM_BUF AT> FLASH
-      
+     
   
   /* Remove information from the standard libraries */
   /DISCARD/ :
@@ -270,4 +260,5 @@ SECTIONS
 
   .ARM.attributes 0 : { *(.ARM.attributes) }
   .NoneCacheableMem (NOLOAD): { *(.NoneCacheableMem) } >SRAM_D2
+  .sdram_buf (NOLOAD): { *(.sdram_buf) } >SDRAM_BUF
 }

@@ -39,7 +39,7 @@ __attribute__((section(".tag"))) flash_tag_t fw_tag =
 
 
 
-extern "C" void fmsxMain(void);
+extern "C" void fake86Main(void);
 static void threadEmul(void const *argument);
 
 
@@ -48,7 +48,6 @@ void apInit(void)
   uartOpen(_DEF_UART1, 57600);
   uartOpen(_DEF_UART2, 57600);
   cmdifOpen(_DEF_UART1, 57600);
-
 
 
   osThreadDef(threadEmul, threadEmul, _HW_DEF_RTOS_THREAD_PRI_EMUL, 0, _HW_DEF_RTOS_THREAD_MEM_EMUL);
@@ -88,7 +87,7 @@ static void threadEmul(void const *argument)
 {
   UNUSED(argument);
 
-  fmsxMain();
+  fake86Main();
 
   while(1)
   {

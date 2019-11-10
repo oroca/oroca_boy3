@@ -161,4 +161,18 @@
 
 
 
+
+#define fopen     ob_fopen
+#define fclose    ob_fclose
+#define fread     ob_fread
+#define fwrite    ob_fwrite
+#define fgets     ob_fgets
+#define fseek     ob_fseek
+#define rewind    ob_frewind
+#define fgetc     ob_fgetc
+#define ftell     ob_ftell
+
+
+
+
 #endif /* SRC_HW_HW_DEF_H_ */
