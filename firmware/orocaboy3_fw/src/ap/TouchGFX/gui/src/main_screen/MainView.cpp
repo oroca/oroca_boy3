@@ -118,7 +118,7 @@ void MainView::handleKeyEvent(uint8_t key)
       switch(swipeContainer_emulator.currentPage)
       {
         case 3:
-          MainViewBase::handleKeyEvent(49);
+          application().gotobtn_showScreenNoTransition();
           break;
 
         default:

@@ -14,12 +14,6 @@
 
 
 
-static struct {
-  FATFS work;
-  struct device *dev;
-} mount_table[_VOLUMES];
-
-
 
 FILE *ob_fopen(const char *filename, const char *mode)
 {
@@ -27,11 +21,11 @@ FILE *ob_fopen(const char *filename, const char *mode)
   BYTE flags = 0;
   FIL *fil;
   int i;
-  printf("@baram 1\n");
+
   fil = malloc(sizeof(FIL));
   if (!fil)
     return NULL;
-  printf("@baram 2\n");
+
   for (i=0; mode[i] != 0; i++) {
     switch (mode[i]) {
       case 'w':
@@ -45,13 +39,13 @@ FILE *ob_fopen(const char *filename, const char *mode)
         break;
     }
   }
-  printf("@baram 3 %s %d\n", filename, flags);
+
   res = f_open(fil, filename, flags);
   if (res != FR_OK) {
     free(fil);
     return NULL;
   }
-  printf("@baram 4\n");
+
   return (FILE *) fil;
 }
 
@@ -138,4 +132,18 @@ long ob_ftell(FILE *stream)
 {
   FIL *fil = (FIL *) stream;
   return f_tell(fil);
+}
+
+int ob_fgetc(FILE *stream)
+{
+  char c;
+  FIL *fil = (FIL *)stream;
+  FRESULT res;
+  UINT bread;
+
+  res = f_read(fil, &c, 1, &bread);
+  if (res != FR_OK)
+    return (EOF);
+
+  return (c);
 }
