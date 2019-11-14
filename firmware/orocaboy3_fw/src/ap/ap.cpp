@@ -38,8 +38,13 @@ void apMain(void)
     {
       pre_time = millis();
       ledToggle(_DEF_LED1);
+      //logPrintf("bat %d %d\n", batteryGetLevel(), batteryGetVoltage());
+      //logPrintf("joyt %d %d\n", joypadGetX(), joypadGetY());
     }
 
     esp32Update();
+    batteryUpdate();
+    joypadUpdate();
+    osdUpdate();
   }
 }

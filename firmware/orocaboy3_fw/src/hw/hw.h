@@ -39,6 +39,9 @@
 #include "ltdc.h"
 #include "slot.h"
 #include "esp32.h"
+#include "battery.h"
+#include "joypad.h"
+#include "osd.h"
 
 #include "sd.h"
 #include "fatfs/fatfs.h"

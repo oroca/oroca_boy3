@@ -47,7 +47,6 @@ protected:
      */
     touchgfx::Box box_bg;
     touchgfx::Image image_speaker;
-    touchgfx::Image image1;
     touchgfx::TextArea textArea_title;
     touchgfx::AnimatedImage animatedImage_title;
     touchgfx::SwipeContainer swipeContainer_emulator;
@@ -64,9 +63,13 @@ protected:
     touchgfx::TextArea test_menu;
 
     touchgfx::ButtonWithLabel button_load;
-    touchgfx::ScalableImage image_bat;
-    touchgfx::ScalableImage image_sd;
     touchgfx::ScalableImage image_drive;
+    touchgfx::Image image_bat3;
+    touchgfx::Image image_bat4;
+    touchgfx::Image image_bat2;
+    touchgfx::Image image_bat1;
+    touchgfx::ScalableImage image_bat;
+    touchgfx::Image image_sd;
 
 private:
 

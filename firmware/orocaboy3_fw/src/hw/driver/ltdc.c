@@ -15,6 +15,7 @@
 
 //#define FRAME_BUF_ADDR        (0x24000000)
 #define FRAME_BUF_ADDR        SDRAM_ADDR_IMAGE
+#define FRAME_OSD_ADDR        (SDRAM_ADDR_IMAGE + (1024+512)*1024)
 
 #define LCD_WIDTH             ((uint16_t)320)   /* LCD PIXEL WIDTH            */
 #define LCD_HEIGHT            ((uint16_t)240)   /* LCD PIXEL HEIGHT           */
@@ -37,6 +38,9 @@
 
 LTDC_HandleTypeDef hltdc;
 bool ltdc_request_draw = false;
+
+uint16_t *ltdc_osd_draw_buffer = (uint16_t *)FRAME_OSD_ADDR;
+
 
 
 bool ltdcInit(void)
@@ -114,12 +118,25 @@ bool ltdcInit(void)
     p_data[i] = 0x00;
   }
 
-  ltdcLayerInit(0, FRAME_BUF_ADDR);
-  //ltdcLayerInit(1, sdramGetAddr());
+  p_data = (uint8_t *)(FRAME_BUF_ADDR + 1024*1024);
+
+  for (int i=0; i<LCD_WIDTH*LCD_HEIGHT*2; i++)
+  {
+    p_data[i] = 0x00;
+  }
+
+  ltdcLayerInit(LTDC_LAYER_1, FRAME_BUF_ADDR);
+  ltdcLayerInit(LTDC_LAYER_2, FRAME_OSD_ADDR);
+
+  ltdcSetAlpha(LTDC_LAYER_2, 0);
 
   return ret;
 }
 
+void ltdcSetAlpha(uint16_t LayerIndex, uint32_t value)
+{
+  HAL_LTDC_SetAlpha(&hltdc, value, LayerIndex);
+}
 
 bool ltdcLayerInit(uint16_t LayerIndex, uint32_t Address)
 {
@@ -135,11 +152,21 @@ bool ltdcLayerInit(uint16_t LayerIndex, uint32_t Address)
      Vertical start   = vertical synchronization + vertical back porch     = 12
      Horizontal stop = Horizontal start + window width -1 = 43 + 480 -1
      Vertical stop   = Vertical start + window height -1  = 12 + 272 -1      */
-  pLayerCfg.WindowX0 = 0;
-  pLayerCfg.WindowX1 = LCD_WIDTH;
-  pLayerCfg.WindowY0 = 0;
-  pLayerCfg.WindowY1 = LCD_HEIGHT;
 
+  if (LayerIndex == LTDC_LAYER_1)
+  {
+    pLayerCfg.WindowX0 = 0;
+    pLayerCfg.WindowX1 = LCD_WIDTH;
+    pLayerCfg.WindowY0 = 0;
+    pLayerCfg.WindowY1 = LCD_HEIGHT;
+  }
+  else
+  {
+    pLayerCfg.WindowX0 = (LCD_WIDTH-200)/2;
+    pLayerCfg.WindowX1 = pLayerCfg.WindowX0 + 200;
+    pLayerCfg.WindowY0 = (LCD_HEIGHT-200)/2;
+    pLayerCfg.WindowY1 = pLayerCfg.WindowY0 + 200;
+  }
   /* Pixel Format configuration*/
   pLayerCfg.PixelFormat = LTDC_PIXEL_FORMAT_RGB565;
 

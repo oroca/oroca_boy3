@@ -25,7 +25,7 @@ __attribute__((section(".tag"))) flash_tag_t fw_tag =
      // fw info
      //
      0xAAAA5555,        // magic_number
-     "V191105R1",       // version_str
+     "V191114R1",       // version_str
      "OROCABOY3",       // board_str
      "Launcher",        // name
      __DATE__,
@@ -43,6 +43,11 @@ __attribute__((section(".tag"))) flash_tag_t fw_tag =
 
 void hwInit(void)
 {
+  uint8_t eep_data[2];
+  uint8_t volume_data;
+  uint8_t bright_data;
+
+
   bspInit();
 
   resetInit();
@@ -112,7 +117,45 @@ void hwInit(void)
   }
 
   esp32Init();
+  batteryInit();
+  joypadInit();
+  osdInit();
 
+
+
+  eep_data[0] = eepromReadByte(_EEP_ADDR_VOLUME+0);
+  eep_data[1] = eepromReadByte(_EEP_ADDR_VOLUME+1);
+  if ((uint8_t)eep_data[0] == (uint8_t)~eep_data[1])
+  {
+    volume_data = eep_data[0];
+  }
+  else
+  {
+    volume_data = 0;
+    eepromWriteByte(_EEP_ADDR_VOLUME+0, volume_data);
+    eepromWriteByte(_EEP_ADDR_VOLUME+1, ~volume_data);
+  }
+
+
+  eep_data[0] = eepromReadByte(_EEP_ADDR_BRIGHT+0);
+  eep_data[1] = eepromReadByte(_EEP_ADDR_BRIGHT+1);
+
+  if ((uint8_t)eep_data[0] == (uint8_t)(~eep_data[1]))
+  {
+    bright_data = eep_data[0];
+  }
+  else
+  {
+    bright_data = 100;
+    eepromWriteByte(_EEP_ADDR_BRIGHT+0, bright_data);
+    eepromWriteByte(_EEP_ADDR_BRIGHT+1, ~bright_data);
+  }
+
+
+  logPrintf("volume    \t\t: %d\n", volume_data);
+  logPrintf("bright    \t\t: %d\n", bright_data);
+
+  pwmWrite(0, map(bright_data, 0, 100, 255, 0));
 
   logPrintf("Start...\r\n");
 

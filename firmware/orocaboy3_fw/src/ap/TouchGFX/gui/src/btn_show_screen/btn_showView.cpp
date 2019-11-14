@@ -64,8 +64,8 @@ void btn_showView::handleTickEvent(void)
 
 
 
-  btn_joy.moveTo(44  + map(adcRead(0), 0, 4095, -20, 20),
-                 168 - map(adcRead(1), 0, 4095, -20, 20));
+  btn_joy.moveTo(44  + map(joypadGetX(), -100, 100, -20, 20),
+                 168 - map(joypadGetY(), -100, 100, -20, 20));
   btn_joy.invalidate();
 #endif
 }

@@ -90,14 +90,19 @@ bool eepromWriteByte(uint32_t addr, uint8_t data_in)
 
   sub_addr = (addr>>8) & 0x03;
 
+  ret = i2cWriteByte(i2c_ch, i2c_addr + sub_addr, addr & 0xFF, data_in, 10);
+
+
   pre_time = millis();
   while(millis()-pre_time < 100)
   {
-    ret = i2cWriteByte(i2c_ch, i2c_addr + sub_addr, addr & 0xFF, data_in, 10);
+
+    ret = i2cRead16Byte(i2c_ch, i2c_addr, addr, &data_in, 1);
     if (ret == true)
     {
       break;
     }
+    delay(1);
   }
 
   return ret;

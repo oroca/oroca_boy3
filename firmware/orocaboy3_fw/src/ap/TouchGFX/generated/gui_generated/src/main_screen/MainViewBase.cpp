@@ -14,9 +14,6 @@ MainViewBase::MainViewBase()
     image_speaker.setXY(7, 2);
     image_speaker.setBitmap(touchgfx::Bitmap(BITMAP_A4_ID));
 
-    image1.setXY(279, 2);
-    image1.setBitmap(touchgfx::Bitmap(BITMAP_A2_ID));
-
     textArea_title.setXY(124, 5);
     textArea_title.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 8, 245));
     textArea_title.setLinespacing(0);
@@ -75,28 +72,42 @@ MainViewBase::MainViewBase()
     button_load.setLabelColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
     button_load.setLabelColorPressed(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
 
-    image_bat.setBitmap(touchgfx::Bitmap(BITMAP_B1_ID));
-    image_bat.setPosition(287, 3, 18, 22);
-    image_bat.setScalingAlgorithm(touchgfx::ScalableImage::BILINEAR_INTERPOLATION);
-
-    image_sd.setBitmap(touchgfx::Bitmap(BITMAP_SD_CARD_ID));
-    image_sd.setPosition(262, 5, 18, 18);
-    image_sd.setScalingAlgorithm(touchgfx::ScalableImage::BILINEAR_INTERPOLATION);
-
     image_drive.setBitmap(touchgfx::Bitmap(BITMAP_USB_DRIVE_ID));
     image_drive.setPosition(242, 3, 23, 20);
     image_drive.setScalingAlgorithm(touchgfx::ScalableImage::BILINEAR_INTERPOLATION);
 
+    image_bat3.setXY(279, 2);
+    image_bat3.setBitmap(touchgfx::Bitmap(BITMAP_BAT3_ID));
+
+    image_bat4.setXY(279, 2);
+    image_bat4.setBitmap(touchgfx::Bitmap(BITMAP_BAT4_ID));
+
+    image_bat2.setXY(279, 2);
+    image_bat2.setBitmap(touchgfx::Bitmap(BITMAP_BAT2_ID));
+
+    image_bat1.setXY(279, 2);
+    image_bat1.setBitmap(touchgfx::Bitmap(BITMAP_A2_ID));
+
+    image_bat.setBitmap(touchgfx::Bitmap(BITMAP_B1_ID));
+    image_bat.setPosition(287, 3, 18, 22);
+    image_bat.setScalingAlgorithm(touchgfx::ScalableImage::BILINEAR_INTERPOLATION);
+
+    image_sd.setXY(261, 3);
+    image_sd.setBitmap(touchgfx::Bitmap(BITMAP_SD_CARD_ID));
+
     add(box_bg);
     add(image_speaker);
-    add(image1);
     add(textArea_title);
     add(animatedImage_title);
     add(swipeContainer_emulator);
     add(button_load);
+    add(image_drive);
+    add(image_bat3);
+    add(image_bat4);
+    add(image_bat2);
+    add(image_bat1);
     add(image_bat);
     add(image_sd);
-    add(image_drive);
 }
 
 void MainViewBase::setupScreen()

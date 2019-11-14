@@ -19,6 +19,11 @@ void MainView::setupScreen()
   image_bat.setVisible(false);
   image_sd.setVisible(false);
   image_drive.setVisible(false);
+
+  image_bat1.setVisible(true);
+  image_bat2.setVisible(false);
+  image_bat3.setVisible(false);
+  image_bat4.setVisible(false);
 }
 
 void MainView::tearDownScreen()
@@ -60,6 +65,35 @@ void MainView::handleTickEvent(void)
   if (millis()-pre_time_bat >= 100)
   {
     pre_time_bat = millis();
+
+
+    image_bat1.setVisible(false);
+    image_bat2.setVisible(false);
+    image_bat3.setVisible(false);
+    image_bat4.setVisible(false);
+
+    if (batteryGetLevel() > 80)
+    {
+      image_bat1.setVisible(true);
+    }
+    else if (batteryGetLevel() > 50)
+    {
+      image_bat2.setVisible(true);
+    }
+    else if (batteryGetLevel() > 20)
+    {
+      image_bat3.setVisible(true);
+    }
+    else
+    {
+      image_bat4.setVisible(true);
+    }
+    image_bat1.invalidate();
+    image_bat2.invalidate();
+    image_bat3.invalidate();
+    image_bat4.invalidate();
+
+
     if (gpioPinRead(_PIN_GPIO_BAT_CHG) == _DEF_LOW)
     {
       image_bat.setVisible(true);

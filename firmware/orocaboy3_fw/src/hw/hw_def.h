@@ -40,6 +40,10 @@
 #define _USE_HW_QSPI
 #define _USE_HW_TOUCHGFX
 #define _USE_HW_ESP32
+#define _USE_HW_BATTERY
+#define _USE_HW_JOYPAD
+#define _USE_HW_OSD
+
 
 
 #define _USE_HW_USB
@@ -157,5 +161,11 @@
 #define _PIN_GPIO_SDCARD_DETECT       4
 #define _PIN_GPIO_ESP_RST             5
 #define _PIN_GPIO_ESP_BOOT            6
+
+
+#define _EEP_ADDR_VOLUME              0
+#define _EEP_ADDR_BRIGHT              2
+
+
 
 #endif /* SRC_HW_HW_DEF_H_ */
