@@ -28,6 +28,9 @@ bool slotRunFromFlash(uint8_t slot_index);
 bool slotRunFromFile(const char *file_name);
 bool slotDelFromFlash(uint8_t slot_index);
 bool slotRunFromFolder(uint8_t slot_index);
+bool slotGetTag(uint8_t slot_index, flash_tag_t *p_tag);
+bool slotGetTagFromFolder(uint8_t slot_index, flash_tag_t *p_tag);
+bool slotGetTagFromFlash(uint8_t slot_index, flash_tag_t *p_tag);
 void slotJumpToFw(uint32_t addr);
 
 

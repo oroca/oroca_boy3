@@ -22,7 +22,7 @@ __attribute__((section(".tag"))) flash_tag_t fw_tag =
      // fw info
      //
      0xAAAA5555,        // magic_number
-     "V191106R1",       // version_str
+     "V191117R1",       // version_str
      "OROCABOY3",       // board_str
      "DOOM",           // name
      __DATE__,
@@ -48,25 +48,10 @@ static void threadEmul(void const *argument);
 
 void apInit(void)
 {
-  //uint32_t *p_data2 = (uint32_t *)0x30000001;
-  //p_data2[0] = 1;
-
-
   uartOpen(_DEF_UART1, 57600);
   uartOpen(_DEF_UART2, 57600);
   cmdifOpen(_DEF_UART1, 57600);
 
-  uint8_t *p_data[100];
-  int i;
-
-  for (i=0; i<100; i++)
-  {
-    p_data[i] = (uint8_t *)memMalloc(1);
-  }
-  for (i=0; i<100; i++)
-  {
-    memFree(p_data[i]);
-  }
 
 
   osThreadDef(threadEmul, threadEmul, _HW_DEF_RTOS_THREAD_PRI_EMUL, 0, _HW_DEF_RTOS_THREAD_MEM_EMUL);
@@ -96,6 +81,10 @@ void apMain(void)
       ledToggle(_DEF_LED1);
     }
     osThreadYield();
+
+    batteryUpdate();
+    joypadUpdate();
+    osdUpdate();
   }
 }
 

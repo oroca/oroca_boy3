@@ -44,6 +44,9 @@
 #include "speaker.h"
 #include "mpu.h"
 #include "resize.h"
+#include "battery.h"
+#include "joypad.h"
+#include "osd.h"
 
 #include "sd.h"
 #include "fatfs/fatfs.h"

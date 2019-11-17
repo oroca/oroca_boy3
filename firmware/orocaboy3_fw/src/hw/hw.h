@@ -42,6 +42,9 @@
 #include "battery.h"
 #include "joypad.h"
 #include "osd.h"
+#include "dac.h"
+#include "lcd.h"
+#include "speaker.h"
 
 #include "sd.h"
 #include "fatfs/fatfs.h"

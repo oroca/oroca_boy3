@@ -43,7 +43,8 @@
 #define _USE_HW_BATTERY
 #define _USE_HW_JOYPAD
 #define _USE_HW_OSD
-
+#define _USE_HW_SPEAKER
+#define _USE_HW_LCD
 
 
 #define _USE_HW_USB
@@ -94,6 +95,9 @@
 #define _USE_HW_ADC
 #define      HW_ADC_MAX_CH          3
 #define      HW_USE_CMDIF_ADC       1
+
+#define _USE_HW_DAC
+#define      HW_DAC_MAX_CH          1
 
 #define _USE_HW_SD
 #define      HW_SD_USE_CMDIF        1
@@ -161,6 +165,9 @@
 #define _PIN_GPIO_SDCARD_DETECT       4
 #define _PIN_GPIO_ESP_RST             5
 #define _PIN_GPIO_ESP_BOOT            6
+#define _PIN_GPIO_SPK_EN              7
+
+
 
 
 #define _EEP_ADDR_VOLUME              0

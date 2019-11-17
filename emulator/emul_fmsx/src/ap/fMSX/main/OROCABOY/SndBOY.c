@@ -60,7 +60,6 @@ unsigned int InitAudio(unsigned int Rate,unsigned int Latency)
   stop = 0;
 
   speakerEnable();
-  speakerSetVolume(10);
   speakerStart(Rate);
 
   audioQueue = xQueueCreate(1, sizeof(uint16_t*));

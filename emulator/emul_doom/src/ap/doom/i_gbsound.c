@@ -382,7 +382,6 @@ static boolean I_SDL_InitSound(boolean _use_sfx_prefix)
     }
 
     speakerEnable();
-    speakerSetVolume(20);
     speakerStart(11025);
 
     osThreadDef(threadAudio, threadAudio, _HW_DEF_RTOS_THREAD_PRI_MAIN, 0, _HW_DEF_RTOS_THREAD_MEM_MAIN);

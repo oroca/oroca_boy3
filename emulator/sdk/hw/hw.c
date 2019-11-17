@@ -75,12 +75,17 @@ void hwInit(void)
   dacInit();
   timerInit();
   speakerInit();
-
+  batteryInit();
+  joypadInit();
+  osdInit();
 
   if (sdInit() == true)
   {
     fatfsInit();
   }
+
+  logPrintf("volume    \t\t: %d\n", speakerGetVolume());
+  logPrintf("bright    \t\t: %d\n", lcdGetBackLight());
 
   logPrintf("Start...\r\n");
 

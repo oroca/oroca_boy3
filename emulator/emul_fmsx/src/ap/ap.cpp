@@ -22,7 +22,7 @@ __attribute__((section(".tag"))) flash_tag_t fw_tag =
      // fw info
      //
      0xAAAA5555,        // magic_number
-     "V191109R1",       // version_str
+     "V191117R1",       // version_str
      "OROCABOY3",       // board_str
      "fMSX",            // name
      __DATE__,
@@ -78,6 +78,10 @@ void apMain(void)
       ledToggle(_DEF_LED1);
     }
     osThreadYield();
+
+    batteryUpdate();
+    joypadUpdate();
+    osdUpdate();
   }
 }
 

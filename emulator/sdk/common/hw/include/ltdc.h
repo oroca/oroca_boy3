@@ -42,6 +42,7 @@ enum class_color {
 bool ltdcInit(void);
 bool ltdcDrawAvailable(void);
 void ltdcRequestDraw(void);
+void ltdcSetAlpha(uint16_t LayerIndex, uint32_t value);
 uint16_t *ltdcGetFrameBuffer(void);
 uint16_t *ltdcGetCurrentFrameBuffer(void);
 int32_t  ltdcWidth(void);

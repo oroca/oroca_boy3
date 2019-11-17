@@ -11,10 +11,10 @@ MainViewBase::MainViewBase()
     box_bg.setPosition(0, 0, 320, 240);
     box_bg.setColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
 
-    image_speaker.setXY(7, 2);
+    image_speaker.setXY(4, 3);
     image_speaker.setBitmap(touchgfx::Bitmap(BITMAP_A4_ID));
 
-    textArea_title.setXY(124, 5);
+    textArea_title.setXY(124, 4);
     textArea_title.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 8, 245));
     textArea_title.setLinespacing(0);
     textArea_title.setTypedText(touchgfx::TypedText(T_SINGLEUSEID1));
@@ -60,8 +60,34 @@ MainViewBase::MainViewBase()
     page_button.add(test_menu);
     swipeContainer_emulator.add(page_button);
 
+    page_user1.setWidth(320);
+    page_user1.setHeight(150);
+
+    textArea_slot_title.setXY(1, 66);
+    textArea_slot_title.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
+    textArea_slot_title.setLinespacing(0);
+    textArea_slot_titleBuffer[0] = 0;
+    textArea_slot_title.setWildcard(textArea_slot_titleBuffer);
+    textArea_slot_title.resizeToCurrentText();
+    textArea_slot_title.setTypedText(touchgfx::TypedText(T_SINGLEUSEID8));
+    page_user1.add(textArea_slot_title);
+    swipeContainer_emulator.add(page_user1);
+
+    page_user2.setWidth(320);
+    page_user2.setHeight(150);
+
+    textArea_slot_title_1.setXY(1, 66);
+    textArea_slot_title_1.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
+    textArea_slot_title_1.setLinespacing(0);
+    textArea_slot_title_1Buffer[0] = 0;
+    textArea_slot_title_1.setWildcard(textArea_slot_title_1Buffer);
+    textArea_slot_title_1.resizeToCurrentText();
+    textArea_slot_title_1.setTypedText(touchgfx::TypedText(T_SINGLEUSEID9));
+    page_user2.add(textArea_slot_title_1);
+    swipeContainer_emulator.add(page_user2);
+
     swipeContainer_emulator.setPageIndicatorBitmaps(touchgfx::Bitmap(BITMAP_DARK_PAGEINDICATOR_DOT_INDICATOR_SMALL_NORMAL_ID), touchgfx::Bitmap(BITMAP_DARK_PAGEINDICATOR_DOT_INDICATOR_SMALL_HIGHLIGHT_ID));
-    swipeContainer_emulator.setPageIndicatorXY(130, 0);
+    swipeContainer_emulator.setPageIndicatorXY(115, 0);
     swipeContainer_emulator.setSwipeCutoff(50);
     swipeContainer_emulator.setEndSwipeElasticWidth(50);
     swipeContainer_emulator.setSelectedPage(0);
@@ -71,10 +97,6 @@ MainViewBase::MainViewBase()
     button_load.setLabelText(touchgfx::TypedText(T_SINGLEUSEID4));
     button_load.setLabelColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
     button_load.setLabelColorPressed(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
-
-    image_drive.setBitmap(touchgfx::Bitmap(BITMAP_USB_DRIVE_ID));
-    image_drive.setPosition(242, 3, 23, 20);
-    image_drive.setScalingAlgorithm(touchgfx::ScalableImage::BILINEAR_INTERPOLATION);
 
     image_bat3.setXY(279, 2);
     image_bat3.setBitmap(touchgfx::Bitmap(BITMAP_BAT3_ID));
@@ -95,19 +117,40 @@ MainViewBase::MainViewBase()
     image_sd.setXY(261, 3);
     image_sd.setBitmap(touchgfx::Bitmap(BITMAP_SD_CARD_ID));
 
+    textArea_volume.setXY(23, 0);
+    textArea_volume.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
+    textArea_volume.setLinespacing(0);
+    Unicode::snprintf(textArea_volumeBuffer, TEXTAREA_VOLUME_SIZE, "%s", touchgfx::TypedText(T_SINGLEUSEID6).getText());
+    textArea_volume.setWildcard(textArea_volumeBuffer);
+    textArea_volume.resizeToCurrentText();
+    textArea_volume.setTypedText(touchgfx::TypedText(T_SINGLEUSEID5));
+
+    image_drive.setXY(242, 4);
+    image_drive.setBitmap(touchgfx::Bitmap(BITMAP_USB1_ID));
+
+    textArea_slot.setXY(3, 227);
+    textArea_slot.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
+    textArea_slot.setLinespacing(0);
+    textArea_slotBuffer[0] = 0;
+    textArea_slot.setWildcard(textArea_slotBuffer);
+    textArea_slot.resizeToCurrentText();
+    textArea_slot.setTypedText(touchgfx::TypedText(T_SINGLEUSEID7));
+
     add(box_bg);
     add(image_speaker);
     add(textArea_title);
     add(animatedImage_title);
     add(swipeContainer_emulator);
     add(button_load);
-    add(image_drive);
     add(image_bat3);
     add(image_bat4);
     add(image_bat2);
     add(image_bat1);
     add(image_bat);
     add(image_sd);
+    add(textArea_volume);
+    add(image_drive);
+    add(textArea_slot);
 }
 
 void MainViewBase::setupScreen()

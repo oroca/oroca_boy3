@@ -10,13 +10,17 @@ struct Typography
 {
     static const touchgfx::FontId DEFAULT = 0;
     static const touchgfx::FontId TYPOGRAPHY_00 = 1;
+    static const touchgfx::FontId TYPOGRAPHY_01 = 2;
+    static const touchgfx::FontId TYPOGRAPHY_02 = 3;
 };
 
 struct TypographyFontIndex
 {
     static const touchgfx::FontId DEFAULT = 0;       // Asap_Regular_80_4bpp
     static const touchgfx::FontId TYPOGRAPHY_00 = 1; // NanumGothicCoding_Bold_18_4bpp
-    static const uint16_t NUMBER_OF_FONTS = 2;
+    static const touchgfx::FontId TYPOGRAPHY_01 = 2; // CONSOLA_TTF_17_4bpp
+    static const touchgfx::FontId TYPOGRAPHY_02 = 3; // NanumGothicCoding_Bold_10_4bpp
+    static const uint16_t NUMBER_OF_FONTS = 4;
 };
 
 class ApplicationFontProvider : public touchgfx::FontProvider

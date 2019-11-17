@@ -54,6 +54,41 @@ bool slotInit(void)
   return true;
 }
 
+bool slotGetTag(uint8_t slot_index, flash_tag_t *p_tag)
+{
+  bool ret = false;
+
+  ret = slotGetTagFromFolder(slot_index, p_tag);
+
+  if (ret != true)
+  {
+    ret = slotGetTagFromFlash(slot_index, p_tag);
+  }
+
+  return ret;
+}
+
+bool slotGetTagFromFlash(uint8_t slot_index, flash_tag_t *p_tag)
+{
+  uint32_t addr_fw;
+  flash_tag_t  *p_fw_tag;
+
+  addr_fw  = QSPI_FW_ADDR(slot_index);
+
+
+  p_fw_tag = (flash_tag_t *)addr_fw;
+
+
+  if (p_fw_tag->magic_number != FLASH_MAGIC_NUMBER)
+  {
+    return false;
+  }
+
+  *p_tag = *p_fw_tag;
+
+  return true;
+}
+
 bool slotRunFromFlash(uint8_t slot_index)
 {
   uint32_t addr_fw;
@@ -188,7 +223,7 @@ bool slotGetFile(uint8_t slot_index, slot_file_t *p_file)
   FILINFO fno;
   FIL file;
   UINT len;
-
+  bool ret = false;
 
   sprintf(slot_path, "/slot/%d", slot_index);
 
@@ -222,6 +257,8 @@ bool slotGetFile(uint8_t slot_index, slot_file_t *p_file)
 
             p_file->tag = slot_fw_tag;
             p_file->file_size = f_size(&file);
+
+            ret = true;
           }
           f_close(&file);
           break;
@@ -231,7 +268,21 @@ bool slotGetFile(uint8_t slot_index, slot_file_t *p_file)
     f_closedir(&dir);
   }
 
-  return true;
+  return ret;
+}
+
+bool slotGetTagFromFolder(uint8_t slot_index, flash_tag_t *p_tag)
+{
+  bool ret = false;
+  slot_file_t slot_file;
+
+  if (slotGetFile(slot_index, &slot_file) == true)
+  {
+    *p_tag = slot_file.tag;
+    ret = true;
+  }
+
+  return ret;
 }
 
 bool slotRunFromFolder(uint8_t slot_index)

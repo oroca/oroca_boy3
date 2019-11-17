@@ -26,10 +26,10 @@
             "RelativeFilename": "a4.png",
             "Alpha": 255,
             "Name": "image_speaker",
-            "X": 7,
-            "Y": 2,
-            "Width": 24,
-            "Height": 24,
+            "X": 4,
+            "Y": 3,
+            "Width": 20,
+            "Height": 20,
             "Type": "Image",
             "Visible": true,
             "Draggable": false,
@@ -50,7 +50,7 @@
             "LineSpacing": 0,
             "Name": "textArea_title",
             "X": 124,
-            "Y": 5,
+            "Y": 4,
             "Width": 72,
             "Height": 18,
             "Type": "TextArea",
@@ -214,11 +214,97 @@
                 "Clickable": false,
                 "Fadeable": false,
                 "Moveable": false
+              },
+              {
+                "Components": [
+                  {
+                    "TextId": "SingleUseId8",
+                    "TextRotation": "0",
+                    "Color": {
+                      "Red": 0,
+                      "Green": 0,
+                      "Blue": 0
+                    },
+                    "Alpha": 255,
+                    "AutoSize": true,
+                    "LineSpacing": 0,
+                    "Wildcard1": {
+                      "UseBuffer": true,
+                      "BufferSize": 48
+                    },
+                    "Name": "textArea_slot_title",
+                    "X": 1,
+                    "Y": 66,
+                    "Width": 0,
+                    "Height": 18,
+                    "Type": "TextArea",
+                    "Visible": true,
+                    "Draggable": false,
+                    "Clickable": false,
+                    "Fadeable": false,
+                    "Moveable": false
+                  }
+                ],
+                "IsCacheableContainer": false,
+                "Name": "page_user1",
+                "X": 0,
+                "Y": 0,
+                "Width": 320,
+                "Height": 150,
+                "Type": "Container",
+                "Visible": true,
+                "Draggable": false,
+                "Clickable": false,
+                "Fadeable": false,
+                "Moveable": false
+              },
+              {
+                "Components": [
+                  {
+                    "TextId": "SingleUseId9",
+                    "TextRotation": "0",
+                    "Color": {
+                      "Red": 0,
+                      "Green": 0,
+                      "Blue": 0
+                    },
+                    "Alpha": 255,
+                    "AutoSize": true,
+                    "LineSpacing": 0,
+                    "Wildcard1": {
+                      "UseBuffer": true,
+                      "BufferSize": 48
+                    },
+                    "Name": "textArea_slot_title_1",
+                    "X": 1,
+                    "Y": 66,
+                    "Width": 0,
+                    "Height": 18,
+                    "Type": "TextArea",
+                    "Visible": true,
+                    "Draggable": false,
+                    "Clickable": false,
+                    "Fadeable": false,
+                    "Moveable": false
+                  }
+                ],
+                "IsCacheableContainer": false,
+                "Name": "page_user2",
+                "X": 0,
+                "Y": 0,
+                "Width": 320,
+                "Height": 150,
+                "Type": "Container",
+                "Visible": true,
+                "Draggable": false,
+                "Clickable": false,
+                "Fadeable": false,
+                "Moveable": false
               }
             ],
             "SwipeCutoff": 50,
             "ShowPageIndicator": true,
-            "PageIndicatorX": 130,
+            "PageIndicatorX": 115,
             "PageIndicatorY": 0,
             "CenteredX": true,
             "IndicatorImageNormal": "__designer\\Dark_PageIndicator_dot_indicator_small_normal.png",
@@ -262,22 +348,6 @@
             "Width": 170,
             "Height": 60,
             "Type": "ButtonWithLabel",
-            "Visible": true,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
-          },
-          {
-            "Filename": "usb_drive.png",
-            "Alpha": 255,
-            "ScalingAlgorithm": "Bilinear Interpolation",
-            "Name": "image_drive",
-            "X": 242,
-            "Y": 3,
-            "Width": 23,
-            "Height": 20,
-            "Type": "ScalableImage",
             "Visible": true,
             "Draggable": false,
             "Clickable": false,
@@ -369,6 +439,76 @@
             "Width": 21,
             "Height": 22,
             "Type": "Image",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "TextId": "SingleUseId5",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 0,
+              "Green": 0,
+              "Blue": 0
+            },
+            "Alpha": 255,
+            "AutoSize": true,
+            "LineSpacing": 0,
+            "Wildcard1": {
+              "TextId": "SingleUseId6",
+              "UseBuffer": true,
+              "BufferSize": 10
+            },
+            "Name": "textArea_volume",
+            "X": 23,
+            "Y": 0,
+            "Width": 37,
+            "Height": 20,
+            "Type": "TextArea",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "RelativeFilename": "usb1.png",
+            "Alpha": 255,
+            "Name": "image_drive",
+            "X": 242,
+            "Y": 4,
+            "Width": 21,
+            "Height": 21,
+            "Type": "Image",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "TextId": "SingleUseId7",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 0,
+              "Green": 0,
+              "Blue": 0
+            },
+            "Alpha": 255,
+            "AutoSize": true,
+            "LineSpacing": 0,
+            "Wildcard1": {
+              "UseBuffer": true,
+              "BufferSize": 48
+            },
+            "Name": "textArea_slot",
+            "X": 3,
+            "Y": 227,
+            "Width": 25,
+            "Height": 10,
+            "Type": "TextArea",
             "Visible": true,
             "Draggable": false,
             "Clickable": false,
@@ -843,6 +983,26 @@
       },
       {
         "TextEntryId": "SingleUseId4",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId5",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId6",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId7",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId8",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId9",
         "IsResource": false
       }
     ],

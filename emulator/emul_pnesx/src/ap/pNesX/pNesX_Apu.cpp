@@ -196,7 +196,7 @@ void ApuAdjustVolume(int8_t step)
   sound_vol += step;
   sound_vol = constrain(sound_vol, 0, 100);
 
-  speakerSetVolume(sound_vol);
+  //speakerSetVolume(sound_vol);
 }
 /*-------------------------------------------------------------------*/
 /*  Apu Initialize Function                                          */
@@ -207,7 +207,7 @@ void ApuInit()
   timerAttachInterrupt(_DEF_TIMER1, pNesX_ISR);
   timerStart(_DEF_TIMER1);
 
-  speakerSetVolume(sound_vol);
+  //speakerSetVolume(sound_vol);
   speakerStart(DACFreq);
 }
 

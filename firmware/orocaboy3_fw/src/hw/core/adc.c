@@ -212,7 +212,7 @@ uint32_t adcConvVoltage(uint8_t ch, uint32_t adc_value)
       break;
 
     case 2:
-      ret  = (uint32_t)((adc_value * 3300 * 26) / (4095*10));
+      ret  = (uint32_t)((adc_value * 3445 * 26) / (4095*10));
       ret += 5;
       ret /= 10;
       break;

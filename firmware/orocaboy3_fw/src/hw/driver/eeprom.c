@@ -88,6 +88,7 @@ bool eepromWriteByte(uint32_t addr, uint8_t data_in)
   uint32_t pre_time;
   bool ret;
 
+
   sub_addr = (addr>>8) & 0x03;
 
   ret = i2cWriteByte(i2c_ch, i2c_addr + sub_addr, addr & 0xFF, data_in, 10);

@@ -41,6 +41,9 @@
 #define _USE_HW_QSPI
 #define _USE_HW_SPEAKER
 #define _USE_HW_MPU
+#define _USE_HW_BATTERY
+#define _USE_HW_JOYPAD
+#define _USE_HW_OSD
 
 
 #define _USE_HW_LCD
@@ -155,10 +158,15 @@
 #define _HW_DEF_ADC_Y_AXIS            1
 
 
+#define _PIN_GPIO_BAT_CHG             0
 #define _PIN_GPIO_LCD_BK_EN           2
 #define _PIN_GPIO_SDCARD_DETECT       4
+#define _PIN_GPIO_ESP_RST             5
+#define _PIN_GPIO_ESP_BOOT            6
 #define _PIN_GPIO_SPK_EN              7
 
+#define _EEP_ADDR_VOLUME              0
+#define _EEP_ADDR_BRIGHT              2
 
 
 

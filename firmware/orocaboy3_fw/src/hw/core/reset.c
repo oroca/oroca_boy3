@@ -62,6 +62,11 @@ void resetSetBits(uint8_t data)
 
 void resetRunSoftReset(void)
 {
+  SysTick->CTRL = 0;
+  __set_CONTROL(0x00);
+  __set_MSP(*(__IO uint32_t*)FLASH_BANK1_BASE);
+  SCB->VTOR = FLASH_BANK1_BASE;
+
   HAL_NVIC_SystemReset();
 }
 
