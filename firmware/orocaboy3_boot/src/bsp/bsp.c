@@ -19,7 +19,7 @@ extern void usbDeInit(void);
 
 void bspInit(void)
 {
-
+  HAL_DeInit();
   HAL_Init();
 
 

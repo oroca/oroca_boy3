@@ -22,7 +22,7 @@ static void SystemClock_Config(void);
 
 void bspInit(void)
 {
-
+  HAL_DeInit();
   HAL_Init();
 
   //SCB_EnableICache();

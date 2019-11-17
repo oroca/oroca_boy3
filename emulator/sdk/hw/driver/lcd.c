@@ -86,6 +86,7 @@ void lcdSetBackLight(uint8_t value)
 
   if (value != backlight_value)
   {
+    backlight_value = value;
     eepromWriteByte(_EEP_ADDR_BRIGHT+0, value);
     eepromWriteByte(_EEP_ADDR_BRIGHT+1, ~value);
   }

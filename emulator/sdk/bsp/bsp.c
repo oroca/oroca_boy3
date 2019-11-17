@@ -11,6 +11,7 @@
 #include "bsp.h"
 #include "uart.h"
 #include "rtos.h"
+#include "usb.h"
 
 
 static void SystemClock_Config(void);
@@ -45,7 +46,7 @@ void bspInit(void)
 
 void bspDeInit(void)
 {
-  //usbDeInit();
+  usbDeInit();
   HAL_RCC_DeInit();
 
   // Disable Interrupts
@@ -57,8 +58,8 @@ void bspDeInit(void)
     __ISB();
   }
 
-  SCB_DisableICache();
-  SCB_DisableDCache();
+  //SCB_DisableICache();
+  //SCB_DisableDCache();
 }
 
 int __io_putchar(int ch)
