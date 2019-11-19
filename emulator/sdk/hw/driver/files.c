@@ -147,3 +147,11 @@ int ob_fgetc(FILE *stream)
 
   return (c);
 }
+
+char* ob_fgets(char* str, int num, FILE* stream)
+{
+  FIL *fil = (FIL *)stream;
+
+
+  return f_gets(str, num, fil);
+}

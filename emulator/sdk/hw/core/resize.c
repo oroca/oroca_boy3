@@ -237,6 +237,123 @@ void resizeImageFast(resize_image_t *src, resize_image_t *dest)
    }
 }
 
+void resizeImageFastOffset(resize_image_t *src, resize_image_t *dest)
+{
+  int destw = dest->w;
+  int desth = dest->h;
+  int i, j;
+  float src_dest_w = (float)(src->w-1)/(float)(dest->w-1);
+  float src_dest_h = (float)(src->h-1)/(float)(dest->h-1);
+  unsigned r, g, b;
+
+
+   COLOR_DEPTH_TYPE *line1, *line2;
+   COLOR_DEPTH_TYPE *dest_line;
+
+   int_least32_t xstep_c;
+   int_least32_t xstep_r;
+   int_least32_t ystep_c;
+   int_least32_t ystep_r;
+   int_least32_t xf, yf;
+   uint_least16_t cxf, cyf;
+   uint_least16_t oneminuscxf, oneminuscyf;
+   int_least32_t xstart_r;
+   int_least32_t ystart_r;
+
+   uint_least16_t xi, yi;
+   uint_least8_t s0, s1, s2, s3;
+   uint_least32_t s01f, s23f, soutf;
+
+   xstep_c = (int_least32_t) round2int32(src_dest_w * (1<<AFFINEWARP_ISHIFT));
+   xstep_r = (int_least32_t) round2int32(0 * (1<<AFFINEWARP_ISHIFT));
+   ystep_c = (int_least32_t) round2int32(0 * (1<<AFFINEWARP_ISHIFT));
+   ystep_r = (int_least32_t) round2int32(src_dest_h * (1<<AFFINEWARP_ISHIFT));
+
+
+   xstart_r = 0;
+   ystart_r = 0;
+
+   for (j=0; j<desth; j++)
+   {
+     xf = xstart_r;
+     yf = ystart_r;
+
+     yi = (uint_least16_t)(yf >> AFFINEWARP_ISHIFT);
+
+     line1 = (COLOR_DEPTH_TYPE *)&src->p_data[(yi)*src->w];
+     line2 = (COLOR_DEPTH_TYPE *)&src->p_data[(yi+1)*src->w];
+     dest_line = (COLOR_DEPTH_TYPE *)&dest->p_data[(j+dest->y)*(dest->stride) + dest->x];
+
+     for(i=0; i<destw; i++)
+     {
+       xi = (uint_least16_t)(xf >> AFFINEWARP_ISHIFT);
+       yi = (uint_least16_t)(yf >> AFFINEWARP_ISHIFT);
+
+       /* extract most significant 16 bits  */
+       cxf = (uint_least16_t)( (xf & AFFINEWARP_COEFFMASK) >> AFFINEWARP_QSHIFT);
+       cyf = (uint_least16_t)( (yf & AFFINEWARP_COEFFMASK) >> AFFINEWARP_QSHIFT);
+       oneminuscxf = 0xFFFF - cxf;
+       oneminuscyf = 0xFFFF - cyf;
+
+
+       s0 = GETR(line1[xi]);
+       s1 = GETR(line1[xi+1]);
+       s2 = GETR(line2[xi]);
+       s3 = GETR(line2[xi+1]);
+
+       // Interpolate
+       s01f  = oneminuscxf*s0 + cxf*s1;   // Interpolate points above
+       s23f  = oneminuscxf*s2 + cxf*s3;   // Interpolate points below
+
+       s01f >>= 8;
+       s23f >>= 8;
+       soutf = oneminuscyf*s01f + cyf*s23f; // Final interpolation
+       soutf = (soutf >> 24);
+       r = (uint_least8_t)soutf;
+
+
+       s0 = GETG(line1[xi]);
+       s1 = GETG(line1[xi+1]);
+       s2 = GETG(line2[xi]);
+       s3 = GETG(line2[xi+1]);
+
+       // Interpolate
+       s01f  = oneminuscxf*s0 + cxf*s1;   // Interpolate points above
+       s23f  = oneminuscxf*s2 + cxf*s3;   // Interpolate points below
+
+       s01f >>= 8;
+       s23f >>= 8;
+       soutf = oneminuscyf*s01f + cyf*s23f; // Final interpolation
+       soutf = (soutf >> 24);
+       g = (uint_least8_t)soutf;
+
+
+       s0 = GETB(line1[xi]);
+       s1 = GETB(line1[xi+1]);
+       s2 = GETB(line2[xi]);
+       s3 = GETB(line2[xi+1]);
+
+
+       // Interpolate
+       s01f  = oneminuscxf*s0 + cxf*s1;   // Interpolate points above
+       s23f  = oneminuscxf*s2 + cxf*s3;   // Interpolate points below
+
+       s01f >>= 8;
+       s23f >>= 8;
+       soutf = oneminuscyf*s01f + cyf*s23f; // Final interpolation
+       soutf = (soutf >> 24);
+       b = (uint_least8_t)soutf;
+
+       dest_line[i] = MAKECOL(r, g, b);
+       xf += xstep_c;
+       yf += ystep_c;
+     }
+
+     xstart_r += xstep_r;
+     ystart_r += ystep_r;
+   }
+}
+
 
 void resizeImageNearest(resize_image_t *src, resize_image_t *dest)
 {

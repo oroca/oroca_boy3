@@ -27,6 +27,8 @@ int    ob_fflush(FILE *stream);
 int    ob_feof(FILE *stream);
 int    ob_fseek(FILE *stream, long offset, int whence);
 long   ob_ftell(FILE *stream);
+int    ob_fgetc(FILE *stream);
+char*  ob_fgets(char* str, int num, FILE* stream);
 
 #endif
 
