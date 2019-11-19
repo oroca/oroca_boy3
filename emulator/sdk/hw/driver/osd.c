@@ -257,8 +257,13 @@ void osdProcess(void)
 
     if (key == _DEF_HW_BTN_A)
     {
-      bspDeInit();
-      resetRunSoftReset();
+      if (cursor == 2)
+      {
+        speakerStop();
+        delay(100);
+        bspDeInit();
+        resetRunSoftReset();
+      }
     }
 
     speakerSetVolume(volume_level);

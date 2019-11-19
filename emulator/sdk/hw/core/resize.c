@@ -362,10 +362,20 @@ void resizeImageNearest(resize_image_t *src, resize_image_t *dest)
   int x2, y2;
   int h2, w2;
   int w1;
+  int stride;
 
   w1 = src->w;
   w2 = dest->w;
   h2 = dest->h;
+
+  if (dest->stride > 0)
+  {
+    stride = dest->stride;
+  }
+  else
+  {
+    stride = w2;
+  }
 
   for (int i=0;i<h2;i++)
   {
@@ -373,7 +383,7 @@ void resizeImageNearest(resize_image_t *src, resize_image_t *dest)
     {
       x2 = ((j*x_ratio)>>16) ;
       y2 = ((i*y_ratio)>>16) ;
-      dest->p_data[(i*w2)+j] = src->p_data[(y2*w1)+x2];
+      dest->p_data[((i+dest->y)*stride)+j+dest->x] = src->p_data[(y2*w1)+x2];
     }
   }
 }

@@ -12,7 +12,7 @@
 #include "cmdif.h"
 
 
-#define DAC_BUFFER_MAX      (1024*2)
+#define DAC_BUFFER_MAX      (1024*1)
 
 
 
@@ -25,13 +25,14 @@ typedef struct
   DAC_ChannelConfTypeDef  sConfig;
   uint32_t                channel;
   uint8_t                 resolution;
-  uint8_t                 buffer[DAC_BUFFER_MAX];
+  uint32_t                buffer[DAC_BUFFER_MAX];
 } dac_t;
 
 
 
-static ring_buf_t tx_buf;
-static uint32_t   dac_hz = 0;
+static ring_buf16_t tx_buf;
+static uint32_t     dac_hz = 0;
+static bool         is_stop = false;
 
 static __attribute__((section(".sram_d3")))  dac_t dac_tbl[DAC_MAX_CH];
 
@@ -58,7 +59,7 @@ void dacInit(void)
 
   tx_buf.ptr_in  = 0;
   tx_buf.ptr_out = 0;
-  tx_buf.p_buf   = (uint8_t *)dac_tbl[0].buffer;
+  tx_buf.p_buf   = (uint16_t *)dac_tbl[0].buffer;
   tx_buf.length  = DAC_BUFFER_MAX;
 
 
@@ -68,10 +69,10 @@ void dacInit(void)
   HAL_DAC_Init(&DacHandle);
 
   dac_tbl[0].channel    = DAC_CHANNEL_1;
-  dac_tbl[0].resolution = 8;
+  dac_tbl[0].resolution = 12;
 
 
-  dac_tbl[0].sConfig.DAC_SampleAndHold = DAC_SAMPLEANDHOLD_DISABLE;
+  dac_tbl[0].sConfig.DAC_SampleAndHold = DAC_SAMPLEANDHOLD_ENABLE;
   dac_tbl[0].sConfig.DAC_Trigger      = DAC_TRIGGER_T6_TRGO;
   dac_tbl[0].sConfig.DAC_OutputBuffer = DAC_OUTPUTBUFFER_ENABLE;
   dac_tbl[0].sConfig.DAC_ConnectOnChipPeripheral = DAC_CHIPCONNECT_ENABLE;
@@ -79,7 +80,7 @@ void dacInit(void)
 
 
   HAL_DAC_ConfigChannel(&DacHandle, &dac_tbl[0].sConfig, dac_tbl[0].channel);
-  HAL_DAC_Start_DMA(&DacHandle, dac_tbl[0].channel, (uint32_t *)dac_tbl[0].buffer, DAC_BUFFER_MAX, DAC_ALIGN_8B_R);
+  HAL_DAC_Start_DMA(&DacHandle, dac_tbl[0].channel, (uint32_t *)dac_tbl[0].buffer, DAC_BUFFER_MAX, DAC_ALIGN_12B_R);
 
 
   dacSetup(8000);
@@ -99,10 +100,31 @@ void dacSetup(uint32_t hz)
 void dacStart(void)
 {
   HAL_TIM_Base_Start(&htim);
+
+  is_stop = false;
 }
 
 void dacStop(void)
 {
+  uint32_t i;
+  uint32_t j;
+
+
+  is_stop = true;
+
+  delay(10);
+
+  for (i=0; i<DAC_MAX_CH; i++)
+  {
+    for (j=0; j<DAC_BUFFER_MAX; j++)
+    {
+      dac_tbl[i].buffer[j] = 0;
+    }
+  }
+
+  delay(10);
+
+
   HAL_TIM_Base_Stop(&htim);
 
   tx_buf.ptr_in  = (tx_buf.length - 1) - ((DMA_Stream_TypeDef   *)DacHandle.DMA_Handle1->Instance)->NDTR;
@@ -148,7 +170,24 @@ uint32_t dacAvailable(void)
 void dacPutch(uint8_t data)
 {
   uint32_t index;
-  volatile uint32_t next_index;
+  uint32_t next_index;
+
+
+  if (is_stop == true) return;
+
+  index      = tx_buf.ptr_out;
+  next_index = tx_buf.ptr_out + 1;
+
+  tx_buf.p_buf[index] = data<<4;
+  tx_buf.ptr_out      = next_index % tx_buf.length;
+}
+
+void dacPut16(uint16_t data)
+{
+  uint32_t index;
+  uint32_t next_index;
+
+  if (is_stop == true) return;
 
 
   index      = tx_buf.ptr_out;
@@ -166,6 +205,17 @@ void dacWrite(uint8_t *p_data, uint32_t length)
   for (i=0; i<length; i++)
   {
     dacPutch(p_data[i]);
+  }
+}
+
+void dacWrite16(uint16_t *p_data, uint32_t length)
+{
+  uint32_t i;
+
+
+  for (i=0; i<length; i++)
+  {
+    dacPut16(p_data[i]);
   }
 }
 
@@ -293,8 +343,8 @@ void HAL_DAC_MspInit(DAC_HandleTypeDef *hdac)
   hdma_dac1.Init.Direction            = DMA_MEMORY_TO_PERIPH;
   hdma_dac1.Init.PeriphInc            = DMA_PINC_DISABLE;
   hdma_dac1.Init.MemInc               = DMA_MINC_ENABLE;
-  hdma_dac1.Init.PeriphDataAlignment  = DMA_PDATAALIGN_BYTE;
-  hdma_dac1.Init.MemDataAlignment     = DMA_MDATAALIGN_BYTE;
+  hdma_dac1.Init.PeriphDataAlignment  = DMA_PDATAALIGN_HALFWORD;
+  hdma_dac1.Init.MemDataAlignment     = DMA_PDATAALIGN_HALFWORD;
   hdma_dac1.Init.Mode                 = DMA_CIRCULAR;
   hdma_dac1.Init.Priority             = DMA_PRIORITY_HIGH;
   hdma_dac1.Init.FIFOMode             = DMA_FIFOMODE_DISABLE;

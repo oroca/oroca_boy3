@@ -86,7 +86,7 @@ uint32_t speakerAvailable(void)
 
 void speakerPutch(uint8_t data)
 {
-  dacPutch(map(data, 0, 255, 0, (volume>>1)));
+  dacPut16(map(data, 0, 255, 0, volume*4095/100));
 }
 
 void speakerWrite(uint8_t *p_data, uint32_t length)

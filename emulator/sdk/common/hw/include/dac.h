@@ -32,6 +32,9 @@ uint32_t dacAvailable(void);
 void     dacPutch(uint8_t data);
 void     dacWrite(uint8_t *p_data, uint32_t length);
 
+void dacPut16(uint16_t data);
+void dacWrite16(uint16_t *p_data, uint32_t length);
+
 uint32_t dacGetDebug(void);
 
 #endif

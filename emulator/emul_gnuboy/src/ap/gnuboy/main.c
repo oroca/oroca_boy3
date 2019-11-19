@@ -18,6 +18,8 @@
 
 void doevents()
 {
+  ev_poll();
+
   pad_set(PAD_UP,    buttonGetPressed(_DEF_HW_BTN_UP));
   pad_set(PAD_RIGHT, buttonGetPressed(_DEF_HW_BTN_RIGHT));
   pad_set(PAD_DOWN,  buttonGetPressed(_DEF_HW_BTN_DOWN));
@@ -54,36 +56,21 @@ void die(char *fmt, ...)
 
 void gnuboyMain(void)
 {
-	int i;
-	char *opt, *arg, *cmd, *s, *rom = 0;
-
-
-	/* If we have special perms, drop them ASAP! */
 	vid_preinit();
 
 	init_exports();
-
-	//s = strdup(argv[0]);
-
-
-	sys_sanitize(s);
-	sys_initpath(s);
-
 
 
 	vid_init();
 	pcm_init();
 
-	rom = strdup(rom);
-	sys_sanitize(rom);
 	
-
   rc_command("set rcpath /gnuboy");
   rc_command("set savedir /gnuboy/saves");
 
 
 	//loader_init(rom);
-	loader_init("/gnuboy/game.gbc");
+	loader_init("/gnuboy/game.gb");
 	
 	emu_reset();
 	emu_run();
