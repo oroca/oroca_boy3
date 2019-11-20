@@ -71,7 +71,7 @@ void apMain(int argc, char *argv[])
     return;
   }
 
-  printf("\norocaboy3_loader... V191029R1\n\n");
+  printf("\norocaboy3_loader... V191120R1\n\n");
 
   port_name = (char *)argv[ 1 ];
   baud      = strtol( argv[ 2 ], NULL, 10 );
@@ -141,6 +141,7 @@ void apMain(int argc, char *argv[])
 
 
   printf("port open \t: %s\n", port_name);
+  printf("     baud \t: %d\n", baud);
 
   ret = bootInit(_DEF_UART2, port_name, baud);
   if (ret == true)
@@ -159,7 +160,7 @@ void apMain(int argc, char *argv[])
   flash_begin = start_addr;
   flash_end   = start_addr + file_size;
 
-  printf("%X\n", flash_begin);
+
   while(1)
   {
     //-- 보드 이름 확인

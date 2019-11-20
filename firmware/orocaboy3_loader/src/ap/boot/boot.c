@@ -49,6 +49,13 @@ bool bootInit(uint8_t channel, char *port_name, uint32_t baud)
   delay(100);
   uartClose(channel);
 
+  uartOpen(channel, baud);
+  uartPutch(channel, 0x55);
+  uartPutch(channel, 0x55);
+  delay(100);
+  uartClose(channel);
+
+
   uartOpen(channel, 1200);
   uartPrintf(channel, "BOOT 5555AAAA");
   uartClose(channel);

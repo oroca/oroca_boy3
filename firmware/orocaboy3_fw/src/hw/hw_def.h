@@ -110,7 +110,7 @@
 
 
 #define _USE_HW_CMDIF
-#define      HW_CMDIF_LIST_MAX              16
+#define      HW_CMDIF_LIST_MAX              32
 #define      HW_CMDIF_CMD_STR_MAX           16
 #define      HW_CMDIF_CMD_BUF_LENGTH        128
 
