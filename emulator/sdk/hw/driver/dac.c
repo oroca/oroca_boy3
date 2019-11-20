@@ -12,7 +12,7 @@
 #include "cmdif.h"
 
 
-#define DAC_BUFFER_MAX      (1024*1)
+#define DAC_BUFFER_MAX      (1024*2)
 
 
 
@@ -34,7 +34,8 @@ static ring_buf16_t tx_buf;
 static uint32_t     dac_hz = 0;
 static bool         is_stop = false;
 
-static __attribute__((section(".sram_d3")))  dac_t dac_tbl[DAC_MAX_CH];
+//static __attribute__((section(".sram_d3")))  dac_t dac_tbl[DAC_MAX_CH];
+static dac_t dac_tbl[DAC_MAX_CH];
 
 
 

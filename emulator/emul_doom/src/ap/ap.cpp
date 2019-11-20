@@ -22,7 +22,7 @@ __attribute__((section(".tag"))) flash_tag_t fw_tag =
      // fw info
      //
      0xAAAA5555,        // magic_number
-     "V191117R1",       // version_str
+     "V191120R1",       // version_str
      "OROCABOY3",       // board_str
      "DOOM",           // name
      __DATE__,
@@ -54,7 +54,7 @@ void apInit(void)
 
 
 
-  osThreadDef(threadEmul, threadEmul, _HW_DEF_RTOS_THREAD_PRI_EMUL, 0, _HW_DEF_RTOS_THREAD_MEM_EMUL);
+  osThreadDef(threadEmul, threadEmul, _HW_DEF_RTOS_THREAD_PRI_EMUL, 0, _HW_DEF_RTOS_THREAD_MEM_EMUL*2);
   if (osThreadCreate(osThread(threadEmul), NULL) != NULL)
   {
     logPrintf("threadEmul \t\t: OK\r\n");
@@ -83,7 +83,7 @@ void apMain(void)
     osThreadYield();
 
     batteryUpdate();
-    joypadUpdate();
+    //joypadUpdate();
     osdUpdate();
   }
 }

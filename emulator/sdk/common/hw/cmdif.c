@@ -164,7 +164,7 @@ void cmdifAdd(const char *cmd_str, void (*p_func)(void))
   uint16_t index;
 
 
-  if (cmdif_cmd.index >= CMDIF_CMD_STR_MAX || cmdif_cmd.init != true || cmdif_cmd.node == NULL)
+  if (cmdif_cmd.index >= CMDIF_LIST_MAX || cmdif_cmd.init != true || cmdif_cmd.node == NULL)
   {
     cmdif_cmd.err_code = 1;
     return;

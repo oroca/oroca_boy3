@@ -169,22 +169,22 @@ uint32_t adcRead(uint8_t ch)
 
 uint32_t adcRead8(uint8_t ch)
 {
-  return 0;
+  return adcRead(ch)>>4;
 }
 
 uint32_t adcRead10(uint8_t ch)
 {
-  return 0;
+  return adcRead(ch)>>2;
 }
 
 uint32_t adcRead12(uint8_t ch)
 {
-  return 0;
+  return adcRead(ch);
 }
 
 uint32_t adcRead16(uint8_t ch)
 {
-  return 0;
+  return adcRead(ch)<<4;
 }
 
 uint32_t adcReadVoltage(uint8_t ch)

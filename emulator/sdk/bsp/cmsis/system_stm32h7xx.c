@@ -156,6 +156,8 @@
   * @{
   */
 
+  extern uint32_t _flash_tag_addr;
+
 /**
   * @brief  Setup the microcontroller system
   *         Initialize the FPU setting, vector table location and External memory
@@ -227,7 +229,7 @@ void SystemInit (void)
 #ifdef VECT_TAB_SRAM
   SCB->VTOR = D1_AXISRAM_BASE  | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal ITCMSRAM */
 #else
-  SCB->VTOR = FLASH_ADDR_START | VECT_TAB_OFFSET;       /* Vector Table Relocation in Internal FLASH */
+  SCB->VTOR = ((uint32_t)&_flash_tag_addr) | VECT_TAB_OFFSET;
 #endif
 
 }

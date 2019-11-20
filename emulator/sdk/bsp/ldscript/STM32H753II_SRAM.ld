@@ -45,9 +45,8 @@ _Min_Stack_Size = 0x800; /* required amount of stack */
 /* Specify the memory areas */
 MEMORY
 {
-  TAG   (rx)      : ORIGIN = 0xD0200000, LENGTH = 1K
-  FLASH (rx)      : ORIGIN = 0xD0200400, LENGTH = 2047K  
-
+  TAG   (rx)      : ORIGIN = 0x24000000, LENGTH = 1K
+  FLASH (rx)      : ORIGIN = 0x24000400, LENGTH = 511K  
   
   DTCMRAM (xrw)   : ORIGIN = 0x20000000, LENGTH = 128K
   SRAM_D1 (xrw)   : ORIGIN = 0x24000000, LENGTH = 512K
@@ -152,7 +151,7 @@ SECTIONS
 
     . = ALIGN(4);
     _edata = .;        /* define a global symbol at data end */
-  } >SRAM_D1 AT> FLASH
+  } >SDRAM_HEAP AT> FLASH
   
  _sisram_d1 = LOADADDR(.sram_d1);
 
