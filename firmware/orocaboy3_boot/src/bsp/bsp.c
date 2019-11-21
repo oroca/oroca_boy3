@@ -42,7 +42,17 @@ void bspDeInit(void)
 {
   usbDeInit();
   HAL_RCC_DeInit();
-  //HAL_DeInit();
+
+
+  // Disable Interrupts
+  //
+  for (int i=0; i<8; i++)
+  {
+    NVIC->ICER[i] = 0xFFFFFFFF;
+    __DSB();
+    __ISB();
+  }
+  SysTick->CTRL = 0;
 }
 
 int __io_putchar(int ch)

@@ -70,7 +70,7 @@ void gnuboyMain(void)
 
 
 	//loader_init(rom);
-	loader_init("/gnuboy/game.gb");
+	loader_init("/gnuboy/game.gbc");
 	
 	emu_reset();
 	emu_run();

@@ -279,7 +279,7 @@ int pNesX_ReadRom( const char *pszFileName )
 
     printf("RomSize: %d\r\n", NesHeader.byRomSize);
     /* Allocate Memory for ROM Image */
-    ROM = (BYTE *)memMalloc( NesHeader.byRomSize * 0x4000 );
+    ROM = (BYTE *)malloc( NesHeader.byRomSize * 0x4000 );
     printf("ROM addr:%x\r\n", (int)ROM);
 
     /* Read ROM Image */
@@ -288,7 +288,7 @@ int pNesX_ReadRom( const char *pszFileName )
     if ( NesHeader.byVRomSize > 0 )
     {
         /* Allocate Memory for VROM Image */
-        VROM = (BYTE *)memMalloc( NesHeader.byVRomSize * 0x2000 );
+        VROM = (BYTE *)malloc( NesHeader.byVRomSize * 0x2000 );
         printf("VROM addr:%x\r\n", (int)VROM);
 
         /* Read VROM Image */
@@ -316,13 +316,13 @@ void pNesX_ReleaseRom()
  */
   if ( ROM )
   {
-    memFree( ROM );
+    free( ROM );
     ROM = NULL;
   }
 
   if ( VROM )
   {
-    memFree( VROM );
+    free( VROM );
     VROM = NULL;
   }
 }

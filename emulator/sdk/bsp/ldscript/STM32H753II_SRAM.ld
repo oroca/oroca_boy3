@@ -52,6 +52,9 @@ MEMORY
   SRAM_D1 (xrw)   : ORIGIN = 0x24000000, LENGTH = 512K
   SRAM_D2 (xrw)   : ORIGIN = 0x30000000, LENGTH = 288K
   SRAM_D3 (xrw)   : ORIGIN = 0x38000000, LENGTH = 64K
+  SRAM_D4 (xrw)   : ORIGIN = 0x38008000, LENGTH = 32K
+  
+  
   ITCMRAM (xrw)   : ORIGIN = 0x00000000, LENGTH = 64K
   MEMORY_B1 (rx)  : ORIGIN = 0x60000000, LENGTH = 0K
   
@@ -210,6 +213,25 @@ SECTIONS
     _esram_d3 = .;       /* create a global symbol at sram_d3 end */
   } >SRAM_D3 AT> FLASH
 
+
+  /* SRAM_D4 section 
+  * 
+  * IMPORTANT NOTE! 
+  * If initialized variables will be placed in this section, 
+  * the startup code needs to be modified to copy the init-values.  
+  */
+  .sram_d4 :
+  {
+    . = ALIGN(4);
+    _ssram_d4 = .;       /* create a global symbol at sram_d4 start */
+    *(.sram_d4)
+    *(.sram_d4*)
+    
+    . = ALIGN(4);
+    _esram_d4 = .;       /* create a global symbol at sram_d4 end */
+  } >SRAM_D4 AT> FLASH
+  
+  
   /* Uninitialized data section */
   . = ALIGN(4);
   .bss :

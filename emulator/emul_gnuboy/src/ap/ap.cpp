@@ -97,7 +97,6 @@ static void threadEmul(void const *argument)
 
   gnuboyMain();
 
-
   while(1)
   {
     delay(100);

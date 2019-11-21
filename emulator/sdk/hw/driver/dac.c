@@ -25,7 +25,7 @@ typedef struct
   DAC_ChannelConfTypeDef  sConfig;
   uint32_t                channel;
   uint8_t                 resolution;
-  uint32_t                buffer[DAC_BUFFER_MAX];
+  volatile uint16_t       *buffer;
 } dac_t;
 
 
@@ -34,9 +34,12 @@ static ring_buf16_t tx_buf;
 static uint32_t     dac_hz = 0;
 static bool         is_stop = false;
 
-//static __attribute__((section(".sram_d3")))  dac_t dac_tbl[DAC_MAX_CH];
-static dac_t dac_tbl[DAC_MAX_CH];
 
+volatile __attribute__((section(".sram_d4")))   uint16_t dac_buffer[DAC_BUFFER_MAX];
+
+
+static dac_t dac_tbl[DAC_MAX_CH];
+static DMA_HandleTypeDef  hdma_dac1;
 
 
 void dacCmdif(void);
@@ -50,8 +53,11 @@ void dacInit(void)
   uint32_t j;
 
 
+
   for (i=0; i<DAC_MAX_CH; i++)
   {
+    dac_tbl[i].buffer = dac_buffer;
+
     for (j=0; j<DAC_BUFFER_MAX; j++)
     {
       dac_tbl[i].buffer[j] = 0;
@@ -83,9 +89,6 @@ void dacInit(void)
   HAL_DAC_ConfigChannel(&DacHandle, &dac_tbl[0].sConfig, dac_tbl[0].channel);
   HAL_DAC_Start_DMA(&DacHandle, dac_tbl[0].channel, (uint32_t *)dac_tbl[0].buffer, DAC_BUFFER_MAX, DAC_ALIGN_12B_R);
 
-
-  dacSetup(8000);
-  dacStart();
 
   cmdifAdd("dac", dacCmdif);
 }
@@ -128,8 +131,8 @@ void dacStop(void)
 
   HAL_TIM_Base_Stop(&htim);
 
-  tx_buf.ptr_in  = (tx_buf.length - 1) - ((DMA_Stream_TypeDef   *)DacHandle.DMA_Handle1->Instance)->NDTR;
-  tx_buf.ptr_out = (tx_buf.length - 1) - ((DMA_Stream_TypeDef   *)DacHandle.DMA_Handle1->Instance)->NDTR;
+  tx_buf.ptr_in  = (tx_buf.length - 1) - ((DMA_Stream_TypeDef   *)hdma_dac1.Instance)->NDTR;
+  tx_buf.ptr_out = tx_buf.ptr_in;
 }
 
 void dacInitTimer(uint32_t hz)
@@ -145,6 +148,7 @@ void dacInitTimer(uint32_t hz)
   htim.Init.ClockDivision     = 0;
   htim.Init.CounterMode       = TIM_COUNTERMODE_UP;
   htim.Init.RepetitionCounter = 0;
+
   HAL_TIM_Base_Init(&htim);
 
   sMasterConfig.MasterOutputTrigger = TIM_TRGO_UPDATE;
@@ -158,7 +162,7 @@ uint32_t dacAvailable(void)
   uint32_t length = 0;
 
 
-  tx_buf.ptr_in = (tx_buf.length - 1) - ((DMA_Stream_TypeDef   *)DacHandle.DMA_Handle1->Instance)->NDTR;
+  tx_buf.ptr_in = (tx_buf.length - 1) - ((DMA_Stream_TypeDef   *)hdma_dac1.Instance)->NDTR;
 
   //*
   length = ((tx_buf.length + tx_buf.ptr_out) - tx_buf.ptr_in) % tx_buf.length;
@@ -222,7 +226,12 @@ void dacWrite16(uint16_t *p_data, uint32_t length)
 
 uint32_t dacGetDebug(void)
 {
-  return ((DMA_Stream_TypeDef   *)DacHandle.DMA_Handle1->Instance)->NDTR;
+  return ((DMA_Stream_TypeDef   *)hdma_dac1.Instance)->NDTR;
+}
+
+uint32_t dacGetBufLength(void)
+{
+  return DAC_BUFFER_MAX;
 }
 
 
@@ -318,7 +327,7 @@ void DACx_IRQHandler(void)
 void HAL_DAC_MspInit(DAC_HandleTypeDef *hdac)
 {
   GPIO_InitTypeDef          GPIO_InitStruct;
-  static DMA_HandleTypeDef  hdma_dac1;
+
 
 
   /*##-1- Enable peripherals and GPIO Clocks #################################*/
@@ -347,9 +356,10 @@ void HAL_DAC_MspInit(DAC_HandleTypeDef *hdac)
   hdma_dac1.Init.PeriphDataAlignment  = DMA_PDATAALIGN_HALFWORD;
   hdma_dac1.Init.MemDataAlignment     = DMA_PDATAALIGN_HALFWORD;
   hdma_dac1.Init.Mode                 = DMA_CIRCULAR;
-  hdma_dac1.Init.Priority             = DMA_PRIORITY_HIGH;
+  hdma_dac1.Init.Priority             = DMA_PRIORITY_LOW;
   hdma_dac1.Init.FIFOMode             = DMA_FIFOMODE_DISABLE;
 
+  HAL_DMA_DeInit(&hdma_dac1);
   HAL_DMA_Init(&hdma_dac1);
 
   /* Associate the initialized DMA handle to the DAC handle */

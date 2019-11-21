@@ -1590,7 +1590,7 @@ void D_DoomMain (void)
             DEH_snprintf(file, sizeof(file), "%s.lmp", myargv[p+1]);
         }
 
-        memFree(uc_filename);
+        free(uc_filename);
 
         if (D_AddFile(file))
         {

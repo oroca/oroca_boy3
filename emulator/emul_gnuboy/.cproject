@@ -199,7 +199,7 @@
 					</folderInfo>
 					<fileInfo id="com.atollic.truestudio.exe.debug.2133610638.1307267855" name="resize.c" rcbsApplicability="disable" resourcePath="src/hw/core/resize.c" toolsToInvoke="com.atollic.truestudio.exe.debug.toolchain.gcc.2005540331.995506517">
 						<tool id="com.atollic.truestudio.exe.debug.toolchain.gcc.2005540331.995506517" name="C Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc.2005540331">
-							<option id="com.atollic.truestudio.exe.debug.toolchain.gcc.optimization.level.655359446" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc.optimization.level" useByScannerDiscovery="false" value="com.atollic.truestudio.gcc.optimization.level.02" valueType="enumerated"/>
+							<option id="com.atollic.truestudio.exe.debug.toolchain.gcc.optimization.level.655359446" name="Optimization Level" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc.optimization.level" useByScannerDiscovery="false" value="com.atollic.truestudio.gcc.optimization.level.02" valueType="enumerated"/>
 							<inputType id="com.atollic.truestudio.gcc.input.709784070" superClass="com.atollic.truestudio.gcc.input"/>
 						</tool>
 					</fileInfo>

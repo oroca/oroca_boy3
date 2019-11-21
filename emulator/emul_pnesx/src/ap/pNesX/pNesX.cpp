@@ -48,10 +48,10 @@
 /*-------------------------------------------------------------------*/
 
 /* RAM */
-__attribute__((section(".sram_d3")))  BYTE RAM[ RAM_SIZE ];
+BYTE RAM[ RAM_SIZE ];
 
 /* SRAM */
-__attribute__((section(".sram_d3"))) BYTE SRAM[ SRAM_SIZE ];
+BYTE SRAM[ SRAM_SIZE ];
 
 /* ROM */
 BYTE *ROM;
@@ -67,7 +67,7 @@ BYTE *ROMBANK3;
 /*-------------------------------------------------------------------*/
 
 /* PPU RAM */
-__attribute__((section(".sram_d3")))  BYTE PPURAM[ PPURAM_SIZE ];
+BYTE PPURAM[ PPURAM_SIZE ];
 
 /* VROM */
 BYTE *VROM;
@@ -76,7 +76,7 @@ BYTE *VROM;
 BYTE *PPUBANK[ 16 ];
 
 /* Sprite RAM */
-__attribute__((section(".sram_d3"))) BYTE SPRRAM[ SPRRAM_SIZE ];
+BYTE SPRRAM[ SPRRAM_SIZE ];
 
 /* PPU Register */
 BYTE PPU_R0;

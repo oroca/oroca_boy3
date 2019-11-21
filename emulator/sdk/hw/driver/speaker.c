@@ -84,6 +84,11 @@ uint32_t speakerAvailable(void)
   return dacAvailable();
 }
 
+uint32_t speakerGetBufLength(void)
+{
+  return dacGetBufLength();
+}
+
 void speakerPutch(uint8_t data)
 {
   dacPut16(map(data, 0, 255, 0, volume*4095/100));

@@ -392,7 +392,7 @@ static void DoMerge(void)
     int i, n;
 
     // Can't ever have more lumps than we already have
-    newlumps = memCalloc(numlumps, sizeof(lumpinfo_t *));
+    newlumps = calloc(numlumps, sizeof(lumpinfo_t *));
     num_newlumps = 0;
 
     // Add IWAD lumps
@@ -547,7 +547,7 @@ static void DoMerge(void)
 
     // Switch to the new lumpinfo, and free the old one
 
-    memFree(lumpinfo);
+    free(lumpinfo);
     lumpinfo = newlumps;
     numlumps = num_newlumps;
 }

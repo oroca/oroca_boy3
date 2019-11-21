@@ -369,7 +369,7 @@ static boolean I_SDL_InitSound(boolean _use_sfx_prefix)
     sound_initialized = true;
 
 
-    p_sound_buf = (sound_buf_t *)memMalloc(sizeof(sound_buf_t) * NUM_CHANNELS);
+    p_sound_buf = (sound_buf_t *)malloc(sizeof(sound_buf_t) * NUM_CHANNELS);
 
     for (int i=0; i<NUM_CHANNELS; i++)
     {
@@ -415,34 +415,37 @@ static void threadAudio(void const *argument)
   {
     buf_length = speakerAvailable();
 
-    for (int i=0; i<16 && i<buf_length; i++)
+    if (buf_length > 16 && (speakerGetBufLength()-buf_length) < 16*2)
     {
-      data_sum = 0;
-      data_index = 0;
-      for (int ch=0; ch<NUM_CHANNELS; ch++)
+      for (int i=0; i<16; i++)
       {
-        if (p_sound_buf[ch].request_stop == true)
+        data_sum = 0;
+        data_index = 0;
+        for (int ch=0; ch<NUM_CHANNELS; ch++)
         {
-          p_sound_buf[ch].request_stop = false;
-          p_sound_buf[ch].is_busy = false;
-        }
-
-        if (p_sound_buf[ch].is_busy)
-        {
-          data_sum += p_sound_buf[ch].data[p_sound_buf[ch].index++];
-          data_index++;
-
-          if (p_sound_buf[ch].index >= p_sound_buf[ch].length)
+          if (p_sound_buf[ch].request_stop == true)
           {
+            p_sound_buf[ch].request_stop = false;
             p_sound_buf[ch].is_busy = false;
           }
+
+          if (p_sound_buf[ch].is_busy)
+          {
+            data_sum += p_sound_buf[ch].data[p_sound_buf[ch].index++];
+            data_index++;
+
+            if (p_sound_buf[ch].index >= p_sound_buf[ch].length)
+            {
+              p_sound_buf[ch].is_busy = false;
+            }
+          }
         }
+        if (data_index > 0)
+        {
+          data_sum = data_sum / data_index;
+        }
+        speakerPutch(data_sum);
       }
-      if (data_index > 0)
-      {
-        data_sum = data_sum / data_index;
-      }
-      speakerPutch(data_sum);
     }
     delay(1);
   }

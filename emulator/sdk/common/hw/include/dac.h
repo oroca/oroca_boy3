@@ -36,6 +36,7 @@ void dacPut16(uint16_t data);
 void dacWrite16(uint16_t *p_data, uint32_t length);
 
 uint32_t dacGetDebug(void);
+uint32_t dacGetBufLength(void);
 
 #endif
 

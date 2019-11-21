@@ -74,7 +74,7 @@ void I_AtExit(atexit_func_t func, boolean run_on_error)
 {
     atexit_listentry_t *entry;
 
-    entry = memMalloc(sizeof(*entry));
+    entry = malloc(sizeof(*entry));
 
     entry->func = func;
     entry->run_on_error = run_on_error;
@@ -118,7 +118,7 @@ static byte *AutoAllocMemory(int *size, int default_ram, int min_ram)
 #ifdef ORIGCODE
         zonemem = malloc(*size);
 #else
-        zonemem = memMalloc(*size);
+        zonemem = malloc(*size);
 #endif
 
         // Failed to allocate?  Reduce zone size until we reach a size
@@ -355,7 +355,7 @@ void *I_Realloc(void *ptr, size_t size)
 {
     void *new_ptr;
 
-    new_ptr = memRealloc(ptr, size);
+    new_ptr = realloc(ptr, size);
 
     if (size != 0 && new_ptr == NULL)
     {

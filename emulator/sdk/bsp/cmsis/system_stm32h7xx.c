@@ -156,7 +156,7 @@
   * @{
   */
 
-  extern uint32_t _flash_tag_addr;
+extern uint32_t _flash_tag_addr;
 
 /**
   * @brief  Setup the microcontroller system

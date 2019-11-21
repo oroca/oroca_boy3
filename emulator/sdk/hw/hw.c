@@ -13,7 +13,7 @@
 
 
 extern flash_tag_t fw_tag;
-
+extern uint32_t _flash_tag_addr;
 
 
 void bootCmdif(void);
@@ -51,9 +51,13 @@ void hwInit(void)
   gpioInit();
   adcInit();
 
-  //sdramInit();
-  //qspiInit();
-  //qspiEnableMemoryMappedMode();
+
+  if ((uint32_t)&_flash_tag_addr == FLASH_ADDR_FW_START)
+  {
+    sdramInit();
+    qspiInit();
+    qspiEnableMemoryMappedMode();
+  }
 
   flashInit();
   buttonInit();

@@ -108,7 +108,7 @@ void pcm_init()
   pcm.stereo = 0;
   n = samplerate;
   pcm.hz = n;
-  pcm.len = n / 30;
+  pcm.len = n / 60;
   pcm.buf = malloc(pcm.len);
 
 

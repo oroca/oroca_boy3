@@ -128,6 +128,8 @@
 #define FLASH_ADDR_BOOT_START         0x08000000
 #define FLASH_ADDR_BOOTEND            (0x08000000 + 128*1024)
 
+#define FLASH_ADDR_FW_START           0x08040000
+
 
 #define SDRAM_ADDR_START              0xD0000000    // 16MB
 #define SDRAM_ADDR_HEAP               0xD1000000    // 16MB
