@@ -16,6 +16,8 @@ void apInit(void)
 {
   uartOpen(_DEF_UART1, 57600);
   uartOpen(_DEF_UART2, 57600);
+  uartOpen(_DEF_UART3, 115200);
+  uartOpen(_DEF_UART4, 115200);
   cmdifOpen(_DEF_UART1, 57600);
 }
 
@@ -23,8 +25,6 @@ void apMain(void)
 {
   uint32_t pre_time;
 
-  uint32_t *p_data2 = (uint32_t *)SDRAM_ADDR_MEM_BUF;
-  p_data2[0] = 1;
 
   while(1)
   {
@@ -34,6 +34,13 @@ void apMain(void)
     {
       pre_time = millis();
       ledToggle(_DEF_LED1);
+      //logPrintf("bat %d %d\n", batteryGetLevel(), batteryGetVoltage());
+      //logPrintf("joyt %d %d\n", joypadGetX(), joypadGetY());
     }
+
+    esp32Update();
+    batteryUpdate();
+    joypadUpdate();
+    osdUpdate();
   }
 }

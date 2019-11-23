@@ -26,25 +26,10 @@
             "RelativeFilename": "a4.png",
             "Alpha": 255,
             "Name": "image_speaker",
-            "X": 7,
-            "Y": 2,
-            "Width": 24,
-            "Height": 24,
-            "Type": "Image",
-            "Visible": true,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
-          },
-          {
-            "RelativeFilename": "a2.png",
-            "Alpha": 255,
-            "Name": "image1",
-            "X": 279,
-            "Y": 2,
-            "Width": 41,
-            "Height": 24,
+            "X": 4,
+            "Y": 3,
+            "Width": 20,
+            "Height": 20,
             "Type": "Image",
             "Visible": true,
             "Draggable": false,
@@ -65,7 +50,7 @@
             "LineSpacing": 0,
             "Name": "textArea_title",
             "X": 124,
-            "Y": 5,
+            "Y": 4,
             "Width": 72,
             "Height": 18,
             "Type": "TextArea",
@@ -132,13 +117,44 @@
               {
                 "Components": [
                   {
-                    "RelativeFilename": "fMSX.png",
+                    "RelativeFilename": "gameboy.png",
+                    "Alpha": 255,
+                    "Name": "image_gameboy",
+                    "X": 60,
+                    "Y": 56,
+                    "Width": 200,
+                    "Height": 42,
+                    "Type": "Image",
+                    "Visible": true,
+                    "Draggable": false,
+                    "Clickable": false,
+                    "Fadeable": false,
+                    "Moveable": false
+                  }
+                ],
+                "IsCacheableContainer": false,
+                "Name": "page_gnuboy",
+                "X": 0,
+                "Y": 0,
+                "Width": 320,
+                "Height": 150,
+                "Type": "Container",
+                "Visible": true,
+                "Draggable": false,
+                "Clickable": false,
+                "Fadeable": false,
+                "Moveable": false
+              },
+              {
+                "Components": [
+                  {
+                    "RelativeFilename": "msx.png",
                     "Alpha": 255,
                     "Name": "image_msx",
                     "X": 60,
-                    "Y": 44,
+                    "Y": 39,
                     "Width": 200,
-                    "Height": 72,
+                    "Height": 83,
                     "Type": "Image",
                     "Visible": true,
                     "Draggable": false,
@@ -194,7 +210,7 @@
               {
                 "Components": [
                   {
-                    "TextId": "SingleUseId3",
+                    "TextId": "SingleUseId8",
                     "TextRotation": "0",
                     "Color": {
                       "Red": 0,
@@ -204,10 +220,14 @@
                     "Alpha": 255,
                     "AutoSize": true,
                     "LineSpacing": 0,
-                    "Name": "test_menu",
-                    "X": 111,
-                    "Y": 77,
-                    "Width": 99,
+                    "Wildcard1": {
+                      "UseBuffer": true,
+                      "BufferSize": 48
+                    },
+                    "Name": "textArea_slot_title",
+                    "X": 1,
+                    "Y": 66,
+                    "Width": 0,
                     "Height": 18,
                     "Type": "TextArea",
                     "Visible": true,
@@ -218,7 +238,50 @@
                   }
                 ],
                 "IsCacheableContainer": false,
-                "Name": "page_button",
+                "Name": "page_user1",
+                "X": 0,
+                "Y": 0,
+                "Width": 320,
+                "Height": 150,
+                "Type": "Container",
+                "Visible": true,
+                "Draggable": false,
+                "Clickable": false,
+                "Fadeable": false,
+                "Moveable": false
+              },
+              {
+                "Components": [
+                  {
+                    "TextId": "SingleUseId9",
+                    "TextRotation": "0",
+                    "Color": {
+                      "Red": 0,
+                      "Green": 0,
+                      "Blue": 0
+                    },
+                    "Alpha": 255,
+                    "AutoSize": true,
+                    "LineSpacing": 0,
+                    "Wildcard1": {
+                      "UseBuffer": true,
+                      "BufferSize": 48
+                    },
+                    "Name": "textArea_slot_title_1",
+                    "X": 1,
+                    "Y": 66,
+                    "Width": 0,
+                    "Height": 18,
+                    "Type": "TextArea",
+                    "Visible": true,
+                    "Draggable": false,
+                    "Clickable": false,
+                    "Fadeable": false,
+                    "Moveable": false
+                  }
+                ],
+                "IsCacheableContainer": false,
+                "Name": "page_user2",
                 "X": 0,
                 "Y": 0,
                 "Width": 320,
@@ -233,7 +296,7 @@
             ],
             "SwipeCutoff": 50,
             "ShowPageIndicator": true,
-            "PageIndicatorX": 130,
+            "PageIndicatorX": 115,
             "PageIndicatorY": 0,
             "CenteredX": true,
             "IndicatorImageNormal": "__designer\\Dark_PageIndicator_dot_indicator_small_normal.png",
@@ -284,6 +347,66 @@
             "Moveable": false
           },
           {
+            "RelativeFilename": "bat3.png",
+            "Alpha": 255,
+            "Name": "image_bat3",
+            "X": 279,
+            "Y": 2,
+            "Width": 41,
+            "Height": 24,
+            "Type": "Image",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "RelativeFilename": "bat4.png",
+            "Alpha": 255,
+            "Name": "image_bat4",
+            "X": 279,
+            "Y": 2,
+            "Width": 41,
+            "Height": 24,
+            "Type": "Image",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "RelativeFilename": "bat2.png",
+            "Alpha": 255,
+            "Name": "image_bat2",
+            "X": 279,
+            "Y": 2,
+            "Width": 41,
+            "Height": 24,
+            "Type": "Image",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "RelativeFilename": "a2.png",
+            "Alpha": 255,
+            "Name": "image_bat1",
+            "X": 279,
+            "Y": 2,
+            "Width": 41,
+            "Height": 24,
+            "Type": "Image",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
             "Filename": "b1.png",
             "Alpha": 255,
             "ScalingAlgorithm": "Bilinear Interpolation",
@@ -298,6 +421,91 @@
             "Clickable": false,
             "Fadeable": false,
             "Moveable": false
+          },
+          {
+            "RelativeFilename": "sd_card.png",
+            "Alpha": 255,
+            "Name": "image_sd",
+            "X": 261,
+            "Y": 3,
+            "Width": 21,
+            "Height": 22,
+            "Type": "Image",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "TextId": "SingleUseId5",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 0,
+              "Green": 0,
+              "Blue": 0
+            },
+            "Alpha": 255,
+            "AutoSize": true,
+            "LineSpacing": 0,
+            "Wildcard1": {
+              "TextId": "SingleUseId6",
+              "UseBuffer": true,
+              "BufferSize": 10
+            },
+            "Name": "textArea_volume",
+            "X": 23,
+            "Y": 0,
+            "Width": 37,
+            "Height": 20,
+            "Type": "TextArea",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "RelativeFilename": "usb1.png",
+            "Alpha": 255,
+            "Name": "image_drive",
+            "X": 242,
+            "Y": 4,
+            "Width": 21,
+            "Height": 21,
+            "Type": "Image",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "TextId": "SingleUseId7",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 0,
+              "Green": 0,
+              "Blue": 0
+            },
+            "Alpha": 255,
+            "AutoSize": true,
+            "LineSpacing": 0,
+            "Wildcard1": {
+              "UseBuffer": true,
+              "BufferSize": 48
+            },
+            "Name": "textArea_slot",
+            "X": 3,
+            "Y": 227,
+            "Width": 25,
+            "Height": 10,
+            "Type": "TextArea",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
           }
         ],
         "Interactions": [
@@ -305,7 +513,7 @@
             "InteractionName": "goLeft_pc",
             "HasCompletedTrigger": false,
             "Trigger": {
-              "ButtonKey": 48,
+              "ButtonKey": 0,
               "Type": "TriggerPhysicalButtonClicked"
             },
             "Action": {
@@ -317,7 +525,7 @@
             "InteractionName": "goRight_pc",
             "HasCompletedTrigger": false,
             "Trigger": {
-              "ButtonKey": 47,
+              "ButtonKey": 0,
               "Type": "TriggerPhysicalButtonClicked"
             },
             "Action": {
@@ -329,7 +537,7 @@
             "InteractionName": "show_empty",
             "HasCompletedTrigger": false,
             "Trigger": {
-              "ButtonKey": 46,
+              "ButtonKey": 0,
               "Type": "TriggerPhysicalButtonClicked"
             },
             "Action": {
@@ -355,7 +563,7 @@
             "InteractionName": "go_btn_test",
             "HasCompletedTrigger": false,
             "Trigger": {
-              "ButtonKey": 49,
+              "ButtonKey": 0,
               "Type": "TriggerPhysicalButtonClicked"
             },
             "Action": {
@@ -762,11 +970,27 @@
         "IsResource": false
       },
       {
-        "TextEntryId": "SingleUseId3",
+        "TextEntryId": "SingleUseId4",
         "IsResource": false
       },
       {
-        "TextEntryId": "SingleUseId4",
+        "TextEntryId": "SingleUseId5",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId6",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId7",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId8",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId9",
         "IsResource": false
       }
     ],

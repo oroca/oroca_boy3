@@ -11,6 +11,7 @@
 #include "speaker.h"
 #include "dac.h"
 #include "gpio.h"
+#include "eeprom.h"
 
 
 static uint8_t volume = 0;
@@ -18,7 +19,23 @@ static uint8_t volume = 0;
 
 bool speakerInit(void)
 {
+  uint8_t eep_data[2];
+
   speakerDisable();
+
+  eep_data[0] = eepromReadByte(_EEP_ADDR_VOLUME+0);
+  eep_data[1] = eepromReadByte(_EEP_ADDR_VOLUME+1);
+
+  if ((uint8_t)eep_data[0] == (uint8_t)~eep_data[1])
+  {
+    volume = eep_data[0];
+  }
+  else
+  {
+    volume = 0;
+    eepromWriteByte(_EEP_ADDR_VOLUME+0, volume);
+    eepromWriteByte(_EEP_ADDR_VOLUME+1, ~volume);
+  }
 
   return true;
 }
@@ -35,11 +52,18 @@ void speakerDisable(void)
 
 void speakerSetVolume(uint8_t volume_data)
 {
-  volume = volume_data;
+  if (volume != volume_data)
+  {
+    volume = volume_data;
+    eepromWriteByte(_EEP_ADDR_VOLUME+0, volume_data);
+    eepromWriteByte(_EEP_ADDR_VOLUME+1, ~volume_data);
+  }
 }
 
 uint8_t speakerGetVolume(void)
 {
+
+
   return volume;
 }
 
@@ -55,14 +79,24 @@ void speakerStop(void)
   dacStop();
 }
 
+void speakerReStart(void)
+{
+  dacStart();
+}
+
 uint32_t speakerAvailable(void)
 {
   return dacAvailable();
 }
 
+uint32_t speakerGetBufLength(void)
+{
+  return dacGetBufLength();
+}
+
 void speakerPutch(uint8_t data)
 {
-  dacPutch(map(data, 0, 255, 0, volume));
+  dacPut16(map(data, 0, 255, 0, volume*4095/100));
 }
 
 void speakerWrite(uint8_t *p_data, uint32_t length)

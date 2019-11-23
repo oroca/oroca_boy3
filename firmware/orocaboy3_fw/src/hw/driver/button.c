@@ -66,7 +66,7 @@ void buttonCmdifInit(void);
 void buttonCmdif(void);
 #endif
 
-
+static bool is_enable = true;
 static bool buttonGetPin(uint8_t ch);
 
 
@@ -173,7 +173,22 @@ bool buttonGetPin(uint8_t ch)
   }
 }
 
+void buttonEnable(bool enable)
+{
+  is_enable = enable;
+}
+
 bool buttonGetPressed(uint8_t ch)
+{
+  if (ch >= BUTTON_MAX_CH || is_enable == false)
+  {
+    return false;
+  }
+
+  return button_tbl[ch].pressed;
+}
+
+bool buttonOsdGetPressed(uint8_t ch)
 {
   if (ch >= BUTTON_MAX_CH)
   {
@@ -188,7 +203,7 @@ bool buttonGetPressedEvent(uint8_t ch)
   bool ret;
 
 
-  if (ch >= BUTTON_MAX_CH) return false;
+  if (ch >= BUTTON_MAX_CH || is_enable == false) return false;
 
   ret = button_tbl[ch].pressed_event;
 
@@ -202,7 +217,7 @@ uint32_t buttonGetPressedTime(uint8_t ch)
   volatile uint32_t ret;
 
 
-  if (ch >= BUTTON_MAX_CH) return 0;
+  if (ch >= BUTTON_MAX_CH || is_enable == false) return 0;
 
 
   ret = button_tbl[ch].pressed_end_time - button_tbl[ch].pressed_start_time;
@@ -216,7 +231,7 @@ bool buttonGetReleased(uint8_t ch)
   bool ret;
 
 
-  if (ch >= BUTTON_MAX_CH) return false;
+  if (ch >= BUTTON_MAX_CH || is_enable == false) return false;
 
   ret = button_tbl[ch].released;
 
@@ -228,7 +243,7 @@ bool buttonGetReleasedEvent(uint8_t ch)
   bool ret;
 
 
-  if (ch >= BUTTON_MAX_CH) return false;
+  if (ch >= BUTTON_MAX_CH || is_enable == false) return false;
 
   ret = button_tbl[ch].released_event;
 
@@ -242,7 +257,7 @@ uint32_t buttonGetReleasedTime(uint8_t ch)
   volatile uint32_t ret;
 
 
-  if (ch >= BUTTON_MAX_CH) return 0;
+  if (ch >= BUTTON_MAX_CH || is_enable == false) return 0;
 
 
   ret = button_tbl[ch].released_end_time - button_tbl[ch].released_start_time;

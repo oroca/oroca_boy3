@@ -39,20 +39,22 @@ _estack = 0x24000000+512K;    /* end of RAM */
 
 
 /* Generate a link error if heap and stack don't fit into RAM */
-_Min_Heap_Size = 0;      /* required amount of heap  */
+_Min_Heap_Size  = 0;      /* required amount of heap  */
 _Min_Stack_Size = 0x800; /* required amount of stack */
 
 /* Specify the memory areas */
 MEMORY
 {
-  TAG   (rx)      : ORIGIN = 0xD0200000, LENGTH = 1K
-  FLASH (rx)      : ORIGIN = 0xD0200400, LENGTH = 2047K  
+  TAG   (rx)      : ORIGIN = 0x08040000, LENGTH = 1K
+  FLASH (rx)      : ORIGIN = 0x08040400, LENGTH = 1280K   
 
   
   DTCMRAM (xrw)   : ORIGIN = 0x20000000, LENGTH = 128K
   SRAM_D1 (xrw)   : ORIGIN = 0x24000000, LENGTH = 512K
   SRAM_D2 (xrw)   : ORIGIN = 0x30000000, LENGTH = 288K
   SRAM_D3 (xrw)   : ORIGIN = 0x38000000, LENGTH = 64K
+  SRAM_D4 (xrw)   : ORIGIN = 0x38008000, LENGTH = 32K
+  
   ITCMRAM (xrw)   : ORIGIN = 0x00000000, LENGTH = 64K
   MEMORY_B1 (rx)  : ORIGIN = 0x60000000, LENGTH = 0K
   
@@ -60,6 +62,7 @@ MEMORY
   QSPI_DATA (rx)  : ORIGIN = 0x92000000, LENGTH = 32M
   
   SDRAM_BUF(xrw)  : ORIGIN = 0xD0400000, LENGTH = 2M
+  SDRAM_HEAP(xrw) : ORIGIN = 0xD1000000, LENGTH = 16M  
 }
 
 /* Define output sections */
@@ -210,6 +213,25 @@ SECTIONS
     _esram_d3 = .;       /* create a global symbol at sram_d3 end */
   } >SRAM_D3 AT> FLASH
 
+
+  /* SRAM_D4 section 
+  * 
+  * IMPORTANT NOTE! 
+  * If initialized variables will be placed in this section, 
+  * the startup code needs to be modified to copy the init-values.  
+  */
+  .sram_d4 :
+  {
+    . = ALIGN(4);
+    _ssram_d4 = .;       /* create a global symbol at sram_d4 start */
+    *(.sram_d4)
+    *(.sram_d4*)
+    
+    . = ALIGN(4);
+    _esram_d4 = .;       /* create a global symbol at sram_d4 end */
+  } >SRAM_D4 AT> FLASH
+
+  
   /* Uninitialized data section */
   . = ALIGN(4);
   .bss :
@@ -247,17 +269,7 @@ SECTIONS
     *(.mb1rodata*)
   } >MEMORY_B1
 
-  .sdram :
-  {
-    . = ALIGN(4);
-    _ssram_d1 = .;       /* create a global symbol at sram_d1 start */
-    *(.sram_d1)
-    *(.sram_d1*)
     
-    . = ALIGN(4);
-    _esram_d1 = .;       /* create a global symbol at sram_d1 end */
-  } >SDRAM_BUF AT> FLASH
-      
   
   /* Remove information from the standard libraries */
   /DISCARD/ :
@@ -269,4 +281,5 @@ SECTIONS
 
   .ARM.attributes 0 : { *(.ARM.attributes) }
   .NoneCacheableMem (NOLOAD): { *(.NoneCacheableMem) } >SRAM_D2
+  .sdram_buf (NOLOAD): { *(.sdram_buf) } >SDRAM_BUF
 }

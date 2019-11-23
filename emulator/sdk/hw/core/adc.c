@@ -150,7 +150,7 @@ uint32_t adcRead(uint8_t ch)
 
   sConfig.Channel = adc_tbl[ch].adc_channel;
   sConfig.Rank = ADC_REGULAR_RANK_1;
-  sConfig.SamplingTime = ADC_SAMPLETIME_387CYCLES_5;
+  sConfig.SamplingTime = ADC_SAMPLETIME_810CYCLES_5;
   sConfig.SingleDiff = ADC_SINGLE_ENDED;
   sConfig.OffsetNumber = ADC_OFFSET_NONE;
   sConfig.Offset = 0;
@@ -169,12 +169,12 @@ uint32_t adcRead(uint8_t ch)
 
 uint32_t adcRead8(uint8_t ch)
 {
-  return 0;
+  return adcRead(ch)>>4;
 }
 
 uint32_t adcRead10(uint8_t ch)
 {
-  return 0;
+  return adcRead(ch)>>2;
 }
 
 uint32_t adcRead12(uint8_t ch)
@@ -184,7 +184,7 @@ uint32_t adcRead12(uint8_t ch)
 
 uint32_t adcRead16(uint8_t ch)
 {
-  return 0;
+  return adcRead(ch)<<4;
 }
 
 uint32_t adcReadVoltage(uint8_t ch)
@@ -206,13 +206,13 @@ uint32_t adcConvVoltage(uint8_t ch, uint32_t adc_value)
   {
     case 0:
     case 1:
-      ret  = (uint32_t)((adc_value * 330 * 10) / (4095*10));
+      ret  = (uint32_t)((adc_value * 3300 * 10) / (4095*10));
       ret += 5;
       ret /= 10;
       break;
 
     case 2:
-      ret  = (uint32_t)((adc_value * 330 * 26) / (4095*10));
+      ret  = (uint32_t)((adc_value * 3445 * 26) / (4095*10));
       ret += 5;
       ret /= 10;
       break;

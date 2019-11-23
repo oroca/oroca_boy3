@@ -39,6 +39,18 @@
 #define _USE_HW_RESET
 #define _USE_HW_QSPI
 #define _USE_HW_TOUCHGFX
+#define _USE_HW_ESP32
+#define _USE_HW_BATTERY
+#define _USE_HW_JOYPAD
+#define _USE_HW_OSD
+#define _USE_HW_SPEAKER
+#define _USE_HW_LCD
+
+
+#define _USE_HW_USB
+#define      HW_USE_CDC             1
+#define      HW_USE_MSC             1
+
 
 #define _USE_HW_SDRAM
 #define      HW_USE_CMDIF_SDRAM     1
@@ -63,7 +75,7 @@
 #define      HW_LED_MAX_CH          1
 
 #define _USE_HW_UART
-#define      HW_UART_MAX_CH         2
+#define      HW_UART_MAX_CH         4
 
 #define _USE_HW_I2C
 #define      HW_I2C_MAX_CH          1
@@ -84,6 +96,9 @@
 #define      HW_ADC_MAX_CH          3
 #define      HW_USE_CMDIF_ADC       1
 
+#define _USE_HW_DAC
+#define      HW_DAC_MAX_CH          1
+
 #define _USE_HW_SD
 #define      HW_SD_USE_CMDIF        1
 
@@ -95,7 +110,7 @@
 
 
 #define _USE_HW_CMDIF
-#define      HW_CMDIF_LIST_MAX              16
+#define      HW_CMDIF_LIST_MAX              32
 #define      HW_CMDIF_CMD_STR_MAX           16
 #define      HW_CMDIF_CMD_BUF_LENGTH        128
 
@@ -117,11 +132,12 @@
 
 
 #define SDRAM_ADDR_START              0xD0000000    // 16MB
-#define SDRAM_ADDR_MEM_BUF            0xD1000000    // 16MB
+#define SDRAM_ADDR_HEAP               0xD1000000    // 16MB
 
 #define SDRAM_ADDR_IMAGE              0xD0000000    // 2MB
 #define SDRAM_ADDR_FW                 0xD0200000    // 2MB
 #define SDRAM_ADDR_BUF                0xD0400000    // 2MB
+
 
 
 #define QSPI_ADDR_START               0x90000000
@@ -147,6 +163,16 @@
 #define _PIN_GPIO_BAT_CHG             0
 #define _PIN_GPIO_LCD_BK_EN           2
 #define _PIN_GPIO_SDCARD_DETECT       4
+#define _PIN_GPIO_ESP_RST             5
+#define _PIN_GPIO_ESP_BOOT            6
+#define _PIN_GPIO_SPK_EN              7
+
+
+
+
+#define _EEP_ADDR_VOLUME              0
+#define _EEP_ADDR_BRIGHT              2
+
 
 
 #endif /* SRC_HW_HW_DEF_H_ */

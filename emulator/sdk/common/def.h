@@ -227,6 +227,15 @@ typedef struct
 
 typedef struct
 {
+  uint32_t  ptr_in;
+  uint32_t  ptr_out;
+  uint32_t  length;
+  uint16_t  *p_buf;
+} ring_buf16_t;
+
+
+typedef struct
+{
   uint32_t addr;
   uint32_t end;
   uint32_t length;

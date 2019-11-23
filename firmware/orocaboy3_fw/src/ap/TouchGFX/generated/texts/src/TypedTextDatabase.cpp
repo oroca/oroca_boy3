@@ -7,11 +7,15 @@
 
 extern touchgfx::GeneratedFont& getFont_Asap_Regular_80_4bpp();
 extern touchgfx::GeneratedFont& getFont_NanumGothicCoding_Bold_18_4bpp();
+extern touchgfx::GeneratedFont& getFont_CONSOLA_TTF_17_4bpp();
+extern touchgfx::GeneratedFont& getFont_NanumGothicCoding_Bold_10_4bpp();
 
 const touchgfx::Font* _fonts[] =
 {
     &(getFont_Asap_Regular_80_4bpp()),
-    &(getFont_NanumGothicCoding_Bold_18_4bpp())
+    &(getFont_NanumGothicCoding_Bold_18_4bpp()),
+    &(getFont_CONSOLA_TTF_17_4bpp()),
+    &(getFont_NanumGothicCoding_Bold_10_4bpp())
 };
 
 extern const touchgfx::TypedText::TypedTextData typedText_database_DEFAULT[];
@@ -23,7 +27,11 @@ const touchgfx::TypedText::TypedTextData typedText_database_DEFAULT[] TEXT_LOCAT
     { 0, touchgfx::CENTER, touchgfx::TEXT_DIRECTION_LTR },
     { 1, touchgfx::LEFT, touchgfx::TEXT_DIRECTION_LTR },
     { 1, touchgfx::CENTER, touchgfx::TEXT_DIRECTION_LTR },
-    { 1, touchgfx::LEFT, touchgfx::TEXT_DIRECTION_LTR },
+    { 1, touchgfx::CENTER, touchgfx::TEXT_DIRECTION_LTR },
+    { 2, touchgfx::LEFT, touchgfx::TEXT_DIRECTION_LTR },
+    { 2, touchgfx::LEFT, touchgfx::TEXT_DIRECTION_LTR },
+    { 3, touchgfx::LEFT, touchgfx::TEXT_DIRECTION_LTR },
+    { 1, touchgfx::CENTER, touchgfx::TEXT_DIRECTION_LTR },
     { 1, touchgfx::CENTER, touchgfx::TEXT_DIRECTION_LTR }
 };
 
@@ -66,6 +74,12 @@ void resetFont(touchgfx::FontId fontId)
         break;
     case 1:
         _fonts[1] = &(getFont_NanumGothicCoding_Bold_18_4bpp());
+        break;
+    case 2:
+        _fonts[2] = &(getFont_CONSOLA_TTF_17_4bpp());
+        break;
+    case 3:
+        _fonts[3] = &(getFont_NanumGothicCoding_Bold_10_4bpp());
         break;
     }
 }

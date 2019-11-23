@@ -30,6 +30,8 @@ extern void delay(uint32_t ms);
 extern uint32_t millis(void);
 extern uint32_t micros(void);
 extern void Error_Handler(void);
+extern void _printHeapInfo(void);
+extern uint32_t _getHeapFree(void);
 
 #ifdef __cplusplus
  }

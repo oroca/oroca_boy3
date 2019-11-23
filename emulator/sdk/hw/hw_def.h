@@ -41,6 +41,9 @@
 #define _USE_HW_QSPI
 #define _USE_HW_SPEAKER
 #define _USE_HW_MPU
+#define _USE_HW_BATTERY
+#define _USE_HW_JOYPAD
+#define _USE_HW_OSD
 
 
 #define _USE_HW_LCD
@@ -125,9 +128,11 @@
 #define FLASH_ADDR_BOOT_START         0x08000000
 #define FLASH_ADDR_BOOTEND            (0x08000000 + 128*1024)
 
+#define FLASH_ADDR_FW_START           0x08040000
+
 
 #define SDRAM_ADDR_START              0xD0000000    // 16MB
-#define SDRAM_ADDR_MEM_BUF            0xD1000000    // 16MB
+#define SDRAM_ADDR_HEAP               0xD1000000    // 16MB
 
 #define SDRAM_ADDR_IMAGE              0xD0000000    // 2MB
 #define SDRAM_ADDR_FW                 0xD0200000    // 2MB
@@ -155,9 +160,28 @@
 #define _HW_DEF_ADC_Y_AXIS            1
 
 
+#define _PIN_GPIO_BAT_CHG             0
 #define _PIN_GPIO_LCD_BK_EN           2
 #define _PIN_GPIO_SDCARD_DETECT       4
+#define _PIN_GPIO_ESP_RST             5
+#define _PIN_GPIO_ESP_BOOT            6
 #define _PIN_GPIO_SPK_EN              7
+
+#define _EEP_ADDR_VOLUME              0
+#define _EEP_ADDR_BRIGHT              2
+#define _EEP_ADDR_VID_MODE            4
+
+
+#define fopen     ob_fopen
+#define fclose    ob_fclose
+#define fread     ob_fread
+#define fwrite    ob_fwrite
+#define fgets     ob_fgets
+#define fseek     ob_fseek
+#define rewind    ob_frewind
+#define fgetc     ob_fgetc
+#define ftell     ob_ftell
+
 
 
 

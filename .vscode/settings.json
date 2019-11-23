@@ -1,0 +1,6 @@
+{
+  "files.associations": {
+    "esp32.h": "c",
+    "hw_def.h": "c"
+  }
+}

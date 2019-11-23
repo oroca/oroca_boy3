@@ -68,7 +68,7 @@ void M_MakeDirectory(const char *path)
     // remove trailing slash
     len = strlen (path);
 
-    path_mod = (char*)memMalloc (len + 1);
+    path_mod = (char*)malloc (len + 1);
 
     strncpy (path_mod, path, len);
 
@@ -86,7 +86,7 @@ void M_MakeDirectory(const char *path)
       I_Error ("M_MakeDirectory: path = '%s', path_mod = '%s', res = %i", path, path_mod, res);
     }
 
-    memFree(path_mod);
+    free(path_mod);
 #endif
 #endif
 }
@@ -194,7 +194,7 @@ char *M_FileCaseExists(const char *path)
     }
 
     // 5. no luck
-    memFree(path_dup);
+    free(path_dup);
     return NULL;
 }
 
@@ -635,7 +635,7 @@ char *M_StringJoin(const char *s, ...)
     va_end(args);
 
 
-    result = memMalloc(result_len);
+    result = malloc(result_len);
 
     if (result == NULL)
     {

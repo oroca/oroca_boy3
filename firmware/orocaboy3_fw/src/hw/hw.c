@@ -25,7 +25,7 @@ __attribute__((section(".tag"))) flash_tag_t fw_tag =
      // fw info
      //
      0xAAAA5555,        // magic_number
-     "V191105R1",       // version_str
+     "V191123R1",       // version_str
      "OROCABOY3",       // board_str
      "Launcher",        // name
      __DATE__,
@@ -90,7 +90,6 @@ void hwInit(void)
 
 
   usbInit();
-  vcpInit();
   ltdcInit();
   slotInit();
 
@@ -99,6 +98,40 @@ void hwInit(void)
   {
     fatfsInit();
   }
+
+  if (buttonGetPressed(_DEF_HW_BTN_SELECT) == true)
+  {
+    logPrintf("usb mode   \t\t: USB_MSC\r\n");
+    usbBegin(USB_MSC_MODE);
+  }
+  else
+  {
+    logPrintf("usb mode   \t\t: USB_CDC\r\n");
+    usbBegin(USB_CDC_MODE);
+    vcpInit();
+  }
+
+  //dacInit();
+  speakerInit();
+  lcdInit();
+
+  esp32Init();
+  batteryInit();
+  joypadInit();
+  osdInit();
+
+
+
+
+
+
+
+
+
+  logPrintf("volume    \t\t: %d\n", speakerGetVolume());
+  logPrintf("bright    \t\t: %d\n", lcdGetBackLight());
+
+
 
   logPrintf("Start...\r\n");
 

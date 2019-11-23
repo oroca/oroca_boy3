@@ -25,8 +25,10 @@ void speakerDisable(void);
 void speakerSetVolume(uint8_t volume_data);
 uint8_t speakerGetVolume(void);
 void speakerStart(uint32_t hz);
+void speakerReStart(void);
 void speakerStop(void);
 uint32_t speakerAvailable(void);
+uint32_t speakerGetBufLength(void);
 void speakerPutch(uint8_t data);
 void speakerWrite(uint8_t *p_data, uint32_t length);
 

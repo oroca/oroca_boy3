@@ -91,6 +91,9 @@ bool flashErase(uint32_t addr, uint32_t length)
 
   for (banks = 0; banks < 2; banks++)
   {
+    start_sector = -1;
+    end_sector = -1;
+
     if (banks == 0)
     {
       flash_tbl = flash_tbl_bank1;

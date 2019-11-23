@@ -1556,28 +1556,35 @@ void G_LoadGame (char* name)
 { 
     M_StringCopy(savename, name, sizeof(savename));
     gameaction = ga_loadgame; 
+
+    printf("G_LoadGame\n");
 } 
 
 void G_DoLoadGame (void) 
 { 
     int savedleveltime;
+    FRESULT fr_ret;
 	 
     gameaction = ga_nothing; 
 	 
-    save_stream = fopen(savename, "rb");
+    printf("load 0\n");
 
-    if (save_stream == NULL)
+    fr_ret = f_open(&save_stream, savename, FA_OPEN_EXISTING | FA_READ);
+
+    if (fr_ret != FR_OK)
     {
         I_Error("Could not load savegame %s", savename);
     }
 
     savegame_error = false;
 
+    printf("load 1\n");
     if (!P_ReadSaveGameHeader())
     {
-        fclose(save_stream);
+        f_close(&save_stream);
         return;
     }
+    printf("load 2\n");
 
     savedleveltime = leveltime;
     
@@ -1595,7 +1602,7 @@ void G_DoLoadGame (void)
     if (!P_ReadSaveGameEOF())
 	I_Error ("Bad savegame");
 
-    fclose(save_stream);
+    f_close(&save_stream);
     
     if (setsizeneeded)
 	R_ExecuteSetViewSize ();
@@ -1622,13 +1629,17 @@ G_SaveGame
 
 void G_DoSaveGame (void) 
 { 
+#if 0
     char *savegame_file;
     char *temp_savegame_file;
     char *recovery_savegame_file;
 
+    printf("save-1\n");
     recovery_savegame_file = NULL;
     temp_savegame_file = P_TempSaveGameFile();
     savegame_file = P_SaveGameFile(savegameslot);
+
+    printf("save-2, %s, %s\n", savegame_file, temp_savegame_file); //@baram
 
     // Open the savegame file for writing.  We write to a temporary file
     // and then rename it at the end if it was successfully written.
@@ -1695,6 +1706,90 @@ void G_DoSaveGame (void)
 
     // draw the pattern into the back screen
     R_FillBackScreen ();
+#else
+    char *savegame_file;
+    char *temp_savegame_file;
+    char *recovery_savegame_file;
+    FRESULT fp_ret;
+
+
+    recovery_savegame_file = NULL;
+    temp_savegame_file = P_TempSaveGameFile();
+    savegame_file = P_SaveGameFile(savegameslot);
+
+
+    // Open the savegame file for writing.  We write to a temporary file
+    // and then rename it at the end if it was successfully written.
+    // This prevents an existing savegame from being overwritten by
+    // a corrupted one, or if a savegame buffer overrun occurs.
+    fp_ret = f_open(&save_stream, temp_savegame_file, FA_CREATE_ALWAYS | FA_WRITE);
+
+    if (fp_ret != FR_OK)
+    {
+        // Failed to save the game, so we're going to have to abort. But
+        // to be nice, save to somewhere else before we call I_Error().
+        recovery_savegame_file = M_TempFile("recovery.dsg");
+
+        fp_ret = f_open(&save_stream, recovery_savegame_file, FA_CREATE_ALWAYS | FA_WRITE);
+
+        if (fp_ret != FR_OK)
+        {
+            I_Error("Failed to open either '%s' or '%s' to write savegame.",
+                    temp_savegame_file, recovery_savegame_file);
+        }
+    }
+
+    savegame_error = false;
+
+    P_WriteSaveGameHeader(savedescription);
+
+    P_ArchivePlayers ();
+    P_ArchiveWorld ();
+    P_ArchiveThinkers ();
+    P_ArchiveSpecials ();
+
+    P_WriteSaveGameEOF();
+
+    // Enforce the same savegame size limit as in Vanilla Doom,
+    // except if the vanilla_savegame_limit setting is turned off.
+
+    if (vanilla_savegame_limit && f_tell(&save_stream) > SAVEGAMESIZE)
+    {
+        I_Error("Savegame buffer overrun");
+    }
+
+    // Finish up, close the savegame file.
+
+    f_close(&save_stream);
+
+    if (recovery_savegame_file != NULL)
+    {
+        // We failed to save to the normal location, but we wrote a
+        // recovery file to the temp directory. Now we can bomb out
+        // with an error.
+        I_Error("Failed to open savegame file '%s' for writing.\n"
+                "But your game has been saved to '%s' for recovery.",
+                temp_savegame_file, recovery_savegame_file);
+    }
+
+    // Now rename the temporary savegame file to the actual savegame
+    // file, overwriting the old savegame if there was one there.
+
+    //remove(savegame_file);
+    //rename(temp_savegame_file, savegame_file);
+
+    f_unlink (savegame_file);
+    f_rename (temp_savegame_file, savegame_file);
+
+    gameaction = ga_nothing;
+    M_StringCopy(savedescription, "", sizeof(savedescription));
+
+    players[consoleplayer].message = DEH_String(GGSAVED);
+
+    // draw the pattern into the back screen
+    R_FillBackScreen ();
+
+#endif
 }
  
 

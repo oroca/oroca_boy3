@@ -6,7 +6,8 @@
 
 btn_showView::btn_showView()
 {
-
+  prev_key = 0;
+  key_repeat = 1;
 }
 
 void btn_showView::setupScreen()
@@ -64,10 +65,46 @@ void btn_showView::handleTickEvent(void)
 
 
 
-  btn_joy.moveTo(44  + map(adcRead(0), 0, 4095, -20, 20),
-                 168 - map(adcRead(1), 0, 4095, -20, 20));
+  btn_joy.moveTo(44  + map(joypadGetX(), -100, 100, -20, 20),
+                 168 - map(joypadGetY(), -100, 100, -20, 20));
   btn_joy.invalidate();
+
+  processKey();
+
 #endif
+}
+
+void btn_showView::processKey(void)
+{
+  uint32_t key = 0;
+
+
+  for (int i=0; i<BUTTON_MAX_CH; i++)
+  {
+    if (buttonGetPressed(i) == true)
+    {
+      key |= (1<<i);
+    }
+  }
+
+  if (key != prev_key)
+  {
+    key_repeat = 0;
+  }
+  key_repeat++;
+
+  prev_key = key;
+
+  if (key > 0)
+  {
+    if (key_repeat == 0 || key_repeat >= 2)
+    {
+      if(key & (1<<0))
+      {
+        application().gotoMainScreenNoTransition();
+      }
+    }
+  }
 }
 
 void btn_showView::handleKeyEvent(uint8_t key)
@@ -80,6 +117,11 @@ void btn_showView::handleKeyEvent(uint8_t key)
   if (millis()-pre_time >= 100)
   {
     pre_time = millis();
+
+    if (buttonGetPressed(0))
+    {
+      application().gotoMainScreenNoTransition();
+    }
   }
 
 #endif

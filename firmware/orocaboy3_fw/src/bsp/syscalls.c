@@ -84,17 +84,20 @@ void initialise_monitor_handles()
 
 int _getpid(void)
 {
+  printf("_getpid\n");
   return 1;
 }
 
 int _kill(int pid, int sig)
 {
+  printf("_kill\n");
   errno = EINVAL;
   return -1;
 }
 
 void _exit (int status)
 {
+  printf("_exit\n");
   _kill(status, -1);
   while (1) {}
 }
@@ -107,6 +110,7 @@ int _write(int file, char *ptr, int len)
     {
        __io_putchar( *ptr++ );
     }
+
   return len;
 }
 
@@ -143,9 +147,14 @@ int _read(int file, char *ptr, int len)
    return len;
 }
 
+int file_num = 1;
+
 int _open(char *path, int flags, ...)
 {
   /* Pretend like we always fail */
+
+  return file_num;
+
   return -1;
 }
 

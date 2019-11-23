@@ -17,9 +17,16 @@ public:
 
     virtual void handleTickEvent(void);
     virtual void handleKeyEvent(uint8_t key);
+
+    void processKey(void);
+    void updateSlotInfo(void);
 protected:
 
 private:
+
+    uint32_t prev_key;
+    uint32_t key_repeat;
+
 
 };
 

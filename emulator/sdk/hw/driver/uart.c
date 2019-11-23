@@ -66,7 +66,7 @@ typedef struct
 
 
 
-static __attribute__((section(".sram_d3")))  uart_t uart_tbl[UART_MAX_CH];
+static __attribute__((section(".sram_d4")))  uart_t uart_tbl[UART_MAX_CH];
 
 
 UART_HandleTypeDef huart1;

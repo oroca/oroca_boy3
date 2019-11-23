@@ -13,7 +13,7 @@
 
 
 __attribute__((section(".version"))) uint8_t boot_name[32] = "OROCABOY3";
-__attribute__((section(".version"))) uint8_t boot_ver[32]  = "B191104R1";
+__attribute__((section(".version"))) uint8_t boot_ver[32]  = "B191122R1";
 
 static uint8_t reset_count = 0;
 

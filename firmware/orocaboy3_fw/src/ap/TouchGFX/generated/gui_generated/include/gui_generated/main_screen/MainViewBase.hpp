@@ -14,6 +14,7 @@
 #include <touchgfx/containers/SwipeContainer.hpp>
 #include <touchgfx/containers/Container.hpp>
 
+#include <touchgfx/widgets/TextAreaWithWildcard.hpp>
 #include <touchgfx/widgets/ButtonWithLabel.hpp>
 #include <touchgfx/widgets/ScalableImage.hpp>
 class MainViewBase : public touchgfx::View<MainPresenter>
@@ -47,12 +48,14 @@ protected:
      */
     touchgfx::Box box_bg;
     touchgfx::Image image_speaker;
-    touchgfx::Image image1;
     touchgfx::TextArea textArea_title;
     touchgfx::AnimatedImage animatedImage_title;
     touchgfx::SwipeContainer swipeContainer_emulator;
     touchgfx::Container page_nes;
     touchgfx::Image image_nes;
+
+    touchgfx::Container page_gnuboy;
+    touchgfx::Image image_gameboy;
 
     touchgfx::Container page_msx;
     touchgfx::Image image_msx;
@@ -60,11 +63,34 @@ protected:
     touchgfx::Container page_doom;
     touchgfx::Image image_doom;
 
-    touchgfx::Container page_button;
-    touchgfx::TextArea test_menu;
+    touchgfx::Container page_user1;
+    touchgfx::TextAreaWithOneWildcard textArea_slot_title;
+
+    touchgfx::Container page_user2;
+    touchgfx::TextAreaWithOneWildcard textArea_slot_title_1;
 
     touchgfx::ButtonWithLabel button_load;
+    touchgfx::Image image_bat3;
+    touchgfx::Image image_bat4;
+    touchgfx::Image image_bat2;
+    touchgfx::Image image_bat1;
     touchgfx::ScalableImage image_bat;
+    touchgfx::Image image_sd;
+    touchgfx::TextAreaWithOneWildcard textArea_volume;
+    touchgfx::Image image_drive;
+    touchgfx::TextAreaWithOneWildcard textArea_slot;
+
+    /*
+     * Wildcard Buffers
+     */
+    static const uint16_t TEXTAREA_SLOT_TITLE_SIZE = 48;
+    touchgfx::Unicode::UnicodeChar textArea_slot_titleBuffer[TEXTAREA_SLOT_TITLE_SIZE];
+    static const uint16_t TEXTAREA_SLOT_TITLE_1_SIZE = 48;
+    touchgfx::Unicode::UnicodeChar textArea_slot_title_1Buffer[TEXTAREA_SLOT_TITLE_1_SIZE];
+    static const uint16_t TEXTAREA_VOLUME_SIZE = 10;
+    touchgfx::Unicode::UnicodeChar textArea_volumeBuffer[TEXTAREA_VOLUME_SIZE];
+    static const uint16_t TEXTAREA_SLOT_SIZE = 48;
+    touchgfx::Unicode::UnicodeChar textArea_slotBuffer[TEXTAREA_SLOT_SIZE];
 
 private:
 

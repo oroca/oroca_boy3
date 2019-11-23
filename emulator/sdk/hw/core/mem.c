@@ -16,8 +16,8 @@
 
 //-- Internal Variables
 //
-static uint32_t __heap_start = SDRAM_ADDR_MEM_BUF;
-static uint32_t __heap_limit = SDRAM_ADDR_MEM_BUF + 16*1024*1024;
+static uint32_t __heap_start = SDRAM_ADDR_HEAP;
+static uint32_t __heap_limit = SDRAM_ADDR_HEAP + 16*1024*1024;
 
 
 //-- External Variables

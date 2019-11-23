@@ -500,25 +500,28 @@ menu_t  SaveDef =
 //
 void M_ReadSaveStrings(void)
 {
-    FILE   *handle;
+    FIL   handle;
+    FRESULT fr_ret;
+    UINT len;
+
     int     i;
     char    name[256];
 
     for (i = 0;i < load_end;i++)
     {
-        int retval;
         M_StringCopy(name, P_SaveGameFile(i), sizeof(name));
 
-	handle = fopen(name, "rb");
-        if (handle == NULL)
+        fr_ret = f_open(&handle, name, FA_OPEN_EXISTING | FA_READ);
+        if (fr_ret != FR_OK)
         {
             M_StringCopy(savegamestrings[i], EMPTYSTRING, SAVESTRINGSIZE);
             LoadMenu[i].status = 0;
             continue;
         }
-        retval = fread(&savegamestrings[i], 1, SAVESTRINGSIZE, handle);
-	fclose(handle);
-        LoadMenu[i].status = retval == SAVESTRINGSIZE;
+        fr_ret = f_read(&handle, &savegamestrings[i], SAVESTRINGSIZE, &len);
+
+        f_close(&handle);
+        LoadMenu[i].status = len == SAVESTRINGSIZE;
     }
 }
 
@@ -535,8 +538,8 @@ void M_DrawLoad(void)
 
     for (i = 0;i < load_end; i++)
     {
-	M_DrawSaveLoadBorder(LoadDef.x,LoadDef.y+LINEHEIGHT*i);
-	M_WriteText(LoadDef.x,LoadDef.y+LINEHEIGHT*i,savegamestrings[i]);
+      M_DrawSaveLoadBorder(LoadDef.x,LoadDef.y+LINEHEIGHT*i);
+      M_WriteText(LoadDef.x,LoadDef.y+LINEHEIGHT*i,savegamestrings[i]);
     }
 }
 
@@ -585,8 +588,8 @@ void M_LoadGame (int choice)
 {
     if (netgame)
     {
-	M_StartMessage(DEH_String(LOADNET),NULL,false);
-	return;
+      M_StartMessage(DEH_String(LOADNET),NULL,false);
+      return;
     }
 	
     M_SetupNextMenu(&LoadDef);
@@ -677,12 +680,12 @@ void M_SaveGame (int choice)
 {
     if (!usergame)
     {
-	M_StartMessage(DEH_String(SAVEDEAD),NULL,false);
-	return;
+      M_StartMessage(DEH_String(SAVEDEAD),NULL,false);
+      return;
     }
 	
     if (gamestate != GS_LEVEL)
-	return;
+      return;
 	
     M_SetupNextMenu(&SaveDef);
     M_ReadSaveStrings();
@@ -877,16 +880,16 @@ void M_NewGame(int choice)
 {
     if (netgame && !demoplayback)
     {
-	M_StartMessage(DEH_String(NEWGAME),NULL,false);
-	return;
+      M_StartMessage(DEH_String(NEWGAME),NULL,false);
+      return;
     }
 	
     // Chex Quest disabled the episode select screen, as did Doom II.
 
     if (gamemode == commercial || gameversion == exe_chex)
-	M_SetupNextMenu(&NewDef);
+      M_SetupNextMenu(&NewDef);
     else
-	M_SetupNextMenu(&EpiDef);
+      M_SetupNextMenu(&EpiDef);
 }
 
 

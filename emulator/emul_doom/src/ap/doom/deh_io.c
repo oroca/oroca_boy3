@@ -119,7 +119,7 @@ deh_context_t *DEH_OpenLump(int lumpnum)
     context->input_buffer_len = W_LumpLength(lumpnum);
     context->input_buffer_pos = 0;
 
-    context->filename = memMalloc(9);
+    context->filename = malloc(9);
     M_StringCopy(context->filename, lumpinfo[lumpnum]->name, 9);
 
     return context;
@@ -138,7 +138,7 @@ void DEH_CloseFile(deh_context_t *context)
         W_ReleaseLumpNum(context->lumpnum);
     }
 
-    memFree(context->filename);
+    free(context->filename);
     Z_Free(context->readbuffer);
     Z_Free(context);
 }

@@ -11,6 +11,8 @@
 #include "lcd.h"
 #include "ltdc.h"
 #include "gpio.h"
+#include "eeprom.h"
+#include "pwm.h"
 #include "hangul/PHan_Lib.h"
 
 
@@ -21,7 +23,7 @@
 
 
 static bool is_init = false;
-
+static uint8_t backlight_value = 100;
 
 extern uint16_t *ltdc_draw_buffer;
 
@@ -33,10 +35,32 @@ void disHanFont(int x, int y, PHAN_FONT_OBJ *FontPtr, uint16_t textcolor);
 
 bool lcdInit(void)
 {
+  uint8_t eep_data[2];
+
+
   is_init = true;
 
   gpioPinWrite(_PIN_GPIO_LCD_BK_EN, _DEF_LOW);
 
+
+
+
+  eep_data[0] = eepromReadByte(_EEP_ADDR_BRIGHT+0);
+  eep_data[1] = eepromReadByte(_EEP_ADDR_BRIGHT+1);
+
+  if ((uint8_t)eep_data[0] == (uint8_t)(~eep_data[1]))
+  {
+    backlight_value = eep_data[0];
+  }
+  else
+  {
+    backlight_value = 100;
+    eepromWriteByte(_EEP_ADDR_BRIGHT+0, backlight_value);
+    eepromWriteByte(_EEP_ADDR_BRIGHT+1, ~backlight_value);
+  }
+
+
+  lcdSetBackLight(backlight_value);
 
   return true;
 }
@@ -49,6 +73,23 @@ bool lcdIsInit(void)
 void lcdReset(void)
 {
 
+}
+
+uint8_t lcdGetBackLight(void)
+{
+  return backlight_value;
+}
+
+void lcdSetBackLight(uint8_t value)
+{
+  pwmWrite(0, map(value, 0, 100, 255, 0));
+
+  if (value != backlight_value)
+  {
+    backlight_value = value;
+    eepromWriteByte(_EEP_ADDR_BRIGHT+0, value);
+    eepromWriteByte(_EEP_ADDR_BRIGHT+1, ~value);
+  }
 }
 
 uint32_t lcdReadPixel(uint16_t x_pos, uint16_t y_pos)
@@ -269,6 +310,37 @@ void lcdPrintf(int x, int y, uint16_t color,  const char *fmt, ...)
 
     if( FontBuf.Code_Type == PHAN_END_CODE ) break;
   }
+}
+
+uint32_t lcdGetStrWidth(const char *fmt, ...)
+{
+  va_list arg;
+  va_start (arg, fmt);
+  int32_t len;
+  char print_buffer[256];
+  int Size_Char;
+  int i;
+  PHAN_FONT_OBJ FontBuf;
+  uint32_t str_len;
+
+
+  len = vsnprintf(print_buffer, 255, fmt, arg);
+  va_end (arg);
+
+  str_len = 0;
+
+  for( i=0; i<len; i+=Size_Char )
+  {
+    PHan_FontLoad( &print_buffer[i], &FontBuf );
+
+    Size_Char = FontBuf.Size_Char;
+
+    str_len += (Size_Char * 8);
+
+    if( FontBuf.Code_Type == PHAN_END_CODE ) break;
+  }
+
+  return str_len;
 }
 
 void disHanFont(int x, int y, PHAN_FONT_OBJ *FontPtr, uint16_t textcolor)

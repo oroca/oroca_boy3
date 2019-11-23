@@ -492,7 +492,7 @@ static char *CheckDirectoryHasIWAD(const char *dir, const char *iwadname)
     }
 
     probe = M_FileCaseExists(filename);
-    memFree(filename);
+    free(filename);
     if (probe != NULL)
     {
         return probe;
@@ -769,7 +769,7 @@ char *D_FindWADByName(const char *name)
             return probe;
         }
 
-        memFree(path);
+        free(path);
     }
 
     // File not found

@@ -37,7 +37,7 @@
 #include "doomtype.h"
 
 #define LOW_PASS_FILTER
-#define NUM_CHANNELS 16
+#define NUM_CHANNELS 8
 
 typedef struct allocated_sound_s allocated_sound_t;
 
@@ -49,6 +49,22 @@ static boolean use_sfx_prefix;
 
 
 int use_libsamplerate = 0;
+uint8_t ch_index = 0;
+
+typedef struct
+{
+  bool     is_busy;
+  bool     request_stop;
+  bool     request_play;
+  uint8_t  channel;
+  uint32_t index;
+  uint32_t length;
+  uint8_t  data[32*1024];
+} sound_buf_t;
+
+
+sound_buf_t *p_sound_buf = NULL;
+
 
 
 static void GetSfxLumpName(sfxinfo_t *sfx, char *buf, size_t buf_len)
@@ -97,7 +113,7 @@ static int I_SDL_GetSfxLumpNum(sfxinfo_t *sfx)
 
 static void I_SDL_UpdateSoundParams(int handle, int vol, int sep)
 {
-  printf("sound : I_SDL_UpdateSoundParams %d %d %d\n", handle, vol, sep);
+  //printf("sound : I_SDL_UpdateSoundParams %d %d %d\n", handle, vol, sep);
 }
 
 //
@@ -147,6 +163,11 @@ static int I_SDL_StartSound(sfxinfo_t *sfxinfo, int channel, int vol, int sep, i
   {
     memFree(p_out_buf);
   }
+#else
+  if (data != NULL)
+  {
+    W_ReleaseLumpNum(lumpnum);
+  }
 #endif
 
 
@@ -195,33 +216,31 @@ static int I_SDL_StartSound(sfxinfo_t *sfxinfo, int channel, int vol, int sep, i
   data += 16;
   length -= 32;
 
+  static int max_length = 0;
 
-  //printf("%d, %d, \n", samplerate, length );
+  if (length > max_length) max_length = length;
+
+  //printf("%dHz, %dB, ch %d, %d, %d\n", samplerate, length , channel, max_length, data[0]);
 
 
-  p_out_buf = memMalloc(length * 4);
-
-  if (p_out_buf == NULL)
+  for (int i=0; i<NUM_CHANNELS; i++)
   {
-    return channel;
+    if (p_sound_buf[i].is_busy == true && p_sound_buf[i].channel == channel)
+    {
+      p_sound_buf[i].request_stop = true;
+    }
   }
 
-  int buf_length = 0;
-  uint8_t data_out;
-  for (int i=0; i<length; i++)
-  {
-    data_out = data[i] - 0x80;
-    p_out_buf[buf_length++] = data_out;
-    p_out_buf[buf_length++] = data_out;
-    p_out_buf[buf_length++] = data_out;
-    p_out_buf[buf_length++] = data_out;
-  }
+  ch_index = (ch_index + 1) % NUM_CHANNELS;
 
-  //audioPlay((uint16_t *)data, length);
+  memcpy(p_sound_buf[ch_index].data, data, length);
+  p_sound_buf[ch_index].channel = channel;
+  p_sound_buf[ch_index].index = 0;
+  p_sound_buf[ch_index].length = length;
+  p_sound_buf[ch_index].request_play = true;
+  p_sound_buf[ch_index].is_busy = true;
 
-
-  //audioPlay((uint16_t *)p_out_buf, buf_length);  @baram
-
+  //printf("%d %d\n", ch_index, channel);
 
   current_sound_handle = channel;
 
@@ -232,11 +251,20 @@ static void I_SDL_StopSound(int handle)
 {
   printf("sound : I_SDL_StopSound\n");
 
-    if (!sound_initialized || handle < 0 || handle >= NUM_CHANNELS)
+  if (!sound_initialized || handle < 0 || handle >= NUM_CHANNELS)
+  {
+      return;
+  }
+
+  for (int ch=0; ch<NUM_CHANNELS; ch++)
+  {
+    if (p_sound_buf[ch].channel == handle && p_sound_buf[ch].is_busy)
     {
-        return;
+      p_sound_buf[ch].request_stop = true;
     }
-    //audioStop(); @baram
+  }
+
+  //audioStop(); @baram
 }
 
 
@@ -257,6 +285,15 @@ static boolean I_SDL_SoundIsPlaying(int handle)
       return true;
     }
 #endif
+
+    for (int ch=0; ch<NUM_CHANNELS; ch++)
+    {
+      if (p_sound_buf[ch].channel == handle && p_sound_buf[ch].is_busy)
+      {
+        return true;
+      }
+    }
+
     return false;
 }
 
@@ -266,7 +303,47 @@ static boolean I_SDL_SoundIsPlaying(int handle)
 
 static void I_SDL_UpdateSound(void)
 {
+  uint32_t data_sum;
+  uint32_t data_index;
+  int buf_length;
+
+
   //printf("sound : I_SDL_UpdateSound\n");
+
+  return;
+
+  buf_length = speakerAvailable();
+
+
+  for (int i=0; i<256 && i<buf_length; i++)
+  {
+    data_sum = 0;
+    data_index = 0;
+    for (int ch=0; ch<NUM_CHANNELS; ch++)
+    {
+      if (p_sound_buf[ch].request_stop == true)
+      {
+        p_sound_buf[ch].request_stop = false;
+        p_sound_buf[ch].is_busy = false;
+      }
+
+      if (p_sound_buf[ch].is_busy)
+      {
+        data_sum += p_sound_buf[ch].data[p_sound_buf[ch].index++];
+        data_index++;
+
+        if (p_sound_buf[ch].index >= p_sound_buf[ch].length)
+        {
+          p_sound_buf[ch].is_busy = false;
+        }
+      }
+    }
+    if (data_index > 0)
+    {
+      data_sum = data_sum / data_index;
+    }
+    speakerPutch(data_sum);
+  }
 }
 
 static void I_SDL_ShutdownSound(void)
@@ -284,14 +361,98 @@ static void I_SDL_ShutdownSound(void)
 }
 
 
+static void threadAudio(void const *argument);
+
 static boolean I_SDL_InitSound(boolean _use_sfx_prefix)
 {
     use_sfx_prefix = _use_sfx_prefix;
     sound_initialized = true;
 
+
+    p_sound_buf = (sound_buf_t *)malloc(sizeof(sound_buf_t) * NUM_CHANNELS);
+
+    for (int i=0; i<NUM_CHANNELS; i++)
+    {
+      p_sound_buf[i].is_busy = false;
+      p_sound_buf[i].request_stop = false;
+      p_sound_buf[i].request_play = false;
+      p_sound_buf[i].channel = 0;
+      p_sound_buf[i].index = 0;
+      p_sound_buf[i].length = 0;
+    }
+
+    speakerEnable();
+    speakerStart(11025);
+
+    osThreadDef(threadAudio, threadAudio, _HW_DEF_RTOS_THREAD_PRI_MAIN, 0, _HW_DEF_RTOS_THREAD_MEM_MAIN);
+    if (osThreadCreate(osThread(threadAudio), NULL) != NULL)
+    {
+      logPrintf("threadAudio \t\t: OK\r\n");
+    }
+    else
+    {
+      logPrintf("threadAudio \t\t: Fail\r\n");
+      while(1);
+    }
+
+
     printf("sound : I_SDL_InitSound\n");
     return true;
 }
+
+static void threadAudio(void const *argument)
+{
+  UNUSED(argument);
+
+  uint32_t data_sum;
+  uint32_t data_index;
+  int buf_length;
+
+
+
+
+  while(1)
+  {
+    buf_length = speakerAvailable();
+
+    if (buf_length > 16 && (speakerGetBufLength()-buf_length) < 16*2)
+    {
+      for (int i=0; i<16; i++)
+      {
+        data_sum = 0;
+        data_index = 0;
+        for (int ch=0; ch<NUM_CHANNELS; ch++)
+        {
+          if (p_sound_buf[ch].request_stop == true)
+          {
+            p_sound_buf[ch].request_stop = false;
+            p_sound_buf[ch].is_busy = false;
+          }
+
+          if (p_sound_buf[ch].is_busy)
+          {
+            data_sum += p_sound_buf[ch].data[p_sound_buf[ch].index++];
+            data_index++;
+
+            if (p_sound_buf[ch].index >= p_sound_buf[ch].length)
+            {
+              p_sound_buf[ch].is_busy = false;
+            }
+          }
+        }
+        if (data_index > 0)
+        {
+          data_sum = data_sum / data_index;
+        }
+        speakerPutch(data_sum);
+      }
+    }
+    delay(1);
+  }
+}
+
+
+
 #if 1
 static snddevice_t sound_sdl_devices[] = 
 {

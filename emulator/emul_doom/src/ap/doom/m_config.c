@@ -2275,7 +2275,7 @@ char *M_GetSaveGameDir(char *iwadname)
 
         M_MakeDirectory(savegamedir);
 
-        memFree(topdir);
+        free(topdir);
     }
 
     return savegamedir;
