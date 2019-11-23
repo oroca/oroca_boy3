@@ -169,7 +169,7 @@
 
 #define _EEP_ADDR_VOLUME              0
 #define _EEP_ADDR_BRIGHT              2
-
+#define _EEP_ADDR_VID_MODE            4
 
 
 #define fopen     ob_fopen

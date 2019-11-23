@@ -54,14 +54,14 @@ protected:
     touchgfx::Container page_nes;
     touchgfx::Image image_nes;
 
+    touchgfx::Container page_gnuboy;
+    touchgfx::Image image_gameboy;
+
     touchgfx::Container page_msx;
     touchgfx::Image image_msx;
 
     touchgfx::Container page_doom;
     touchgfx::Image image_doom;
-
-    touchgfx::Container page_button;
-    touchgfx::TextArea test_menu;
 
     touchgfx::Container page_user1;
     touchgfx::TextAreaWithOneWildcard textArea_slot_title;

@@ -22,7 +22,7 @@ rcvar_t emu_exports[] =
 
 
 
-
+extern uint8_t osd_menu(void);
 
 
 
@@ -84,6 +84,7 @@ void emu_run()
 	void *timer = sys_timer();
 	int delay;
 
+
 	vid_begin();
 	lcd_begin();
 	for (;;)
@@ -119,5 +120,11 @@ void emu_run()
 		}
 		/* VBLANK END */
 		/* FRAME END */
+
+
+		if (osd_menu())
+		{
+		  break;
+		}
 	}
 }

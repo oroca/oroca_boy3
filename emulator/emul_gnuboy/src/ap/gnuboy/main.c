@@ -11,8 +11,11 @@
 #include "hw.h"
 #include "Version"
 #include "hw_def.h"
+#include "button.h"
 
+extern char szRomPath[256];
 
+extern int gnuboyFiler();
 
 
 
@@ -69,14 +72,31 @@ void gnuboyMain(void)
   rc_command("set savedir /gnuboy/saves");
 
 
-	//loader_init(rom);
-	loader_init("/gnuboy/game.gbc");
-	
-	emu_reset();
-	emu_run();
+  while(1)
+  {
+    switch (gnuboyFiler())
+    {
+      case 0:  // Selected a file
+        loader_init(szRomPath);
+        emu_reset();
+        emu_run();
 
-  //rom_unload();
-  //vid_close();
-  //pcm_close();
+        loader_unload();
+        break;
+
+      case 1:  // Return to Emu
+          break;
+
+      case 2:  // Reset
+        break;
+
+      case -1:  // Error
+        printf("Filer Error\r\n");
+        while(1);
+    }
+  }
+
+  vid_close();
+  pcm_close();
 }
 

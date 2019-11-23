@@ -312,6 +312,37 @@ void lcdPrintf(int x, int y, uint16_t color,  const char *fmt, ...)
   }
 }
 
+uint32_t lcdGetStrWidth(const char *fmt, ...)
+{
+  va_list arg;
+  va_start (arg, fmt);
+  int32_t len;
+  char print_buffer[256];
+  int Size_Char;
+  int i;
+  PHAN_FONT_OBJ FontBuf;
+  uint32_t str_len;
+
+
+  len = vsnprintf(print_buffer, 255, fmt, arg);
+  va_end (arg);
+
+  str_len = 0;
+
+  for( i=0; i<len; i+=Size_Char )
+  {
+    PHan_FontLoad( &print_buffer[i], &FontBuf );
+
+    Size_Char = FontBuf.Size_Char;
+
+    str_len += (Size_Char * 8);
+
+    if( FontBuf.Code_Type == PHAN_END_CODE ) break;
+  }
+
+  return str_len;
+}
+
 void disHanFont(int x, int y, PHAN_FONT_OBJ *FontPtr, uint16_t textcolor)
 {
   uint16_t    i, j, Loop;

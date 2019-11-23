@@ -8,12 +8,18 @@
 #include "def.h"
 #include "resize.h"
 #include "speaker.h"
+#include "ltdc.h"
+#include "lcd.h"
+#include "osd.h"
+#include "button.h"
+#include "eeprom.h"
+
 
 #include "../../defs.h"
 #include "../../pcm.h"
 #include "../../rc.h"
 #include "../../fb.h"
-
+#include "../../loader.h"
 
 
 extern uint32_t micros(void);
@@ -111,9 +117,9 @@ void pcm_init()
   pcm.len = n / 60;
   pcm.buf = malloc(pcm.len);
 
-
-  speakerEnable();
   speakerStart(samplerate);
+  delay(100);
+  speakerEnable();
 }
 
 void pcm_close()
@@ -159,6 +165,14 @@ void vid_init()
 
   fb.dirty    = 0;
   fb.enabled  = 1;
+
+  vid_mode = eepromReadByte(_EEP_ADDR_VID_MODE);
+
+  if (vid_mode >= 5)
+  {
+    vid_mode = 0;
+    eepromWriteByte(_EEP_ADDR_VID_MODE, vid_mode);
+  }
 }
 
 void vid_close()
@@ -184,6 +198,8 @@ void vid_begin()
 void vid_change_mode(void)
 {
   vid_mode = (vid_mode + 1) % 5;
+
+  eepromWriteByte(_EEP_ADDR_VID_MODE, vid_mode);
 }
 
 void vid_end()
@@ -299,4 +315,102 @@ void joy_close()
 
 void joy_poll()
 {
+}
+
+
+
+
+
+bool osd_menu(void)
+{
+  uint32_t cursor = 0;
+  uint32_t cursor_last = 0;
+  uint32_t cursor_max = 4;
+  uint32_t key;
+  bool is_disp_on = false;
+  uint16_t bg_color = orange;
+  bool ret_exit = false;
+
+
+  key = osdWaitKey(false);
+
+  if ((key & (1<<_DEF_HW_BTN_X)) == 0)
+  {
+    return false;
+  }
+
+  speakerDisable();
+  speakerStop();
+
+  osdClear(bg_color);
+  osdDrawFillRect(0, 0, osdGetWidth(), 20, blue);
+
+  osdSetBgColor(blue);
+  osdPrintf((osdGetWidth()-lcdGetStrWidth("MENU"))/2, 2, white, "MENU");
+
+  buttonEnable(false);
+
+  while(1)
+  {
+    osdSetBgColor(bg_color);
+    osdPrintf(0, 46 + 20*0, white, " SAVE");
+    osdPrintf(0, 46 + 20*1, white, " LOAD");
+    osdPrintf(0, 46 + 20*2, white, " EXIT");
+    osdPrintf(0, 46 + 20*3, white, " OK");
+
+    osdDrawRect(2, 44 + 20*cursor, osdGetWidth()-4, 19, blue);
+    if (cursor != cursor_last)
+    {
+      osdDrawRect(2, 44 + 20*cursor_last, osdGetWidth()-4, 19, bg_color);
+    }
+
+    if (is_disp_on != true)
+    {
+      is_disp_on = true;
+      osdDisplayOn();
+    }
+
+    key = osdWaitKey(true);
+
+    if (key & (1<<_DEF_HW_BTN_UP))
+    {
+      cursor_last = cursor;
+
+      if (cursor == 0) cursor = cursor_max - 1;
+      else             cursor = (cursor - 1) % cursor_max;
+    }
+    if (key & (1<<_DEF_HW_BTN_DOWN))
+    {
+      cursor_last = cursor;
+      cursor = (cursor + 1) % cursor_max;
+    }
+
+    if (key & (1<<_DEF_HW_BTN_A))
+    {
+      if (cursor == 0) // SAVE
+      {
+        state_save(0);
+        osdMessage("Saving...");
+        delay(1000);
+      }
+      if (cursor == 1) // LOAD
+      {
+        state_load(0);
+        osdMessage("Loading...");
+        delay(1000);
+      }
+      if (cursor == 2) // EXIT
+      {
+        ret_exit = true;
+      }
+      break;
+    }
+  }
+
+  osdDisplayOff();
+  buttonEnable(true);
+  speakerReStart();
+  speakerEnable();
+
+  return ret_exit;
 }

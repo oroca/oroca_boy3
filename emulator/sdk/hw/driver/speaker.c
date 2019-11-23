@@ -79,6 +79,11 @@ void speakerStop(void)
   dacStop();
 }
 
+void speakerReStart(void)
+{
+  dacStart();
+}
+
 uint32_t speakerAvailable(void)
 {
   return dacAvailable();

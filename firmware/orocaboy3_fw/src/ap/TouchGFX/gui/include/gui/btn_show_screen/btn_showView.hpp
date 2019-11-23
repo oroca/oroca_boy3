@@ -16,7 +16,13 @@ public:
     void handleTickEvent(void);
     void handleKeyEvent(uint8_t key);
 
+    void processKey(void);
+
 protected:
+
+    uint32_t prev_key;
+    uint32_t key_repeat;
+
 };
 
 #endif // BTN_SHOWVIEW_HPP

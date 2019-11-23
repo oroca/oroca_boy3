@@ -34,11 +34,19 @@ MainViewBase::MainViewBase()
     page_nes.add(image_nes);
     swipeContainer_emulator.add(page_nes);
 
+    page_gnuboy.setWidth(320);
+    page_gnuboy.setHeight(150);
+
+    image_gameboy.setXY(60, 56);
+    image_gameboy.setBitmap(touchgfx::Bitmap(BITMAP_GAMEBOY_ID));
+    page_gnuboy.add(image_gameboy);
+    swipeContainer_emulator.add(page_gnuboy);
+
     page_msx.setWidth(320);
     page_msx.setHeight(150);
 
-    image_msx.setXY(60, 44);
-    image_msx.setBitmap(touchgfx::Bitmap(BITMAP_FMSX_ID));
+    image_msx.setXY(60, 39);
+    image_msx.setBitmap(touchgfx::Bitmap(BITMAP_MSX_ID));
     page_msx.add(image_msx);
     swipeContainer_emulator.add(page_msx);
 
@@ -49,16 +57,6 @@ MainViewBase::MainViewBase()
     image_doom.setBitmap(touchgfx::Bitmap(BITMAP_DOOM_ID));
     page_doom.add(image_doom);
     swipeContainer_emulator.add(page_doom);
-
-    page_button.setWidth(320);
-    page_button.setHeight(150);
-
-    test_menu.setXY(111, 77);
-    test_menu.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
-    test_menu.setLinespacing(0);
-    test_menu.setTypedText(touchgfx::TypedText(T_SINGLEUSEID3));
-    page_button.add(test_menu);
-    swipeContainer_emulator.add(page_button);
 
     page_user1.setWidth(320);
     page_user1.setHeight(150);

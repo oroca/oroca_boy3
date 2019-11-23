@@ -194,7 +194,6 @@ int rom_load()
 		if (strcmp(romfile, "-")) f = fopen(romfile, "rb");
 		else f = stdin;
 		if (!f) die("cannot open rom file: %s\n", romfile);
-
 		data = loadfile(f, &len);
 #ifndef GNUBOY_NO_MINIZIP
 	}
@@ -386,7 +385,7 @@ void rtc_load()
 void loader_unload()
 {
 	sram_save();
-	if (romfile) free(romfile);
+	//if (romfile) free(romfile);
 	if (sramfile) free(sramfile);
 	if (saveprefix) free(saveprefix);
 	if (rom.bank) free(rom.bank);
@@ -428,7 +427,6 @@ void loader_init(char *s)
 	char *name, *p;
 
 	sys_checkdir(savedir, 1); /* needs to be writable */
-
 	romfile = s;
 	rom_load();
 	vid_settitle(rom.name);

@@ -32,7 +32,8 @@ typedef struct
 
 static ring_buf16_t tx_buf;
 static uint32_t     dac_hz = 0;
-static bool         is_stop = false;
+static bool         is_stop = true;
+
 
 
 volatile __attribute__((section(".sram_d4")))   uint16_t dac_buffer[DAC_BUFFER_MAX];
@@ -106,6 +107,11 @@ void dacStart(void)
   HAL_TIM_Base_Start(&htim);
 
   is_stop = false;
+}
+
+bool dacIsStarted(void)
+{
+  return !is_stop;
 }
 
 void dacStop(void)

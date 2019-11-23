@@ -55,6 +55,11 @@ void MainView::setupScreen()
       slot_info[i].is_empty = true;
     }
   }
+
+  updateSlotInfo();
+
+  prev_key = 0;
+  key_repeat = 1;
 }
 
 void MainView::tearDownScreen()
@@ -158,9 +163,31 @@ void MainView::handleTickEvent(void)
 
     Unicode::snprintf(MainView::textArea_volumeBuffer, TEXTAREA_VOLUME_SIZE, "%d", speakerGetVolume());
     textArea_volume.invalidate();
+  }
 
-    int slot_index = swipeContainer_emulator.currentPage;
+  int slot_index = swipeContainer_emulator.currentPage;
 
+  if (slot_info[slot_index].is_empty != true)
+  {
+    Unicode::snprintf(MainView::textArea_slotBuffer, TEXTAREA_SLOT_SIZE, "%d %s %s", slot_index,
+                      slot_info[slot_index].name_str, slot_info[slot_index].ver_str);
+    textArea_slot.invalidate();
+  }
+  else
+  {
+    Unicode::snprintf(MainView::textArea_slotBuffer, TEXTAREA_SLOT_SIZE, "%d Empty", slot_index);
+    textArea_slot.invalidate();
+  }
+
+  processKey();
+
+#endif
+}
+
+void MainView::updateSlotInfo(void)
+{
+  for (int slot_index=0; slot_index<swipeContainer_emulator.getNumberOfPages(); slot_index++)
+  {
     if (slot_info[slot_index].is_empty != true)
     {
       Unicode::snprintf(MainView::textArea_slotBuffer, TEXTAREA_SLOT_SIZE, "%d %s %s", slot_index,
@@ -182,16 +209,48 @@ void MainView::handleTickEvent(void)
       Unicode::snprintf(MainView::textArea_slot_title_1Buffer, TEXTAREA_SLOT_SIZE, "Empty");
       textArea_slot_title_1.invalidate();
     }
-
   }
-#endif
+}
+
+void MainView::processKey(void)
+{
+  uint32_t key = 0;
+
+  for (int i=0; i<BUTTON_MAX_CH; i++)
+  {
+    if (buttonGetPressed(i) == true)
+    {
+      key |= (1<<i);
+    }
+  }
+
+  if (key != prev_key)
+  {
+    key_repeat = 0;
+  }
+  key_repeat++;
+
+  prev_key = key;
+
+  if (key > 0)
+  {
+    if (key_repeat == 0 || key_repeat >= 5)
+    {
+      if(key & (1<<0))
+      {
+        application().gotobtn_showScreenNoTransition();
+      }
+    }
+  }
 }
 
 void MainView::handleKeyEvent(uint8_t key)
 {
   MainViewBase::handleKeyEvent(key);
 
+
 #ifndef SIMULATOR
+
   static uint32_t pre_time;
 
   if (millis()-pre_time >= 100)
@@ -210,10 +269,6 @@ void MainView::handleKeyEvent(uint8_t key)
     {
       switch(swipeContainer_emulator.currentPage)
       {
-        case 3:
-          application().gotobtn_showScreenNoTransition();
-          break;
-
         default:
           if (slotIsAvailable(swipeContainer_emulator.currentPage) == true)
           {

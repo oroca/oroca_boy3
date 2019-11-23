@@ -23,7 +23,7 @@ enum plstatus
 };
 
 
-static byte bestmatch(int c)
+byte bestmatch(int c)
 {
 	byte n, best;
 	int r, g, b;

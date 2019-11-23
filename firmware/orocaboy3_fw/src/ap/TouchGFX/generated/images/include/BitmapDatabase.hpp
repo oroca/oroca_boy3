@@ -21,13 +21,15 @@ const uint16_t BITMAP_DARK_PAGEINDICATOR_DOT_INDICATOR_SMALL_HIGHLIGHT_ID = 11;
 const uint16_t BITMAP_DARK_PAGEINDICATOR_DOT_INDICATOR_SMALL_NORMAL_ID = 12;
 const uint16_t BITMAP_DOOM_ID = 13;
 const uint16_t BITMAP_FMSX_ID = 14;
-const uint16_t BITMAP_OROCABOY1_ID = 15;
-const uint16_t BITMAP_OROCABOY2_ID = 16;
-const uint16_t BITMAP_OROCABOY3_ID = 17;
-const uint16_t BITMAP_OROCABOY4_ID = 18;
-const uint16_t BITMAP_SD_CARD_ID = 19;
-const uint16_t BITMAP_USB1_ID = 20;
-const uint16_t BITMAP_USB_DRIVE_ID = 21;
+const uint16_t BITMAP_GAMEBOY_ID = 15;
+const uint16_t BITMAP_MSX_ID = 16;
+const uint16_t BITMAP_OROCABOY1_ID = 17;
+const uint16_t BITMAP_OROCABOY2_ID = 18;
+const uint16_t BITMAP_OROCABOY3_ID = 19;
+const uint16_t BITMAP_OROCABOY4_ID = 20;
+const uint16_t BITMAP_SD_CARD_ID = 21;
+const uint16_t BITMAP_USB1_ID = 22;
+const uint16_t BITMAP_USB_DRIVE_ID = 23;
 
 namespace BitmapDatabase
 {

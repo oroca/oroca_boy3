@@ -115,37 +115,48 @@ void osdUpdate(void)
 }
 
 
-uint32_t osdWaitKey(void)
+uint32_t osdWaitKey(bool wait)
 {
-  uint32_t ret = 0;
-  bool key_pressed = false;
-  uint32_t pre_time;
+  uint32_t key = 0;
+  uint32_t prev_key = 0;
+  uint32_t key_repeat = 1;
 
-  pre_time = millis();
   while(1)
   {
     delay(10);
-    if (millis()-pre_time >= 150)
-    {
-      pre_time = millis();
 
-      for (int i=0; i<BUTTON_MAX_CH; i++)
+    key = 0;
+    for (int i=0; i<BUTTON_MAX_CH; i++)
+    {
+      if (buttonOsdGetPressed(i) == true)
       {
-        if (buttonOsdGetPressed(i) == true)
-        {
-          ret = i;
-          key_pressed = true;
-          break;
-        }
+        key |= (1<<i);
       }
-      if (key_pressed == true)
+    }
+
+    if (wait != true)
+    {
+      break;
+    }
+
+    if (key != prev_key)
+    {
+      key_repeat = 0;
+    }
+    key_repeat++;
+
+    prev_key = key;
+
+    if (key > 0)
+    {
+      if (key_repeat == 0 || key_repeat >= 10)
       {
         break;
       }
     }
   }
 
-  return ret;
+  return key;
 }
 
 void osdProcess(void)
@@ -211,22 +222,22 @@ void osdProcess(void)
       osdDisplayOn();
     }
 
-    key = osdWaitKey();
+    key = osdWaitKey(true);
 
-    if (key == _DEF_HW_BTN_UP)
+    if (key & (1<<_DEF_HW_BTN_UP))
     {
       cursor_last = cursor;
 
       if (cursor == 0) cursor = cursor_max - 1;
       else             cursor = (cursor - 1) % cursor_max;
     }
-    if (key == _DEF_HW_BTN_DOWN)
+    if (key & (1<<_DEF_HW_BTN_DOWN))
     {
       cursor_last = cursor;
       cursor = (cursor + 1) % cursor_max;
     }
 
-    if (key == _DEF_HW_BTN_RIGHT)
+    if (key & (1<<_DEF_HW_BTN_RIGHT))
     {
       if (cursor == 0)
       {
@@ -237,7 +248,7 @@ void osdProcess(void)
         bright_level = constrain(bright_level + 5, 0, 100);
       }
     }
-    if (key == _DEF_HW_BTN_LEFT)
+    if (key & (1<<_DEF_HW_BTN_LEFT))
     {
       if (cursor == 0)
       {
@@ -255,16 +266,21 @@ void osdProcess(void)
       }
     }
 
-    if (key == _DEF_HW_BTN_A)
+    if (key & (1<<_DEF_HW_BTN_A))
     {
-      bspDeInit();
-      resetRunSoftReset();
+      if (cursor == 2)
+      {
+        speakerStop();
+        delay(100);
+        bspDeInit();
+        resetRunSoftReset();
+      }
     }
 
     speakerSetVolume(volume_level);
     lcdSetBackLight(bright_level);
 
-    if (key == _DEF_HW_BTN_START)
+    if (key & (1<<_DEF_HW_BTN_START))
     {
       break;
     }
@@ -279,12 +295,12 @@ void osdProcess(void)
 
 uint32_t osdReadPixel(uint16_t x_pos, uint16_t y_pos)
 {
-  return ltdc_osd_draw_buffer[y_pos * osdGetWidth() + x_pos];
+  return ltdc_osd_draw_buffer[y_pos * ltdcWidth() + x_pos];
 }
 
 void osdDrawPixel(uint16_t x_pos, uint16_t y_pos, uint32_t rgb_code)
 {
-  ltdc_osd_draw_buffer[y_pos * osdGetWidth() + x_pos] = rgb_code;
+  ltdc_osd_draw_buffer[y_pos * ltdcWidth() + x_pos] = rgb_code;
 }
 
 void osdClear(uint32_t rgb_code)
@@ -336,14 +352,18 @@ void osdDisplayOn(void)
 
 int32_t osdGetWidth(void)
 {
-  return ltdcWidth();
+  return osd_width;
 }
 
 int32_t osdGetHeight(void)
 {
-  return ltdcHeight();
+  return osd_height;
 }
 
+void osdSetBgColor(uint16_t color)
+{
+  bg_color = color;
+}
 
 void osdDrawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1,uint16_t color)
 {
@@ -421,7 +441,7 @@ void osdDrawRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color)
 
 void osdDrawFillScreen(uint16_t color)
 {
-  osdDrawFillRect(0, 0, osdGetWidth(), osdGetHeight(), color);
+  osdDrawFillRect(0, 0, ltdcWidth(), ltdcHeight(), color);
 }
 
 void osdPrintf(int x, int y, uint16_t color,  const char *fmt, ...)
@@ -455,7 +475,7 @@ void osdPrintf(int x, int y, uint16_t color,  const char *fmt, ...)
         x += 1*8;
     }
 
-    if( osdGetWidth() < x )
+    if( ltdcWidth() < x )
     {
         x  = x_Pre;
         y += 16;
@@ -495,4 +515,58 @@ void disHanFont(int x, int y, PHAN_FONT_OBJ *FontPtr, uint16_t textcolor)
       }
     }
   }
+}
+
+uint32_t osdGetStrWidth(const char *fmt, ...)
+{
+  va_list arg;
+  va_start (arg, fmt);
+  int32_t len;
+  char print_buffer[256];
+  int Size_Char;
+  int i;
+  PHAN_FONT_OBJ FontBuf;
+  uint32_t str_len;
+
+
+  len = vsnprintf(print_buffer, 255, fmt, arg);
+  va_end (arg);
+
+  str_len = 0;
+
+  for( i=0; i<len; i+=Size_Char )
+  {
+    PHan_FontLoad( &print_buffer[i], &FontBuf );
+
+    Size_Char = FontBuf.Size_Char;
+
+    str_len += (Size_Char * 8);
+
+    if( FontBuf.Code_Type == PHAN_END_CODE ) break;
+  }
+
+  return str_len;
+}
+
+void osdMessage(char *msg)
+{
+  uint16_t save_bg_color;
+
+  save_bg_color = bg_color;
+
+  bg_color = white;
+  if (msg)
+  {
+    osdDrawFillRect(0, (osdGetWidth()-50)/2, osdGetHeight(), 50, bg_color);
+
+    uint16_t w = 8, h = 16;
+    w = osdGetStrWidth(msg);
+    osdPrintf((osdGetWidth()-w)/2, (osdGetHeight()-50)/2 + (50-h)/2, black, "%s", msg);
+  }
+  else
+  {
+    osdDrawFillRect(0, (osdGetHeight()-50)/2, osdGetWidth(), 50, bg_color);
+  }
+
+  bg_color = save_bg_color;
 }

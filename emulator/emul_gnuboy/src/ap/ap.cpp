@@ -22,7 +22,7 @@ __attribute__((section(".tag"))) flash_tag_t fw_tag =
      // fw info
      //
      0xAAAA5555,        // magic_number
-     "V191119R1",       // version_str
+     "V191123R1",       // version_str
      "OROCABOY3",       // board_str
      "gnuboy",          // name
      __DATE__,

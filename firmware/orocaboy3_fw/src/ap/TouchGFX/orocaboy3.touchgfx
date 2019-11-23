@@ -117,13 +117,44 @@
               {
                 "Components": [
                   {
-                    "RelativeFilename": "fMSX.png",
+                    "RelativeFilename": "gameboy.png",
+                    "Alpha": 255,
+                    "Name": "image_gameboy",
+                    "X": 60,
+                    "Y": 56,
+                    "Width": 200,
+                    "Height": 42,
+                    "Type": "Image",
+                    "Visible": true,
+                    "Draggable": false,
+                    "Clickable": false,
+                    "Fadeable": false,
+                    "Moveable": false
+                  }
+                ],
+                "IsCacheableContainer": false,
+                "Name": "page_gnuboy",
+                "X": 0,
+                "Y": 0,
+                "Width": 320,
+                "Height": 150,
+                "Type": "Container",
+                "Visible": true,
+                "Draggable": false,
+                "Clickable": false,
+                "Fadeable": false,
+                "Moveable": false
+              },
+              {
+                "Components": [
+                  {
+                    "RelativeFilename": "msx.png",
                     "Alpha": 255,
                     "Name": "image_msx",
                     "X": 60,
-                    "Y": 44,
+                    "Y": 39,
                     "Width": 200,
-                    "Height": 72,
+                    "Height": 83,
                     "Type": "Image",
                     "Visible": true,
                     "Draggable": false,
@@ -165,45 +196,6 @@
                 ],
                 "IsCacheableContainer": false,
                 "Name": "page_doom",
-                "X": 0,
-                "Y": 0,
-                "Width": 320,
-                "Height": 150,
-                "Type": "Container",
-                "Visible": true,
-                "Draggable": false,
-                "Clickable": false,
-                "Fadeable": false,
-                "Moveable": false
-              },
-              {
-                "Components": [
-                  {
-                    "TextId": "SingleUseId3",
-                    "TextRotation": "0",
-                    "Color": {
-                      "Red": 0,
-                      "Green": 0,
-                      "Blue": 0
-                    },
-                    "Alpha": 255,
-                    "AutoSize": true,
-                    "LineSpacing": 0,
-                    "Name": "test_menu",
-                    "X": 111,
-                    "Y": 77,
-                    "Width": 99,
-                    "Height": 18,
-                    "Type": "TextArea",
-                    "Visible": true,
-                    "Draggable": false,
-                    "Clickable": false,
-                    "Fadeable": false,
-                    "Moveable": false
-                  }
-                ],
-                "IsCacheableContainer": false,
-                "Name": "page_button",
                 "X": 0,
                 "Y": 0,
                 "Width": 320,
@@ -975,10 +967,6 @@
       },
       {
         "TextEntryId": "SingleUseId2",
-        "IsResource": false
-      },
-      {
-        "TextEntryId": "SingleUseId3",
         "IsResource": false
       },
       {

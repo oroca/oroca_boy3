@@ -47,6 +47,7 @@ void lcdDrawFillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color)
 void lcdDrawFillScreen(uint16_t color);
 void lcdDrawRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color);
 void lcdPrintf(int x, int y, uint16_t color,  const char *fmt, ...);
+uint32_t lcdGetStrWidth(const char *fmt, ...);
 
 #endif /* _USE_HW_LCD */
 
