@@ -88,7 +88,7 @@ MainViewBase::MainViewBase()
     swipeContainer_emulator.setPageIndicatorXY(115, 0);
     swipeContainer_emulator.setSwipeCutoff(50);
     swipeContainer_emulator.setEndSwipeElasticWidth(50);
-    swipeContainer_emulator.setSelectedPage(0);
+    swipeContainer_emulator.setSelectedPage(4);
 
     button_load.setXY(75, 263);
     button_load.setBitmaps(touchgfx::Bitmap(BITMAP_DARK_BUTTONS_ROUND_EDGE_SMALL_ID), touchgfx::Bitmap(BITMAP_DARK_BUTTONS_ROUND_EDGE_SMALL_PRESSED_ID));

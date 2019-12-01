@@ -6,6 +6,7 @@ FONT_TABLE_LOCATION_FLASH_PRAGMA
 KEEP extern const touchgfx::GlyphNode glyphs_NanumGothicCoding_Bold_18_4bpp[] FONT_TABLE_LOCATION_FLASH_ATTRIBUTE =
 {
     {     0, 0x0002,   5,  10,   6,   0,   9,   0,   0, 0x00 },
+    {    30, 0x0020,   0,   0,   0,   0,   9,   0,   0, 0x00 },
     {    30, 0x002B,   9,  10,  11,   0,   9,   0,   0, 0x00 },
     {    80, 0x002D,   7,   2,   7,   1,   9,   0,   0, 0x00 },
     {    88, 0x002E,   3,   4,   2,   3,   9,   0,   0, 0x00 },
@@ -87,6 +88,6 @@ touchgfx::GeneratedFont& getFont_NanumGothicCoding_Bold_18_4bpp();
 
 touchgfx::GeneratedFont& getFont_NanumGothicCoding_Bold_18_4bpp()
 {
-    static touchgfx::GeneratedFont NanumGothicCoding_Bold_18_4bpp(glyphs_NanumGothicCoding_Bold_18_4bpp, 68, 18, 4, 4, 1, 0, 0, unicodes_NanumGothicCoding_Bold_18_4bpp, kerning_NanumGothicCoding_Bold_18_4bpp, 63, 0, 0);
+    static touchgfx::GeneratedFont NanumGothicCoding_Bold_18_4bpp(glyphs_NanumGothicCoding_Bold_18_4bpp, 69, 18, 4, 4, 1, 0, 0, unicodes_NanumGothicCoding_Bold_18_4bpp, kerning_NanumGothicCoding_Bold_18_4bpp, 63, 0, 0);
     return NanumGothicCoding_Bold_18_4bpp;
 }

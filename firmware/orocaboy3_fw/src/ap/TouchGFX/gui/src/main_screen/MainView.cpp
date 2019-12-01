@@ -194,20 +194,32 @@ void MainView::updateSlotInfo(void)
                         slot_info[slot_index].name_str, slot_info[slot_index].ver_str);
       textArea_slot.invalidate();
 
-      Unicode::snprintf(MainView::textArea_slot_titleBuffer, TEXTAREA_SLOT_SIZE, "%s", slot_info[slot_index].name_str);
-      textArea_slot_title.invalidate();
-      Unicode::snprintf(MainView::textArea_slot_title_1Buffer, TEXTAREA_SLOT_SIZE, "%s",slot_info[slot_index].name_str);
-      textArea_slot_title_1.invalidate();
+      if (slot_index == 4)
+      {
+        Unicode::snprintf(MainView::textArea_slot_titleBuffer, TEXTAREA_SLOT_SIZE, "%s", slot_info[slot_index].name_str);
+        textArea_slot_title.invalidate();
+      }
+      if (slot_index == 5)
+      {
+        Unicode::snprintf(MainView::textArea_slot_title_1Buffer, TEXTAREA_SLOT_SIZE, "%s",slot_info[slot_index].name_str);
+        textArea_slot_title_1.invalidate();
+      }
     }
     else
     {
       Unicode::snprintf(MainView::textArea_slotBuffer, TEXTAREA_SLOT_SIZE, "%d Empty", slot_index);
       textArea_slot.invalidate();
 
-      Unicode::snprintf(MainView::textArea_slot_titleBuffer, TEXTAREA_SLOT_SIZE, "Empty");
-      textArea_slot_title.invalidate();
-      Unicode::snprintf(MainView::textArea_slot_title_1Buffer, TEXTAREA_SLOT_SIZE, "Empty");
-      textArea_slot_title_1.invalidate();
+      if (slot_index == 4)
+      {
+        Unicode::snprintf(MainView::textArea_slot_titleBuffer, TEXTAREA_SLOT_SIZE, "Empty");
+        textArea_slot_title.invalidate();
+      }
+      if (slot_index == 5)
+      {
+        Unicode::snprintf(MainView::textArea_slot_title_1Buffer, TEXTAREA_SLOT_SIZE, "Empty");
+        textArea_slot_title_1.invalidate();
+      }
     }
   }
 }

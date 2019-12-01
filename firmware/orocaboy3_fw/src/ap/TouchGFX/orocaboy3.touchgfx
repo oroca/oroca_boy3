@@ -302,7 +302,7 @@
             "IndicatorImageNormal": "__designer\\Dark_PageIndicator_dot_indicator_small_normal.png",
             "IndicatorImageHighlight": "__designer\\Dark_PageIndicator_dot_indicator_small_highlight.png",
             "EndSwipeElasticWidth": 50,
-            "SelectedPage": "page_nes",
+            "SelectedPage": "page_user1",
             "Style": "Style1",
             "IsCacheableContainer": false,
             "Name": "swipeContainer_emulator",
